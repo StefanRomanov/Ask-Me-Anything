@@ -46,16 +46,17 @@ module.exports = {
         })
     },
 
-    createQuery(title, description, tags, username) {
-        return UserService.findUserByUsername(username)
-            .then(user => {
-                db.query.create({
-                    title
-                    , description
-                    , tags
-                }).then((query) => {
-                    query.setUser(user);
-                })
+    createQuery: (title, description, tags, username) => {
+        return Promise.all([
+            UserService.findUserByUsername(username),
+            db.query.create({
+                title,
+                description,
+                tags
+            })])
+            .then(values => {
+                const [user, query] = values;
+                query.setUser(user);
             })
     }
 };

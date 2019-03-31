@@ -17,17 +17,16 @@ module.exports = {
     },
 
     createAnswer: (title, description, userId, queryId) => {
+        return Promise.all([
+            db.user.findOne({where: {id: userId}}),
+            db.query.findOne({where: {id: queryId}}),
+            db.answer.create({title, description})
+        ])
+            .then((values) => {
+                const [user, query, answer] = values;
 
-        return db.user.findOne({where: {id: userId}})
-            .then(user => {
-                db.query.findOne({where: {id: queryId}})
-                    .then(query => {
-                        db.answer.create({title, description})
-                            .then(answer => {
-                                answer.setUser(user);
-                                answer.setQuery(query);
-                            })
-                    })
+                answer.setUser(user);
+                answer.setQuery(query);
             })
     },
 
