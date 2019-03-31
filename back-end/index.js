@@ -1,3 +1,5 @@
+const AnswerService = require("./services/answer-service");
+
 const UserService = require("./services/user-service");
 
 const QueryService = require("./services/query-service");
@@ -30,6 +32,8 @@ app.use((error, req, res, next) => {
   next();
 });
 
-QueryService.createQuery('first','shellow',['aa','bb'], 'aaa');
+AnswerService.increaseScore(1);
+UserService.increaseScore('aaa');
+QueryService.decreaseScore(1);
 
 app.listen(port, () => { console.log(`REST API listening on port: ${port}`) });

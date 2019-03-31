@@ -4,9 +4,19 @@ module.exports = (sequelize,DataTypes) => {
 
     class Query extends Model {}
     Query.init({
-        title: DataTypes.STRING,
-        description: DataTypes.TEXT,
-        score: DataTypes.INTEGER,
+        title: {
+            type: DataTypes.STRING,
+            allowNull: false,
+        },
+        description: {
+            type: DataTypes.STRING,
+            allowNull: false,
+        },
+        score: {
+            type: DataTypes.INTEGER,
+            defaultValue: 0,
+            allowNull: false,
+        },
         tags: {
             type: DataTypes.STRING,
             get() {
