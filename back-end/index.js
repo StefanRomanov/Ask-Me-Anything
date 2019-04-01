@@ -1,9 +1,3 @@
-const AnswerService = require("./services/answer-service");
-
-const UserService = require("./services/user-service");
-
-const QueryService = require("./services/query-service");
-
 const express = require('express');
 const bodyParser = require('body-parser');
 const feedRoutes = require('./routes/feed');
@@ -30,8 +24,6 @@ app.use((error, req, res, next) => {
     res.status(status).json({message: message});
     next();
 });
-
-QueryService.createQuery('promiseall', 'asdadasd', ['bbb','ccc'], 'aaa');
 
 app.listen(port, () => {
     console.log(`REST API listening on port: ${port}`)

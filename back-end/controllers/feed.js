@@ -9,10 +9,8 @@ function validatePost(req, res) {
       message: 'Validation failed, entered data is incorrect',
       errors: errors.array()
     });
-
     return false;
   }
-
   return true;
 }
 

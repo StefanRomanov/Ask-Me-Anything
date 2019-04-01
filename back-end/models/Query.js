@@ -28,8 +28,6 @@ module.exports = (sequelize,DataTypes) => {
         }
     }, { sequelize });
 
-
-
     return Query;
 };
 

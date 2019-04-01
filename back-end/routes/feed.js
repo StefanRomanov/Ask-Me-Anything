@@ -1,9 +1,10 @@
 const router = require('express').Router();
 const { body } = require('express-validator/check');
 const feedController = require('../controllers/feed');
+const {QueryController} = require('../controllers');
 const isAuth = require('../middleware/is-auth');
 
-router.get('/posts', isAuth, feedController.getPosts);
+router.get('/queries', QueryController.getQueries);
 router.post('/post/create', isAuth , [
   body('title')
     .trim()
