@@ -3,6 +3,8 @@ const encryption = require('../util/encryption');
 
 module.exports = {
     createUser: (username, email, password) => {
+
+        console.log(password);
         const salt = encryption.generateSalt();
         const hashedPassword = encryption.generateHashedPassword(salt, password);
 

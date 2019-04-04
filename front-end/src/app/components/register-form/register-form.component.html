@@ -1,0 +1,60 @@
+<div class="container">
+    <div class="row">
+        <div class="col-lg-4"></div>
+        <div class="col-lg-4">
+            <h1>Registration Form</h1>
+            <form [formGroup]="form" (submit)="submitForm()">
+                <div class="form-group input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"> <i class="fa fa-user"></i> </span>
+                    </div>
+                    <input formControlName="username" class="form-control" placeholder="Username"/>
+                </div>
+                <div class="alert alert-danger" *ngIf="username?.touched && username?.errors?.required">
+                    Username is required
+                </div>
+                <div class="alert alert-danger" *ngIf="username?.dirty && username?.errors?.pattern">
+                    Allowed only letters and numbers
+                </div>
+                <div class="form-group input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"> <i class="fa fa-envelope"></i> </span>
+                    </div>
+                    <input formControlName="email" class="form-control" placeholder="Email Address" type="email"/>
+                </div>
+                <div class="alert alert-danger" *ngIf="email?.touched && email?.errors?.required">
+                    Email is required
+                </div>
+                <div class="alert alert-danger" *ngIf="email?.dirty && email?.errors?.pattern">
+                    Required pattern: 'example@example.com'
+                </div>
+                <div class="form-group input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"> <i class="fa fa-lock"></i> </span>
+                    </div>
+                    <input formControlName="password" class="form-control" placeholder="Create password" type="password"/>
+                </div>
+                <div class="alert alert-danger" *ngIf="password?.touched && password?.errors?.required">
+                    Password is required
+                </div>
+                <div class="alert alert-danger" *ngIf="password?.dirty && password?.errors?.pattern">
+                    Numbers and digits, min 3, max 16
+                </div>
+                <div class="form-group input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"> <i class="fa fa-lock"></i> </span>
+                    </div>
+                    <input formControlName="repeatPassword" class="form-control" placeholder="Repeat password" type="password"/>
+                </div>
+                <div class="alert alert-danger" *ngIf="password?.value != repeatPassword?.value">
+                    Passwords don't match
+                </div>
+                <div class="form-group">
+                    <button type="submit" [disabled]="form.invalid" class="btn btn-primary btn-block"> Register</button>
+                </div>
+                <p class="text-center">Have an account? <a href="">Log In</a></p>
+            </form>
+        </div>
+        <div class="col-lg-4"></div>
+    </div>
+</div>

@@ -19,11 +19,11 @@ module.exports = {
         if (validateUser(req, res)) {
             const {username, email, password} = req.body;
 
-            UserService.createUser({
+            UserService.createUser(
                 username,
                 email,
                 password
-            }).then((user) => {
+            ).then((user) => {
                 res.status(201)
                     .json({message: 'User created!', userId: user._id});
             })
