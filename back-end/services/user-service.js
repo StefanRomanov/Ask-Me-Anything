@@ -1,26 +1,45 @@
 const db = require('../database/config');
 const encryption = require('../util/encryption');
 
-module.exports = {
-    createUser: (username, email, password) => {
+class UserService {
 
-        console.log(password);
+    constructor() {
+
+    }
+
+    createUser(username, email, password) {
+
+        let role = 'USER';
+
         const salt = encryption.generateSalt();
         const hashedPassword = encryption.generateHashedPassword(salt, password);
 
-        return db.user.create({
-            username,
-            email,
-            salt,
-            hashedPassword
-        })
-    },
+        return db.user.count()
+            .then(
+            result => {
+                if(result === 0){
+                    role = 'ADMIN';
+                }
+                return db.user.create({
+                    username,
+                    email,
+                    salt,
+                    role,
+                    hashedPassword
+                })
+            })
 
-    findUserByUsername: (username) => {
+    }
+
+    findUserByUsername(username) {
         return db.user.findOne({where: {username: username}});
-    },
+    }
 
-    increaseScore: (username) => {
+    findUserById(id) {
+        return db.user.findOne({where: {id: id}});
+    }
+
+    increaseScore(username) {
         return db.user.increment(
             'score',
             {
@@ -29,9 +48,9 @@ module.exports = {
                 }
             }
         )
-    },
+    }
 
-    decreaseScore: (username) => {
+    decreaseScore(username) {
         return db.user.decrement(
             'score',
             {
@@ -41,4 +60,8 @@ module.exports = {
             }
         )
     }
+}
+
+module.exports = () => {
+    return new UserService();
 };

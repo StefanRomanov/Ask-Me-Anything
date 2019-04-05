@@ -8,12 +8,18 @@ import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 import {AuthInterceptor} from './services/interceptors/auth.interceptor';
 import {RegisterFormComponent} from './components/register-form/register-form.component';
 import {ReactiveFormsModule} from '@angular/forms';
+import { LoginFormComponent } from './components/login-form/login-form.component';
+import { NavigationComponent } from './components/navigation/navigation.component';
+import { FooterComponent } from './components/footer/footer.component';
 
 @NgModule({
     declarations: [
         AppComponent,
         AllQueriesComponent,
-        RegisterFormComponent
+        RegisterFormComponent,
+        LoginFormComponent,
+        NavigationComponent,
+        FooterComponent
     ],
     imports: [
         BrowserModule,

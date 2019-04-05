@@ -1,25 +1,15 @@
-const {validationResult} = require('express-validator/check');
+const validateUser = require('../util/validateCreation');
 const jwt = require('jsonwebtoken');
 const UserService = require('../services/user-service');
 
-function validateUser(req, res) {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-        res.status(422).json({
-            message: 'Validation failed, entered data is incorrect',
-            errors: errors.array()
-        });
-        return false;
-    }
-    return true;
-}
+const userService = UserService();
 
 module.exports = {
-    signUp: (req, res) => {
+    signUp: (req, res, next) => {
         if (validateUser(req, res)) {
             const {username, email, password} = req.body;
 
-            UserService.createUser(
+            userService.createUser(
                 username,
                 email,
                 password
@@ -36,26 +26,27 @@ module.exports = {
                 });
         }
     },
-    signIn: (req, res) => {
+    signIn: (req, res, next) => {
         const {username, password} = req.body;
 
-        UserService.findUserByUsername(username)
+        userService.findUserByUsername(username)
             .then((user) => {
                 if (!user) {
-                    const error = new Error('A user with this email could not be found');
+                    const error = new Error('A user with this username could not be found');
                     error.statusCode = 401;
                     throw error;
                 }
 
                 if (!user.authenticate(password)) {
-                    const error = new Error('A user with this email could not be found');
+                    const error = new Error('A user with this username could not be found');
                     error.statusCode = 401;
                     throw error;
                 }
 
                 const token = jwt.sign({
-                        email: user.email,
-                        userId: user._id.toString()
+                        username: user.username,
+                        role: user.role,
+                        userId: user.id.toString()
                     }
                     , 'somesupersecret'
                     , {expiresIn: '1h'});

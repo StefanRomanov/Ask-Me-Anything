@@ -1,7 +1,9 @@
 const router = require('express').Router();
 const {body} = require('express-validator/check');
-const authController = require('../controllers/auth');
+const authController = require('../controllers/auth-controller');
 const UserService = require('../services/user-service');
+
+const userService = UserService();
 
 router.post('/register',
     [
@@ -10,7 +12,7 @@ router.post('/register',
             .isEmpty()
             .withMessage('Please enter a valid name.')
             .custom((value) => {
-                return UserService.findUserByUsername(value).then(userDoc => {
+                return userService.findUserByUsername(value).then(userDoc => {
                     if (userDoc) {
                         return Promise.reject('Username address already exists!');
                     }

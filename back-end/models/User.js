@@ -1,10 +1,17 @@
 const encryption = require('../util/encryption');
 const {Model} = require('sequelize');
+const uuid = require('uuid/v4');
 
 module.exports = (sequelize, DataTypes) => {
     class User extends Model {}
 
     User.init({
+        id: {
+            allowNull: false,
+            primaryKey: true,
+            type: DataTypes.UUID,
+            defaultValue: uuid()
+        },
         username: {
             type: DataTypes.STRING,
             unique: true,
@@ -23,6 +30,10 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.STRING,
             allowNull: false
         },
+        role: {
+            type: DataTypes.STRING,
+            allowNull: false
+        },
         score: {
             type: DataTypes.INTEGER,
             defaultValue: 0,
@@ -37,7 +48,6 @@ module.exports = (sequelize, DataTypes) => {
     };
 
     return User;
-
 };
 
 

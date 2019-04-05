@@ -21,6 +21,7 @@ module.exports = (req, res, next) => {
       .json({ message: 'Not authenticated.' });
   }
 
+  req.role = decodedToken.role;
   req.userId = decodedToken.userId;
   next();
 };
