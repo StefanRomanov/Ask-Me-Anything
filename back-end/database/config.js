@@ -22,7 +22,8 @@ db.query_dislikes = require('../models/QueryDislikes')(sequelize,Sequelize);
 
 db.query.hasMany(db.answer,{ onDelete: 'cascade' });
 db.user.hasMany(db.answer);
-db.user.hasOne(db.query);
+db.query.belongsTo(db.user);
+
 db.answer.belongsToMany(db.user, {
     through: {
         model: db.answer_dislikes,

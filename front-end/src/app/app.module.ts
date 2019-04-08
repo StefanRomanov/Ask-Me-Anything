@@ -11,6 +11,10 @@ import {ReactiveFormsModule} from '@angular/forms';
 import { LoginFormComponent } from './components/login-form/login-form.component';
 import { NavigationComponent } from './components/navigation/navigation.component';
 import { FooterComponent } from './components/footer/footer.component';
+import { CreateQueryComponent } from './components/create-query/create-query.component';
+import {CKEditorModule} from '@ckeditor/ckeditor5-angular';
+import { InputTextComponent } from './components/input-text/input-text.component';
+import { QueryDetailsComponent } from './components/query-details/query-details.component';
 
 @NgModule({
     declarations: [
@@ -19,13 +23,17 @@ import { FooterComponent } from './components/footer/footer.component';
         RegisterFormComponent,
         LoginFormComponent,
         NavigationComponent,
-        FooterComponent
+        FooterComponent,
+        CreateQueryComponent,
+        InputTextComponent,
+        QueryDetailsComponent,
     ],
     imports: [
         BrowserModule,
         AppRoutingModule,
         HttpClientModule,
-        ReactiveFormsModule
+        ReactiveFormsModule,
+        CKEditorModule
     ],
     providers: [
         {

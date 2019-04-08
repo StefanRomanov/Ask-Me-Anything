@@ -7,6 +7,7 @@ const userService = UserService();
 const queryService = QueryService(userService);
 
 module.exports = {
+
     getQueries: (req, res, next) => {
         queryService.findAll()
             .then((queries) => {
@@ -34,7 +35,7 @@ module.exports = {
                         .status(200)
                         .json({message: 'Query created !', success: true})
                 })
-                .catch(err => {
+                .catch(error => {
                     if (!error.statusCode) {
                         error.statusCode = 500;
                     }
@@ -48,32 +49,16 @@ module.exports = {
         const queryId = req.params.queryId;
         const userId = req.userId;
 
-        Promise.all([
-            queryService.findOneById(queryId),
-            userService.findUserById(userId)
-        ])
-            .then(result => {
-                const [query, user] = result;
-                if (!user) {
-                    res
-                        .status(404)
-                        .json({message: 'User not found', success: false,})
-                }
-                if (!query) {
-                    res
-                        .status(404)
-                        .json({message: 'Query not found', success: false,})
-                } else {
-                    query.isLiked = queryService.isLikedByUser(userId, query.id);
-                    query.isDisliked = queryService.isDislikedByUser(userId, query.id);
-                    query.isOwner = query.UserId === user.id;
+        let response;
 
-                    res
-                        .status(200)
-                        .json({message: `Query found`, success: true, query})
-                }
-            })
-            .catch(err => {
+        if (userId) {
+            response = queryDetailsAuthed(req, res, queryId, userId);
+        } else {
+            response = queryDetailsAnonymous(req, res, queryId);
+        }
+
+        response
+            .catch(error => {
                 if (!error.statusCode) {
                     error.statusCode = 500;
                 }
@@ -87,13 +72,13 @@ module.exports = {
         const userId = req.userId;
         const role = req.role;
 
-        queryService.deleteQuery(queryId,userId, role)
+        queryService.deleteQuery(queryId, userId, role)
             .then(() => {
                 res
                     .status(200)
                     .json({message: `Query deleted`, success: true})
             })
-            .catch(err => {
+            .catch(error => {
                 if (!error.statusCode) {
                     error.statusCode = 500;
                 }
@@ -115,7 +100,7 @@ module.exports = {
                         .status(200)
                         .json({message: 'Query updated', success: true})
                 })
-                .catch(err => {
+                .catch(error => {
                     if (!error.statusCode) {
                         error.statusCode = 500;
                     }
@@ -125,17 +110,17 @@ module.exports = {
         }
     },
 
-    likeQuery: (req,res, next) => {
+    likeQuery: (req, res, next) => {
         const userId = req.userId;
         const queryId = req.params.queryId;
 
-        queryService.like(userId,queryId)
+        queryService.like(userId, queryId)
             .then(() => {
                 res
                     .status(200)
                     .json({message: 'Query liked', success: true})
             })
-            .catch(err => {
+            .catch(error => {
                 if (!error.statusCode) {
                     error.statusCode = 500;
                 }
@@ -144,17 +129,52 @@ module.exports = {
             })
     },
 
-    dislikeQuery: (req,res, next) => {
+    dislikeQuery: (req, res, next) => {
         const userId = req.userId;
         const queryId = req.params.queryId;
 
-        queryService.dislike(userId,queryId)
+        queryService.dislike(userId, queryId)
             .then(() => {
                 res
                     .status(200)
                     .json({message: 'Query disliked', success: true})
             })
-            .catch(err => {
+            .catch(error => {
+                if (!error.statusCode) {
+                    error.statusCode = 500;
+                }
+
+                next(error);
+            })
+    },
+
+    searchByTag: (req, res, next) => {
+        const tag = req.query.search;
+
+        queryService.findByTags(tag)
+            .then(result => {
+                res
+                    .status(200)
+                    .json({message: `${result.length} queries found`, success: true, result})
+            })
+            .catch(error => {
+                if (!error.statusCode) {
+                    error.statusCode = 500;
+                }
+
+                next(error);
+            })
+    },
+    searchByTitle: (req, res, next) => {
+        const title = req.query.title;
+
+        queryService.findByTitleContains(title)
+            .then(result => {
+                res
+                    .status(200)
+                    .json({message: `${result.length} queries found`, success: true, result})
+            })
+            .catch(error => {
                 if (!error.statusCode) {
                     error.statusCode = 500;
                 }
@@ -163,3 +183,49 @@ module.exports = {
             })
     }
 };
+
+function queryDetailsAuthed(req, res, queryId, userId) {
+
+    return Promise.all([
+        queryService.findOneById(queryId),
+        userService.findUserById(userId)
+    ])
+        .then(result => {
+            const [query, user] = result;
+            if (!user) {
+                res
+                    .status(404)
+                    .json({message: 'User not found', success: false,})
+            }
+            if (!query) {
+                res
+                    .status(404)
+                    .json({message: 'Query not found', success: false,})
+            } else {
+                query.isLiked = queryService.isLikedByUser(userId, query.id);
+                query.isDisliked = queryService.isDislikedByUser(userId, query.id);
+                query.isOwner = query.UserId === user.id;
+
+                res
+                    .status(200)
+                    .json({message: `Query found`, success: true, query})
+            }
+        })
+
+}
+
+function queryDetailsAnonymous(req, res, queryId) {
+
+    return queryService.findOneById(queryId)
+        .then(query => {
+            if (!query) {
+                res
+                    .status(404)
+                    .json({message: 'Query not found', success: false,})
+            } else {
+                res
+                    .status(200)
+                    .json({message: `Query found`, success: true, query})
+            }
+        })
+}

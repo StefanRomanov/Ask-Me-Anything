@@ -1,0 +1,10 @@
+<div *ngIf="query">
+    <h1>{{query.title}}</h1>
+    <pre [innerHTML]="query.description"></pre>
+    <div>
+        <span *ngFor="let tag of query.tags"> {{tag}}</span>
+    </div>
+    <h4>Author: {{query.User.username}}</h4>
+
+</div>
+

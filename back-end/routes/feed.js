@@ -6,7 +6,7 @@ const isAdmin = require('../middleware/is-admin');
 
 //Query routes
 router.get('/queries', QueryController.getQueries);
-router.post('/query/create', isAuth, [
+router.post('/query/create', [
     body('title')
         .trim()
         .isLength({min: 5}),
@@ -26,6 +26,8 @@ router.put('/query/update/:queryId', isAuth, [
     ], QueryController.updateQuery);
 router.post('/query/like/:queryId', isAuth, QueryController.likeQuery);
 router.post('/query/dislike/:queryId', isAuth, QueryController.dislikeQuery);
+router.get('/queries/tagged', QueryController.searchByTag);
+router.get('/queries/search', QueryController.searchByTitle);
 
 //Answer routes
 router.get('/answers/:queryId', AnswerController.getAnswers);

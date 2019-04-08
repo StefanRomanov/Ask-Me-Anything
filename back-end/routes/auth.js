@@ -20,7 +20,7 @@ router.post('/register',
             }),
         body('password')
             .trim()
-            .isLength({min: 3})
+            .isLength({min: 3,max: 16})
             .withMessage('Please enter a valid password.'),
         body('email')
             .trim()

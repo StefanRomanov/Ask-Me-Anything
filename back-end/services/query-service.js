@@ -6,17 +6,35 @@ class QueryService {
     }
 
     findAll() {
-        return db.query.findAll();
+        return db.query.findAll({
+            include:[{
+                model: db.user,
+                attributes: ['id','username']
+            }]
+        });
     }
 
     findOneById(id) {
-        return db.query.findOne({where: {id: id}})
+        return db.query.findOne({
+            where: {id: id},
+            include: [{
+                model: db.answer,
+                include: [{
+                    model: db.user,
+                    attributes: ['id', 'username']
+                }]
+
+            }, {
+                model: db.user,
+                attributes: ['id', 'username']
+            }]
+        })
     }
 
     deleteQuery(id, userId, role) {
         return this.findOneById(id)
             .then(query => {
-                if (query.UserId !== userId || role !== 'ADMIN'){
+                if (query.UserId !== userId || role !== 'ADMIN') {
                     throw new Error('Unauthorized. User is not author or admin !');
                 } else {
                     return db.query.destroy({where: {id: id}})
@@ -24,11 +42,11 @@ class QueryService {
             });
     }
 
-    updateQuery(id, payload, userId){
+    updateQuery(id, payload, userId) {
 
         return this.findOneById(id)
             .then(query => {
-                if (query.UserId !== userId ){
+                if (query.UserId !== userId) {
                     throw new Error('Unauthorized. User is not author or admin !');
                 } else {
                     return db.query.update(payload, {where: {id: id}})
@@ -61,16 +79,24 @@ class QueryService {
     findByTitleContains(title) {
         return db.query.findAll({
             where: {
-                title: db.Sequelize.where(db.Sequelize.fn('LOWER', db.Sequelize.col('title')), 'LIKE', '%' + title + '%')
-            }
+                title: db.Sequelize.where(db.Sequelize.fn('LOWER', db.Sequelize.col('title')), 'LIKE', '%' + title + '%'),
+            },
+            include:[{
+                model: db.user,
+                attributes: ['id','username']
+            }]
         })
     }
 
-    findByTags(tags) {
+    findByTags(tag) {
         return db.query.findAll({
             where: {
-                tags: db.Sequelize.where(db.Sequelize.fn('LOWER', db.Sequelize.col('asset_name')), 'LIKE', '%' + title + '%')
-            }
+                tags: db.Sequelize.where(db.Sequelize.fn('LOWER', db.Sequelize.col('tags')), 'IN', '%' + tag + '%'),
+            },
+            include:[{
+                model: db.user,
+                attributes: ['id','username']
+            }]
         })
     }
 
@@ -84,7 +110,8 @@ class QueryService {
             })])
             .then(values => {
                 const [user, query] = values;
-                user.setQuery(query);
+                console.log(query);
+                query.setUser(user);
             })
     }
 
@@ -98,7 +125,7 @@ class QueryService {
             .then((result) => {
                 const [user, query, like, dislike] = result;
                 if (user && query && !dislike) {
-                    if(query.UserId === userId){
+                    if (query.UserId === userId) {
                         throw 'Cannot vote for your own queries';
                     }
 
@@ -127,7 +154,7 @@ class QueryService {
             .then((result) => {
                 const [user, query, like, dislike] = result;
                 if (user && query && !like) {
-                    if(query.UserId === userId){
+                    if (query.UserId === userId) {
                         throw 'Cannot vote for your own queries';
                     }
 
@@ -146,12 +173,12 @@ class QueryService {
             });
     }
 
-    isLikedByUser(userId, answerId){
-        return db.query_likes.findOne({where: {userId,answerId}});
+    isLikedByUser(userId, answerId) {
+        return db.query_likes.findOne({where: {userId, answerId}});
     }
 
-    isDislikedByUser(userId, answerId){
-        return db.query_dislikes.findOne({where: {userId,answerId}});
+    isDislikedByUser(userId, answerId) {
+        return db.query_dislikes.findOne({where: {userId, answerId}});
     }
 }
 
