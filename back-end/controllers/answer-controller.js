@@ -22,7 +22,7 @@ module.exports = {
                     .status(200)
                     .json({message: `${answers.length} queries found`, answers})
             })
-            .catch(err => {
+            .catch(error => {
                 if (!error.statusCode) {
                     error.statusCode = 500;
                 }
@@ -33,17 +33,17 @@ module.exports = {
 
     createAnswer: (req, res, next) => {
         if(validateAnswer(req,res)){
-            const queryId = req.params.queryId;
             const userId = req.userId;
-            const {title,content} = req.body;
+            console.error(userId);
+            const {content, queryId} = req.body;
 
-            answerService.createAnswer(title,content,userId,queryId)
+            answerService.createAnswer(content,userId,queryId)
                 .then(() => {
                     res
                         .status(200)
                         .json({message: 'Answer created !', success: true})
                 })
-                .catch(err => {
+                .catch(error => {
                     if (!error.statusCode) {
                         error.statusCode = 500;
                     }
@@ -64,7 +64,7 @@ module.exports = {
                     .status(200)
                     .json({message: `Query deleted`, success: true})
             })
-            .catch(err => {
+            .catch(error => {
                 if (!error.statusCode) {
                     error.statusCode = 500;
                 }
@@ -85,7 +85,7 @@ module.exports = {
                         .status(200)
                         .json({message: 'Answer updated', success: true})
                 })
-                .catch(err => {
+                .catch(error => {
                     if (!error.statusCode) {
                         error.statusCode = 500;
                     }
@@ -105,7 +105,7 @@ module.exports = {
                     .status(200)
                     .json({message: 'Answer liked !', success: true})
             })
-            .catch(err => {
+            .catch(error => {
                 if (!error.statusCode) {
                     error.statusCode = 500;
                 }
@@ -124,7 +124,7 @@ module.exports = {
                     .status(200)
                     .json({message: 'Answer disliked !', success: true})
             })
-            .catch(err => {
+            .catch(error => {
                 if (!error.statusCode) {
                     error.statusCode = 500;
                 }

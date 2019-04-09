@@ -112,7 +112,7 @@ module.exports = {
 
     likeQuery: (req, res, next) => {
         const userId = req.userId;
-        const queryId = req.params.queryId;
+        const {queryId} = req.body;
 
         queryService.like(userId, queryId)
             .then(() => {
@@ -131,7 +131,7 @@ module.exports = {
 
     dislikeQuery: (req, res, next) => {
         const userId = req.userId;
-        const queryId = req.params.queryId;
+        const {queryId} = req.body;
 
         queryService.dislike(userId, queryId)
             .then(() => {

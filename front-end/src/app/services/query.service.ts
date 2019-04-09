@@ -10,10 +10,7 @@ export class QueryService {
   constructor(private http: HttpClient) { }
 
   getAllQueries() {
-    return this.http.get('http://localhost:3000/feed/queries')
-      .subscribe(data => {
-        console.log(data);
-      });
+    return this.http.get<{message: string, success: boolean, queries: Query[]}>('http://localhost:3000/feed/queries')
   }
 
     createQuery(data) {
@@ -25,5 +22,19 @@ export class QueryService {
 
     getQuery(id) {
       return this.http.get<{message: string, success: boolean, query: Query}>('http://localhost:3000/feed/query/' + id);
+    }
+
+    upVote(payload) {
+        return this.http.post('http://localhost:3000/feed/query/like', payload)
+            .subscribe(answer => {
+                console.log(answer);
+            });
+    }
+
+    downVote(payload) {
+        return this.http.post('http://localhost:3000/feed/query/dislike', payload)
+            .subscribe(answer => {
+                console.log(answer);
+            });
     }
 }

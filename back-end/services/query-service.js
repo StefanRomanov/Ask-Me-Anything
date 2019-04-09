@@ -19,11 +19,10 @@ class QueryService {
             where: {id: id},
             include: [{
                 model: db.answer,
-                include: [{
+                include: {
                     model: db.user,
                     attributes: ['id', 'username']
-                }]
-
+                }
             }, {
                 model: db.user,
                 attributes: ['id', 'username']
@@ -89,10 +88,11 @@ class QueryService {
     }
 
     findByTags(tag) {
+
+        const {fn, col} = db.sequelize;
+
         return db.query.findAll({
-            where: {
-                tags: db.Sequelize.where(db.Sequelize.fn('LOWER', db.Sequelize.col('tags')), 'IN', '%' + tag + '%'),
-            },
+            where: fn('JSON_CONTAINS', col('tags'), `\"${tag}\"`),
             include:[{
                 model: db.user,
                 attributes: ['id','username']
@@ -131,8 +131,6 @@ class QueryService {
 
                     if (like) {
                         like.destroy();
-                        this.decreaseScore(queryId);
-                        this.userService.decreaseScore(user.username);
                     }
 
                     this.decreaseScore(queryId);
@@ -160,8 +158,6 @@ class QueryService {
 
                     if (dislike) {
                         dislike.destroy();
-                        this.increaseScore(queryId);
-                        this.userService.increaseScore(user.username);
                     }
 
                     this.increaseScore(queryId);

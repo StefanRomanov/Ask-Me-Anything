@@ -23,16 +23,16 @@ class AnswerService {
         })
     }
 
-    createAnswer(title, content, userId, queryId){
+    createAnswer(content, userId, queryId){
         return Promise.all([
             db.user.findOne({where: {id: userId}}),
             db.query.findOne({where: {id: queryId}}),
-            db.answer.create({title, content})
+            db.answer.create({content})
         ])
             .then((values) => {
                 const [user, query, answer] = values;
                 if(user && query && answer){
-                    user.addAnswer(answer);
+                    answer.setUser(user);
                     query.addAnswer(answer);
                 } else {
                     throw 'Entity doesn\'t exist';

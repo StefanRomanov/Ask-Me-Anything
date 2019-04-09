@@ -5,6 +5,7 @@ interface Query {
   id: string;
   title: string;
   description: string;
+  score: number;
   tags: string[];
   User: User;
   Answers: Answer[];

@@ -1,0 +1,23 @@
+<div class="container">
+    <div class="row">
+        <div class="col-lg-2"></div>
+        <div class="col-lg-6">
+            <form [formGroup]="answerForm" class="mt-2" (submit)="submitForm()">
+                <ckeditor
+                    tagName="textarea"
+                    formControlName="content"
+                    [editor]="editor"
+                    [config]="{ toolbar: ['bold', 'italic', 'blockquote' ] }"
+                    data="<p>Answer...</p>">
+                </ckeditor>
+                <div class="alert alert-danger" *ngIf="content?.touched && content?.errors?.required">
+                    Content is required
+                </div>
+                <div class="form-group mt-3 w-25 pull-left">
+                    <button type="submit" [disabled]="answerForm.invalid" class="btn btn-primary btn-block"> Answer</button>
+                </div>
+            </form>
+        </div>
+        <div class="col-lg-4"></div>
+    </div>
+</div>

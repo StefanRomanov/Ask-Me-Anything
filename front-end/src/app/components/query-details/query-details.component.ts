@@ -30,4 +30,12 @@ export class QueryDetailsComponent implements OnInit, OnDestroy {
     ngOnDestroy(): void {
         this.subscription$.unsubscribe();
     }
+
+    upVoteQuery() {
+        this.queryService.upVote({queryId: this.query.id});
+    }
+
+    downVoteQuery() {
+        this.queryService.downVote({queryId: this.query.id});
+    }
 }

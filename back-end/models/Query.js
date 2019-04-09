@@ -30,13 +30,10 @@ module.exports = (sequelize,DataTypes) => {
             allowNull: false,
         },
         tags: {
-            type: DataTypes.STRING,
+            type: DataTypes.JSON,
             get() {
-                return this.getDataValue('tags').split(';')
-            },
-            set(tags) {
-                this.setDataValue('tags',tags.join(';'));
-            },
+                return JSON.parse(this.getDataValue('tags'));
+            }
         }
     }, { sequelize });
 

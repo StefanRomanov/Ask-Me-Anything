@@ -11,10 +11,6 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.UUID,
             defaultValue: uuid()
         },
-        title: {
-            type: DataTypes.STRING,
-            allowNull: false
-        },
         content: {
             type: DataTypes.TEXT,
             allowNull: false

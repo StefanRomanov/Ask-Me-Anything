@@ -2,8 +2,8 @@ import User from './User';
 
 interface Answer {
   id: number;
-  text: string;
-  user: User;
+  content: string;
+  User: User;
   dateAdded: Date;
   score: number;
 }

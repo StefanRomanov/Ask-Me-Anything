@@ -20,8 +20,8 @@ db.answer_dislikes = require('../models/AnswerDislikes')(sequelize,Sequelize);
 db.query_likes = require('../models/QueryLikes')(sequelize,Sequelize);
 db.query_dislikes = require('../models/QueryDislikes')(sequelize,Sequelize);
 
-db.query.hasMany(db.answer,{ onDelete: 'cascade' });
-db.user.hasMany(db.answer);
+db.query.hasMany(db.answer);
+db.answer.belongsTo(db.user);
 db.query.belongsTo(db.user);
 
 db.answer.belongsToMany(db.user, {

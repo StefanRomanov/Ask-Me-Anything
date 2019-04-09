@@ -15,6 +15,9 @@ import { CreateQueryComponent } from './components/create-query/create-query.com
 import {CKEditorModule} from '@ckeditor/ckeditor5-angular';
 import { InputTextComponent } from './components/input-text/input-text.component';
 import { QueryDetailsComponent } from './components/query-details/query-details.component';
+import { QueryListComponent } from './components/query-list/query-list.component';
+import { QueryCardComponent } from './components/query-card/query-card.component';
+import { AnswerCreateFormComponent } from './components/answer-create-form/answer-create-form.component';
 
 @NgModule({
     declarations: [
@@ -27,6 +30,9 @@ import { QueryDetailsComponent } from './components/query-details/query-details.
         CreateQueryComponent,
         InputTextComponent,
         QueryDetailsComponent,
+        QueryListComponent,
+        QueryCardComponent,
+        AnswerCreateFormComponent,
     ],
     imports: [
         BrowserModule,
