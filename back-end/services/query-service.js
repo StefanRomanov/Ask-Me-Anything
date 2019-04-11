@@ -53,10 +53,11 @@ class QueryService {
             });
     }
 
-    increaseScore(id) {
+    increaseScore(id,amount) {
         return db.query.increment(
             'score',
             {
+                by: amount,
                 where: {
                     id: id
                 }
@@ -64,10 +65,11 @@ class QueryService {
         )
     }
 
-    decreaseScore(id) {
+    decreaseScore(id, amount) {
         return db.query.decrement(
             'score',
             {
+                by: amount,
                 where: {
                     id: id
                 }
@@ -130,12 +132,19 @@ class QueryService {
                     }
 
                     if (like) {
-                        like.destroy();
+                        return Promise.all([
+                            like.destroy(),
+                            this.decreaseScore(queryId,2),
+                            this.userService.decreaseScore(userId, 2),
+                            db.query_dislikes.create({userId, queryId})
+                        ])
                     }
 
-                    this.decreaseScore(queryId);
-                    this.userService.decreaseScore(user.username);
-                    return db.query_dislikes.create({userId, queryId})
+                    return Promise.all([
+                        this.decreaseScore(queryId, 1),
+                        this.userService.decreaseScore(userId, 1),
+                        db.query_dislikes.create({userId, queryId})]);
+
                 } else {
                     throw 'Invalid operation';
                 }
@@ -157,12 +166,18 @@ class QueryService {
                     }
 
                     if (dislike) {
-                        dislike.destroy();
+                        return Promise.all([
+                            dislike.destroy(),
+                            this.increaseScore(queryId, 2),
+                            this.userService.increaseScore(userId, 2),
+                            db.query_likes.create({userId, queryId})
+                        ])
                     }
 
-                    this.increaseScore(queryId);
-                    this.userService.increaseScore(user.username);
-                    return db.query_likes.create({userId, queryId})
+                    return Promise.all([
+                        this.increaseScore(queryId, 1),
+                        this.userService.increaseScore(userId, 1),
+                        db.query_likes.create({userId, queryId})]);
                 } else {
                     throw 'Invalid operation';
                 }

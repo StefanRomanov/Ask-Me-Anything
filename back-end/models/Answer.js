@@ -9,7 +9,7 @@ module.exports = (sequelize, DataTypes) => {
             allowNull: false,
             primaryKey: true,
             type: DataTypes.UUID,
-            defaultValue: uuid()
+            defaultValue: () => uuid()
         },
         content: {
             type: DataTypes.TEXT,

@@ -18,6 +18,8 @@ import { QueryDetailsComponent } from './components/query-details/query-details.
 import { QueryListComponent } from './components/query-list/query-list.component';
 import { QueryCardComponent } from './components/query-card/query-card.component';
 import { AnswerCreateFormComponent } from './components/answer-create-form/answer-create-form.component';
+import { AnswerListComponent } from './components/answer-list/answer-list.component';
+import { AnswerCardComponent } from './components/answer-card/answer-card.component';
 
 @NgModule({
     declarations: [
@@ -33,6 +35,8 @@ import { AnswerCreateFormComponent } from './components/answer-create-form/answe
         QueryListComponent,
         QueryCardComponent,
         AnswerCreateFormComponent,
+        AnswerListComponent,
+        AnswerCardComponent,
     ],
     imports: [
         BrowserModule,

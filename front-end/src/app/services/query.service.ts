@@ -25,16 +25,10 @@ export class QueryService {
     }
 
     upVote(payload) {
-        return this.http.post('http://localhost:3000/feed/query/like', payload)
-            .subscribe(answer => {
-                console.log(answer);
-            });
+        return this.http.post('http://localhost:3000/feed/query/like', payload);
     }
 
     downVote(payload) {
-        return this.http.post('http://localhost:3000/feed/query/dislike', payload)
-            .subscribe(answer => {
-                console.log(answer);
-            });
+        return this.http.post('http://localhost:3000/feed/query/dislike', payload);
     }
 }

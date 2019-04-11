@@ -2,9 +2,9 @@
     <div class="row mt-3">
         <div class="col-lg-1">
             <div class="row justify-content-between mt-5">
-                <a class="fa fa-thumbs-o-up" (click)="upVoteQuery()"></a>
+                <button class="btn" [disabled]="true" (click)="upVoteQuery()"><i class="fa fa-arrow-circle-up fa-2x text-success"></i></button>
                 <h4>{{query.score}}</h4>
-                <a class="fa fa-thumbs-o-down" (click)="downVoteQuery()"></a>
+                <a class="fa fa-arrow-circle-down fa-2x text-danger" (click)="downVoteQuery()"></a>
             </div>
         </div>
         <div class="col-lg-5">
@@ -20,21 +20,7 @@
     <app-answer-create-form [queryId]="query.id"></app-answer-create-form>
     <hr>
     <div>
-        <div class="row" *ngFor="let answer of query.Answers">
-            <div class="col-lg-2"></div>
-            <div class="col-lg-1">
-                <div class="row justify-content-between">
-                    <a class="fa fa-thumbs-o-up" ></a>
-                    <h4>{{answer.score}}</h4>
-                    <a class="fa fa-thumbs-o-down"></a>
-                </div>
-            </div>
-            <div class="col-lg-6">
-                <p>{{answer.content}}</p>
-                <p class="pull-right">Author: {{answer.User.username}}</p>
-            </div>
-            <hr>
-        </div>
+        <app-answer-list [answers]="query.Answers"></app-answer-list>
     </div>
 </div>
 

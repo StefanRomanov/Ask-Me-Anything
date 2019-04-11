@@ -1,15 +1,17 @@
 const {Model} = require('sequelize');
 const uuid = require('uuid/v4');
 
-module.exports = (sequelize,DataTypes) => {
+module.exports = (sequelize, DataTypes) => {
 
-    class Query extends Model {}
+    class Query extends Model {
+    }
+
     Query.init({
         id: {
             allowNull: false,
             primaryKey: true,
             type: DataTypes.UUID,
-            defaultValue: uuid()
+            defaultValue: () => uuid()
         },
         title: {
             type: DataTypes.STRING,
@@ -31,11 +33,8 @@ module.exports = (sequelize,DataTypes) => {
         },
         tags: {
             type: DataTypes.JSON,
-            get() {
-                return JSON.parse(this.getDataValue('tags'));
-            }
         }
-    }, { sequelize });
+    }, {sequelize});
 
     return Query;
 };

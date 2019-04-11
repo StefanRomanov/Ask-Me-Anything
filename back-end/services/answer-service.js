@@ -1,7 +1,7 @@
 const db = require('../database/config');
 
 class AnswerService {
-    constructor(queryService,userService){
+    constructor(queryService, userService) {
         this.userService = userService;
         this.queryService = queryService;
     }
@@ -17,13 +17,14 @@ class AnswerService {
             where: {QueryId: queryId}
         })
     }
+
     findAllByUserId(userId) {
         return db.answer.findOne({
             where: {UserId: userId}
         })
     }
 
-    createAnswer(content, userId, queryId){
+    createAnswer(content, userId, queryId) {
         return Promise.all([
             db.user.findOne({where: {id: userId}}),
             db.query.findOne({where: {id: queryId}}),
@@ -31,7 +32,7 @@ class AnswerService {
         ])
             .then((values) => {
                 const [user, query, answer] = values;
-                if(user && query && answer){
+                if (user && query && answer) {
                     answer.setUser(user);
                     query.addAnswer(answer);
                 } else {
@@ -40,10 +41,10 @@ class AnswerService {
             })
     }
 
-    deleteAnswer(queryId,userId, role) {
+    deleteAnswer(queryId, userId, role) {
         return this.findOneById(id)
             .then(answer => {
-                if (answer.UserId !== userId ){
+                if (answer.UserId !== userId) {
                     throw new Error('Unauthorized. User is not author or admin !');
                 } else {
                     return db.answer.destroy({where: {id: id}})
@@ -51,10 +52,10 @@ class AnswerService {
             });
     }
 
-    updateAnswer(id, payload, userId){
+    updateAnswer(id, payload, userId) {
         return this.findOneById(id)
             .then(answer => {
-                if (answer.UserId !== userId ){
+                if (answer.UserId !== userId) {
                     throw new Error('Unauthorized. User is not author or admin !');
                 } else {
                     return db.answer.update(payload, {where: {id: id}})
@@ -62,7 +63,7 @@ class AnswerService {
             });
     }
 
-    increaseScore(id){
+    increaseScore(id) {
         return db.answer.increment(
             'score',
             {
@@ -72,7 +73,8 @@ class AnswerService {
             }
         )
     }
-    decreaseScore(id){
+
+    decreaseScore(id) {
         return db.answer.decrement(
             'score',
             {
@@ -93,20 +95,26 @@ class AnswerService {
             .then((result) => {
                 const [user, answer, like, dislike] = result;
                 if (user && answer && !dislike) {
-                    if(answer.UserId === userId){
+                    if (answer.UserId === userId) {
                         throw 'Cannot vote for your own queries';
                     }
 
                     if (like) {
-                        like.destroy();
-                        this.decreaseScore(answerId);
-                        this.userService.decreaseScore(user.username);
+                        return Promise.all([
+                            like.destroy(),
+                            this.decreaseScore(answerId),
+                            this.userService.decreaseScore(user.username),
+                            this.decreaseScore(answerId),
+                            this.userService.decreaseScore(user.username),
+                            db.query_dislikes.create({userId, answerId})
+                        ])
                     }
 
-                    this.decreaseScore(answerId);
-                    this.userService.decreaseScore(user.username);
-
-                    return db.query_dislikes.create({userId, answerId})
+                    return Promise.all([
+                        this.decreaseScore(answerId),
+                        this.userService.decreaseScore(user.username),
+                        db.query_dislikes.create({userId, answerId})
+                    ])
                 } else {
                     throw 'Invalid operation';
                 }
@@ -123,7 +131,7 @@ class AnswerService {
             .then((result) => {
                 const [user, query, like, dislike] = result;
                 if (user && query && !like) {
-                    if(query.UserId === userId){
+                    if (query.UserId === userId) {
                         throw 'Cannot vote for your own queries';
                     }
 
@@ -142,15 +150,15 @@ class AnswerService {
             });
     }
 
-    isLikedByUser(userId, answerId){
-        return db.answer_likes.findOne({where: {userId,answerId}});
+    isLikedByUser(userId, answerId) {
+        return db.answer_likes.findOne({where: {userId, answerId}});
     }
 
-    isDislikedByUser(userId, answerId){
-        return db.answer_dislikes.findOne({where: {userId,answerId}});
+    isDislikedByUser(userId, answerId) {
+        return db.answer_dislikes.findOne({where: {userId, answerId}});
     }
 }
 
 module.exports = (queryService, userService) => {
-    return new AnswerService(queryService,userService);
+    return new AnswerService(queryService, userService);
 };

@@ -39,23 +39,25 @@ class UserService {
         return db.user.findOne({where: {id: id}});
     }
 
-    increaseScore(username) {
+    increaseScore(id, amount) {
         return db.user.increment(
             'score',
             {
+                by: amount,
                 where: {
-                    username: username
+                    id: id
                 }
             }
         )
     }
 
-    decreaseScore(username) {
+    decreaseScore(id, amount) {
         return db.user.decrement(
             'score',
             {
+                by: amount,
                 where: {
-                    username: username
+                    id: id
                 }
             }
         )
