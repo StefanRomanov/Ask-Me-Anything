@@ -32,7 +32,7 @@ module.exports = (sequelize, DataTypes) => {
             allowNull: false,
         },
         tags: {
-            type: DataTypes.JSON,
+            type: DataTypes.ARRAY(DataTypes.STRING),
         }
     }, {sequelize});
 

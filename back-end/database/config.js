@@ -2,10 +2,10 @@ const {Sequelize} = require('sequelize');
 
 const db = {};
 
-const sequelize = new Sequelize('angular_project', 'root', 'root', {
+const sequelize = new Sequelize('angular_project', 'postgres', 'root', {
     host: 'localhost',
-    port: '3306',
-    dialect: 'mysql',
+    port: '5432',
+    dialect: 'postgres',
 });
 
 db.Sequelize = Sequelize;

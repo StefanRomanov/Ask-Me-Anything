@@ -1,7 +1,7 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import * as ClassicEditor from '@ckeditor/ckeditor5-build-classic';
-import {AnswerService} from '../../services/answer.service';
+import {AnswerService} from '../answer.service';
 
 @Component({
     selector: 'app-answer-create-form',

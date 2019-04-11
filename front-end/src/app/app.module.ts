@@ -3,47 +3,27 @@ import {NgModule} from '@angular/core';
 
 import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
-import {AllQueriesComponent} from './components/all-queries/all-queries.component';
 import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
-import {AuthInterceptor} from './services/interceptors/auth.interceptor';
-import {RegisterFormComponent} from './components/register-form/register-form.component';
-import {ReactiveFormsModule} from '@angular/forms';
-import { LoginFormComponent } from './components/login-form/login-form.component';
-import { NavigationComponent } from './components/navigation/navigation.component';
-import { FooterComponent } from './components/footer/footer.component';
-import { CreateQueryComponent } from './components/create-query/create-query.component';
-import {CKEditorModule} from '@ckeditor/ckeditor5-angular';
-import { InputTextComponent } from './components/input-text/input-text.component';
-import { QueryDetailsComponent } from './components/query-details/query-details.component';
-import { QueryListComponent } from './components/query-list/query-list.component';
-import { QueryCardComponent } from './components/query-card/query-card.component';
-import { AnswerCreateFormComponent } from './components/answer-create-form/answer-create-form.component';
-import { AnswerListComponent } from './components/answer-list/answer-list.component';
-import { AnswerCardComponent } from './components/answer-card/answer-card.component';
+import {AuthInterceptor} from './interceptors/auth.interceptor';
+import {QueriesModule} from './queries/queries.module';
+import {AnswersModule} from './answers/answers.module';
+import {AuthModule} from './auth/auth.module';
+import {SharedModule} from './shared/shared.module';
+import { LandingComponent } from './landing/landing.component';
 
 @NgModule({
     declarations: [
         AppComponent,
-        AllQueriesComponent,
-        RegisterFormComponent,
-        LoginFormComponent,
-        NavigationComponent,
-        FooterComponent,
-        CreateQueryComponent,
-        InputTextComponent,
-        QueryDetailsComponent,
-        QueryListComponent,
-        QueryCardComponent,
-        AnswerCreateFormComponent,
-        AnswerListComponent,
-        AnswerCardComponent,
+        LandingComponent,
     ],
     imports: [
         BrowserModule,
         AppRoutingModule,
         HttpClientModule,
-        ReactiveFormsModule,
-        CKEditorModule
+        QueriesModule,
+        AnswersModule,
+        AuthModule,
+        SharedModule
     ],
     providers: [
         {

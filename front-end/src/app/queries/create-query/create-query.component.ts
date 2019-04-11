@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import * as ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {QueryService} from '../../services/query.service';
+import {QueryService} from '../query.service';
 
 @Component({
     selector: 'app-create-query',

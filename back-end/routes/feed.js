@@ -6,6 +6,11 @@ const isAdmin = require('../middleware/is-admin');
 
 //Query routes
 router.get('/queries', QueryController.getQueries);
+router.get('/query/:queryId', QueryController.getQuery);
+router.get('/queries/top', QueryController.getTopQuueries);
+router.get('/queries/tagged', QueryController.searchByTag);
+
+router.get('/queries/search', QueryController.searchByTitle);
 router.post('/query/create', [
     body('title')
         .trim()
@@ -14,8 +19,6 @@ router.post('/query/create', [
         .trim()
         .isLength({min: 5})
 ], QueryController.createQuery);
-router.get('/query/:queryId', QueryController.getQuery);
-router.delete('/query/:queryId', isAuth, QueryController.deleteQuery);
 router.put('/query/update/:queryId', isAuth, [
     body('title')
         .trim()
@@ -26,17 +29,21 @@ router.put('/query/update/:queryId', isAuth, [
     ], QueryController.updateQuery);
 router.post('/query/like', isAuth, QueryController.likeQuery);
 router.post('/query/dislike', isAuth, QueryController.dislikeQuery);
-router.get('/queries/tagged', QueryController.searchByTag);
-router.get('/queries/search', QueryController.searchByTitle);
+
+router.delete('/query/:queryId', isAuth, QueryController.deleteQuery);
+
 
 //Answer routes
 router.get('/answers/:queryId', AnswerController.getAnswers);
+
 router.post('/answer', isAuth,[
     body('content')
         .trim()
         .isLength({min: 5})
 ], AnswerController.createAnswer);
-router.delete('/answer/:answerId', isAuth, AnswerController.deleteAnswer);
+router.post('/answer/like', isAuth, AnswerController.likeAnswer);
+router.post('/answer/dislike', isAuth, AnswerController.dislikeAnswer);
+
 router.put('/answer/:answerId', isAuth, [
     body('title')
         .trim()
@@ -45,7 +52,8 @@ router.put('/answer/:answerId', isAuth, [
         .trim()
         .isLength({min: 5})
 ], AnswerController.updateAnswer);
-router.post('/answer/like', isAuth, AnswerController.likeAnswer);
-router.post('/answer/dislike', isAuth, AnswerController.dislikeAnswer);
+
+router.delete('/answer/:answerId', isAuth, AnswerController.deleteAnswer);
+
 
 module.exports = router;

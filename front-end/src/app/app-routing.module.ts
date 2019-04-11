@@ -1,21 +1,26 @@
-import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
-import {RegisterFormComponent} from './components/register-form/register-form.component';
-import {LoginFormComponent} from './components/login-form/login-form.component';
-import {CreateQueryComponent} from './components/create-query/create-query.component';
-import {QueryDetailsComponent} from './components/query-details/query-details.component';
-import {QueryListComponent} from './components/query-list/query-list.component';
+import {NgModule} from '@angular/core';
+import {Routes, RouterModule} from '@angular/router';
+import {RegisterFormComponent} from './auth/register-form/register-form.component';
+import {LoginFormComponent} from './auth/login-form/login-form.component';
+import {CreateQueryComponent} from './queries/create-query/create-query.component';
+import {QueryDetailsComponent} from './queries/query-details/query-details.component';
+import {QueryListComponent} from './queries/query-list/query-list.component';
+import {LandingComponent} from './landing/landing.component';
+import {AllQueriesComponent} from './queries/all-queries/all-queries.component';
 
 const routes: Routes = [
+    {path: '', pathMatch: 'full', redirectTo: 'home'},
+    {path: 'home', component: LandingComponent},
     {path: 'register', component: RegisterFormComponent},
     {path: 'login', component: LoginFormComponent},
     {path: 'query/create', component: CreateQueryComponent},
     {path: 'query/details/:id', component: QueryDetailsComponent},
-    {path: 'query/all', component: QueryListComponent}
+    {path: 'query/all', component: AllQueriesComponent}
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
+    imports: [RouterModule.forRoot(routes)],
+    exports: [RouterModule]
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {
+}

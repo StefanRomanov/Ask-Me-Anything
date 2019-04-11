@@ -1,0 +1,16 @@
+<div class="home">
+    <div class='container mt-3'>
+        <section class='jumbotron text-center shadow'>
+            <div class='container justify-content-between'>
+                <h1 class='jumbotron-heading font-weight-bold'>Welcome to RentCar !</h1>
+                <h3 class="mb-4">Fast and easy car renting</h3>
+                <div>
+                    <a routerLink="/query/all" routerLinkActive="active" class='btn btn-primary mr-3 shadow-sm'>All queries</a>
+                </div>
+            </div>
+        </section>
+        <section *ngIf="(queries$ | async) as queries">
+            <app-query-list [queries]="queries"></app-query-list>
+        </section>
+    </div>
+</div>

@@ -30,6 +30,13 @@ class QueryService {
         })
     }
 
+    findTopFiveByScore() {
+        return db.query.findAll({
+            order: [['score','DESC']],
+            limit: 5
+        })
+    }
+
     deleteQuery(id, userId, role) {
         return this.findOneById(id)
             .then(query => {

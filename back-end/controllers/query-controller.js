@@ -24,6 +24,23 @@ module.exports = {
             })
     },
 
+    getTopQuueries: (req, res, next) => {
+        queryService.findTopFiveByScore()
+            .then(queries => {
+                res
+                    .status(200)
+                    .json({message: `${queries.length} queries found`, success: true, queries})
+            })
+            .catch(error => {
+                if (!error.statusCode) {
+                    error.statusCode = 500;
+                }
+
+                next(error);
+            })
+
+    },
+
     createQuery: (req, res, next) => {
 
         if (validateQuery(req, res)) {

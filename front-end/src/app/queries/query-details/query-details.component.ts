@@ -1,6 +1,6 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import Query from '../../models/Query';
-import {QueryService} from '../../services/query.service';
+import {QueryService} from '../query.service';
 import {Subscription} from 'rxjs';
 import {ActivatedRoute} from '@angular/router';
 
