@@ -1,0 +1,12 @@
+<div class="container">
+    <form [formGroup]="form" (submit)="submitSearch()">
+        <div class="form-group input-group">
+            <div class="input-group-prepend">
+                <span class="input-group-text"> <i class="fa fa-search"></i> </span>
+            </div>
+            <input formControlName="search" class="form-control" placeholder="Search"/>
+        </div>
+        <button class="btn btn-primary" type="submit">Search</button>
+    </form>
+    <hr>
+</div>

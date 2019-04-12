@@ -4,9 +4,9 @@ import {RegisterFormComponent} from './auth/register-form/register-form.componen
 import {LoginFormComponent} from './auth/login-form/login-form.component';
 import {CreateQueryComponent} from './queries/create-query/create-query.component';
 import {QueryDetailsComponent} from './queries/query-details/query-details.component';
-import {QueryListComponent} from './queries/query-list/query-list.component';
 import {LandingComponent} from './landing/landing.component';
 import {AllQueriesComponent} from './queries/all-queries/all-queries.component';
+import {UserQueriesComponent} from './queries/user-queries/user-queries.component';
 
 const routes: Routes = [
     {path: '', pathMatch: 'full', redirectTo: 'home'},
@@ -14,6 +14,7 @@ const routes: Routes = [
     {path: 'register', component: RegisterFormComponent},
     {path: 'login', component: LoginFormComponent},
     {path: 'query/create', component: CreateQueryComponent},
+    {path: 'query/my', component: UserQueriesComponent},
     {path: 'query/details/:id', component: QueryDetailsComponent},
     {path: 'query/all', component: AllQueriesComponent}
 ];

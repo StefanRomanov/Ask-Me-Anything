@@ -3,6 +3,7 @@ import Query from '../../models/Query';
 import {QueryService} from '../query.service';
 import {Subscription} from 'rxjs';
 import {ActivatedRoute} from '@angular/router';
+import {AuthService} from '../../auth/auth.service';
 
 @Component({
     selector: 'app-query-details',
@@ -17,7 +18,7 @@ export class QueryDetailsComponent implements OnInit, OnDestroy {
     subscriptionUpVote: Subscription;
     id: string;
 
-    constructor(private queryService: QueryService, private activatedRoute: ActivatedRoute) {
+    constructor(private queryService: QueryService, private activatedRoute: ActivatedRoute, private authService: AuthService) {
     }
 
     ngOnInit() {
@@ -31,8 +32,13 @@ export class QueryDetailsComponent implements OnInit, OnDestroy {
 
     ngOnDestroy(): void {
         this.subscription$.unsubscribe();
-        this.subscriptionDownVote.unsubscribe();
-        this.subscriptionUpVote.unsubscribe();
+        if (this.subscriptionDownVote) {
+            this.subscriptionDownVote.unsubscribe();
+        }
+
+        if (this.subscriptionUpVote) {
+            this.subscriptionUpVote.unsubscribe();
+        }
     }
 
     upVoteQuery() {

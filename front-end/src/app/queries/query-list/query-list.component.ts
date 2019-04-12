@@ -1,9 +1,5 @@
-import {Component, Input, OnDestroy, OnInit} from '@angular/core';
-import {QueryService} from '../query.service';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import Query from '../../models/Query';
-import {Observable, Subscription} from 'rxjs';
-import {map} from 'rxjs/operators';
-
 @Component({
     selector: 'app-query-list',
     templateUrl: './query-list.component.html',
@@ -14,9 +10,20 @@ export class QueryListComponent implements OnInit {
     @Input()
     queries: Query[];
 
-    constructor(private queryService: QueryService) {
+    @Output()
+    orderEmitter = new EventEmitter<string>();
+
+    constructor() {
     }
 
     ngOnInit() {
+    }
+
+    orderLatest() {
+        this.orderEmitter.emit('latest');
+    }
+
+    orderPopular() {
+        this.orderEmitter.emit('popular');
     }
 }

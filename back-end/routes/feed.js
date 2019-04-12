@@ -3,11 +3,13 @@ const {body} = require('express-validator/check');
 const {QueryController,  AnswerController} = require('../controllers');
 const isAuth = require('../middleware/is-auth');
 const isAdmin = require('../middleware/is-admin');
+const isAnonymous = require('../middleware/is-anonymous');
 
 //Query routes
 router.get('/queries', QueryController.getQueries);
-router.get('/query/:queryId', QueryController.getQuery);
-router.get('/queries/top', QueryController.getTopQuueries);
+router.get('/query/:queryId', isAnonymous , QueryController.getQuery);
+router.get('/queries/latest', QueryController.getLatestQueries);
+router.get('/queries/user/:userId', QueryController.getByUser);
 router.get('/queries/tagged', QueryController.searchByTag);
 
 router.get('/queries/search', QueryController.searchByTitle);

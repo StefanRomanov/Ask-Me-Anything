@@ -5,13 +5,48 @@ class QueryService {
         this.userService = userService;
     }
 
-    findAll() {
+    findAllByUserIdAndTitleIncludesAndOrder(id, title, order) {
+
+        const orderArgument = getOrderArgument(order);
+
         return db.query.findAll({
+            order: orderArgument,
+            where: {
+                UserId: id,
+                title: db.Sequelize.where(db.Sequelize.fn('LOWER', db.Sequelize.col('title')), 'LIKE', '%' + title + '%')},
             include:[{
                 model: db.user,
                 attributes: ['id','username']
             }]
         });
+    }
+
+    findByTitleContainsAndOrder(title, order) {
+
+        const orderArgument = getOrderArgument(order);
+
+        return db.query.findAll({
+            order: orderArgument,
+            where: {
+                title: db.Sequelize.where(db.Sequelize.fn('LOWER', db.Sequelize.col('title')), 'LIKE', '%' + title + '%'),
+            },
+            include:[{
+                model: db.user,
+                attributes: ['id','username']
+            }]
+        })
+    }
+
+    findByTags(tag) {
+        const {fn, col} = db.sequelize;
+
+        return db.query.findAll({
+            where: fn('JSON_CONTAINS', col('tags'), `\"${tag}\"`),
+            include:[{
+                model: db.user,
+                attributes: ['id','username']
+            }]
+        })
     }
 
     findOneById(id) {
@@ -30,9 +65,9 @@ class QueryService {
         })
     }
 
-    findTopFiveByScore() {
+    findLatestFive() {
         return db.query.findAll({
-            order: [['score','DESC']],
+            order: [['createdAt','DESC']],
             limit: 5
         })
     }
@@ -84,34 +119,9 @@ class QueryService {
         )
     }
 
-    findByTitleContains(title) {
-        return db.query.findAll({
-            where: {
-                title: db.Sequelize.where(db.Sequelize.fn('LOWER', db.Sequelize.col('title')), 'LIKE', '%' + title + '%'),
-            },
-            include:[{
-                model: db.user,
-                attributes: ['id','username']
-            }]
-        })
-    }
-
-    findByTags(tag) {
-
-        const {fn, col} = db.sequelize;
-
-        return db.query.findAll({
-            where: fn('JSON_CONTAINS', col('tags'), `\"${tag}\"`),
-            include:[{
-                model: db.user,
-                attributes: ['id','username']
-            }]
-        })
-    }
-
-    createQuery(title, description, tags, username) {
+    createQuery(title, description, tags, userId) {
         return Promise.all([
-            this.userService.findUserByUsername(username),
+            this.userService.findUserById(userId),
             db.query.create({
                 title,
                 description,
@@ -191,15 +201,24 @@ class QueryService {
             });
     }
 
-    isLikedByUser(userId, answerId) {
-        return db.query_likes.findOne({where: {userId, answerId}});
+    isLikedByUser(userId, queryId) {
+        return db.query_likes.findOne({where: {userId, queryId}});
     }
 
-    isDislikedByUser(userId, answerId) {
-        return db.query_dislikes.findOne({where: {userId, answerId}});
+    isDislikedByUser(userId, queryId) {
+        return db.query_dislikes.findOne({where: {userId, queryId}});
     }
 }
 
 module.exports = (userService) => {
     return new QueryService(userService);
 };
+
+function getOrderArgument(order){
+    let orderArgument = [['score', 'DESC']];
+    if(order === 'latest'){
+        orderArgument = [['createdAt', 'DESC']];
+    }
+
+    return orderArgument;
+}

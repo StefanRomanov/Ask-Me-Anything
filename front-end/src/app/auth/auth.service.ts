@@ -15,11 +15,26 @@ export class AuthService {
     }
 
     login(username: string, password: string) {
-        return this.http.post('http://localhost:3000/auth/login', {username, password})
-            .subscribe(result => {
-                window.localStorage.setItem('auth_token', result['token']);
-                window.localStorage.setItem('user', result['userId']);
-                this.router.navigate(['']);
-            });
+        return this.http.post('http://localhost:3000/auth/login', {username, password});
+    }
+
+    getToken() {
+        return window.localStorage.getItem('auth_token');
+    }
+
+    getUsername() {
+        return window.localStorage.getItem('username');
+    }
+
+    isLoggedIn() {
+        return window.localStorage.getItem('auth_token') !== null;
+    }
+
+    getUserId() {
+        return window.localStorage.getItem('user');
+    }
+
+    logout() {
+        window.localStorage.clear();
     }
 }

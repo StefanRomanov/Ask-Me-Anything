@@ -55,6 +55,7 @@ module.exports = {
                     {
                         message: 'User successfully logged in!',
                         token,
+                        username: user.username,
                         userId: user.id.toString()
                     });
             })

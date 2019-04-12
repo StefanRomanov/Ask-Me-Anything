@@ -5,6 +5,9 @@ interface Query {
   id: string;
   title: string;
   description: string;
+  isLiked: boolean;
+  isDisliked: boolean;
+  isOwner: boolean;
   score: number;
   tags: string[];
   User: User;

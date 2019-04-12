@@ -9,6 +9,8 @@ import {ReactiveFormsModule} from '@angular/forms';
 import {CKEditorModule} from '@ckeditor/ckeditor5-angular';
 import {RouterModule} from '@angular/router';
 import {AnswersModule} from '../answers/answers.module';
+import {SharedModule} from '../shared/shared.module';
+import { UserQueriesComponent } from './user-queries/user-queries.component';
 
 @NgModule({
     declarations: [
@@ -16,10 +18,12 @@ import {AnswersModule} from '../answers/answers.module';
         CreateQueryComponent,
         QueryCardComponent,
         QueryDetailsComponent,
-        QueryListComponent
+        QueryListComponent,
+        UserQueriesComponent
     ],
     imports: [
         CommonModule,
+        SharedModule,
         ReactiveFormsModule,
         CKEditorModule,
         RouterModule,

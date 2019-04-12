@@ -1,4 +1,6 @@
 <div class="container">
+    <button class="btn btn-light" (click)="orderPopular()" >Popular</button>
+    <button class="btn btn-light" (click)="orderLatest()" >Latest</button>
     <hr/>
     <app-query-card *ngFor="let query of queries" [query]="query"></app-query-card>
     <hr/>

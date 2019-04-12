@@ -1,7 +1,6 @@
 <div class="container">
     <a routerLink="/query/details/{{query.id}}"><h2>{{query.title}}</h2></a>
     <p>{{query.description | slice:0:50}}...</p>
-    <span class="pull-right">{{query.User.username}}</span>
+    <!--<span class="pull-right">{{query.User.username}}</span>-->
     <p>Tags<span *ngFor="let tag of query.tags"> {{tag}}</span></p>
 </div>
-

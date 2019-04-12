@@ -19,8 +19,8 @@ import { LandingComponent } from './landing/landing.component';
     imports: [
         BrowserModule,
         AppRoutingModule,
-        HttpClientModule,
         QueriesModule,
+        HttpClientModule,
         AnswersModule,
         AuthModule,
         SharedModule

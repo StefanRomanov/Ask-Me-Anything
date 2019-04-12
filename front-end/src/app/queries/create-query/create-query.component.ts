@@ -2,6 +2,8 @@ import {Component, OnInit} from '@angular/core';
 import * as ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {QueryService} from '../query.service';
+import {AuthService} from '../../auth/auth.service';
+import {Router} from '@angular/router';
 
 @Component({
     selector: 'app-create-query',
@@ -12,7 +14,12 @@ export class CreateQueryComponent implements OnInit {
     public editor = ClassicEditor;
     form: FormGroup;
     tagsArray: string[];
-    constructor(private formBuilder: FormBuilder, private queryService: QueryService ) {
+
+    constructor(
+        private formBuilder: FormBuilder,
+        private queryService: QueryService,
+        private authService: AuthService,
+        private router: Router) {
     }
 
     ngOnInit() {
@@ -24,14 +31,19 @@ export class CreateQueryComponent implements OnInit {
     }
 
     submitForm() {
-        this.tagsArray = this.tags.value.split(' ');
+        this.tagsArray = Array.from(new Set(this.tags.value.split(' ')));
+        const userId = this.authService.getUserId();
+        console.log(userId);
 
         this.queryService.createQuery({
             title: this.title.value,
             description: this.description.value,
             tags: this.tagsArray,
-            username: 'aaaa'
-        });
+            userId
+        })
+            .subscribe(answer => {
+                this.router.navigate(['queries', 'all']);
+            });
     }
 
     get title() {

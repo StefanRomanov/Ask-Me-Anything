@@ -9,7 +9,10 @@ const queryService = QueryService(userService);
 module.exports = {
 
     getQueries: (req, res, next) => {
-        queryService.findAll()
+        const order = req.query.order;
+        const search = req.query.search || '';
+
+        queryService.findByTitleContainsAndOrder(search, order)
             .then((queries) => {
                 res
                     .status(200)
@@ -24,8 +27,29 @@ module.exports = {
             })
     },
 
-    getTopQuueries: (req, res, next) => {
-        queryService.findTopFiveByScore()
+    getByUser: (req, res, next) => {
+
+        const order = req.query.order;
+        const userId = req.params.userId;
+        const title = req.query.title || '';
+
+        queryService.findAllByUserIdAndTitleIncludesAndOrder(userId, title, order)
+            .then((queries) => {
+                res
+                    .status(200)
+                    .json({message: `${queries.length} queries found`, success: true, queries})
+            })
+            .catch(error => {
+                if (!error.statusCode) {
+                    error.statusCode = 500;
+                }
+
+                next(error);
+            })
+    },
+
+    getLatestQueries: (req, res, next) => {
+        queryService.findLatestFive()
             .then(queries => {
                 res
                     .status(200)
@@ -44,9 +68,9 @@ module.exports = {
     createQuery: (req, res, next) => {
 
         if (validateQuery(req, res)) {
-            const {title, description, tags, username} = req.body;
+            const {title, description, tags, userId} = req.body;
 
-            queryService.createQuery(title, description, tags, username)
+            queryService.createQuery(title, description, tags, userId)
                 .then(() => {
                     res
                         .status(200)
@@ -186,10 +210,10 @@ module.exports = {
         const title = req.query.title;
 
         queryService.findByTitleContains(title)
-            .then(result => {
+            .then(queries => {
                 res
                     .status(200)
-                    .json({message: `${result.length} queries found`, success: true, result})
+                    .json({message: `${queries.length} queries found`, success: true, queries})
             })
             .catch(error => {
                 if (!error.statusCode) {
@@ -219,13 +243,21 @@ function queryDetailsAuthed(req, res, queryId, userId) {
                     .status(404)
                     .json({message: 'Query not found', success: false,})
             } else {
-                query.isLiked = queryService.isLikedByUser(userId, query.id);
-                query.isDisliked = queryService.isDislikedByUser(userId, query.id);
-                query.isOwner = query.UserId === user.id;
+                return Promise.all([
+                    queryService.isLikedByUser(user.id, query.id),
+                    queryService.isDislikedByUser(user.id, query.id)
+                ])
+                    .then(result => {
+                        const [like, dislike] = result;
 
-                res
-                    .status(200)
-                    .json({message: `Query found`, success: true, query})
+                        query.dataValues.isLiked = !!like;
+                        query.dataValues.isDisliked = !!dislike;
+
+                        query.dataValues.isOwner = query.UserId === user.id;
+                        res
+                            .status(200)
+                            .json({message: `Query found`, success: true, query})
+                    })
             }
         })
 
