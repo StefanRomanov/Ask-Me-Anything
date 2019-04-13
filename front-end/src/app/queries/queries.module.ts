@@ -11,6 +11,8 @@ import {RouterModule} from '@angular/router';
 import {AnswersModule} from '../answers/answers.module';
 import {SharedModule} from '../shared/shared.module';
 import { UserQueriesComponent } from './user-queries/user-queries.component';
+import { EditQueryComponent } from './edit-query/edit-query.component';
+import { QueryTaggedComponent } from './query-tagged/query-tagged.component';
 
 @NgModule({
     declarations: [
@@ -19,7 +21,9 @@ import { UserQueriesComponent } from './user-queries/user-queries.component';
         QueryCardComponent,
         QueryDetailsComponent,
         QueryListComponent,
-        UserQueriesComponent
+        UserQueriesComponent,
+        EditQueryComponent,
+        QueryTaggedComponent
     ],
     imports: [
         CommonModule,

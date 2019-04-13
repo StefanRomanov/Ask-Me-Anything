@@ -13,11 +13,11 @@ export class QueryService {
     constructor(private http: HttpClient) {
     }
 
-    getAllQueries(search, order) {
+    getAllQueries(search, order, tag) {
         return this.http.get<{
             message: string,
             success: boolean,
-            queries: Query[] }>(`${FEED_URL}queries?search=${search}&order=${order}`);
+            queries: Query[] }>(`${FEED_URL}queries?search=${search}&order=${order}&tag=${tag}`);
     }
 
     createQuery(data) {
@@ -31,12 +31,16 @@ export class QueryService {
             queries: Query[] }>(`${FEED_URL}queries/user/${data}?title=${title}&order=${order}`);
     }
 
-    getTopQueries() {
+    getLatestQueries() {
         return this.http.get<{ message: string, success: boolean, queries: Query[] }>(`${FEED_URL}queries/latest`);
     }
 
     getQuery(id) {
         return this.http.get<{ message: string, success: boolean, query: Query }>(`${FEED_URL}query/${id}`);
+    }
+
+    editQuery(id, payload) {
+        return this.http.put(`${FEED_URL}query/update/${id}`, payload);
     }
 
     upVote(payload) {
@@ -45,5 +49,9 @@ export class QueryService {
 
     downVote(payload) {
         return this.http.post(`${FEED_URL}query/dislike`, payload);
+    }
+
+    deleteQuery(id) {
+        return this.http.delete(`${FEED_URL}query/${id}`);
     }
 }

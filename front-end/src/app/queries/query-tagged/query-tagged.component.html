@@ -1,0 +1,5 @@
+<h1 class="text-center">{{title}}</h1>
+<app-search-form (searchEmitter)="search($event)"></app-search-form>
+<div class="container" *ngIf="queries$ | async; let queries">
+    <app-query-list [queries]="queries" (orderEmitter)="order($event)"></app-query-list>
+</div>

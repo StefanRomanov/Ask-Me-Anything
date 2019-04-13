@@ -7,6 +7,8 @@ import {QueryDetailsComponent} from './queries/query-details/query-details.compo
 import {LandingComponent} from './landing/landing.component';
 import {AllQueriesComponent} from './queries/all-queries/all-queries.component';
 import {UserQueriesComponent} from './queries/user-queries/user-queries.component';
+import {EditQueryComponent} from './queries/edit-query/edit-query.component';
+import {QueryTaggedComponent} from './queries/query-tagged/query-tagged.component';
 
 const routes: Routes = [
     {path: '', pathMatch: 'full', redirectTo: 'home'},
@@ -16,7 +18,9 @@ const routes: Routes = [
     {path: 'query/create', component: CreateQueryComponent},
     {path: 'query/my', component: UserQueriesComponent},
     {path: 'query/details/:id', component: QueryDetailsComponent},
-    {path: 'query/all', component: AllQueriesComponent}
+    {path: 'query/all', component: AllQueriesComponent},
+    {path: 'query/edit/:id', component: EditQueryComponent},
+    {path: 'query/tagged/:tag', component: QueryTaggedComponent}
 ];
 
 @NgModule({

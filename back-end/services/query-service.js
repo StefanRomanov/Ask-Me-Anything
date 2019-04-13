@@ -5,7 +5,7 @@ class QueryService {
         this.userService = userService;
     }
 
-    findAllByUserIdAndTitleIncludesAndOrder(id, title, order) {
+    findAllByUserIdAndTitleIncludesAndOrderAndTags(id, title, order, tags) {
 
         const orderArgument = getOrderArgument(order);
 
@@ -13,7 +13,8 @@ class QueryService {
             order: orderArgument,
             where: {
                 UserId: id,
-                title: db.Sequelize.where(db.Sequelize.fn('LOWER', db.Sequelize.col('title')), 'LIKE', '%' + title + '%')},
+                title: db.Sequelize.where(db.Sequelize.fn('LOWER', db.Sequelize.col('title')), 'LIKE', '%' + title + '%'),
+                tags: { [db.Sequelize.op.contains] : tags }},
             include:[{
                 model: db.user,
                 attributes: ['id','username']
@@ -21,7 +22,7 @@ class QueryService {
         });
     }
 
-    findByTitleContainsAndOrder(title, order) {
+    findByTitleContainsAndOrderAndTags(title, order, tags) {
 
         const orderArgument = getOrderArgument(order);
 
@@ -29,19 +30,8 @@ class QueryService {
             order: orderArgument,
             where: {
                 title: db.Sequelize.where(db.Sequelize.fn('LOWER', db.Sequelize.col('title')), 'LIKE', '%' + title + '%'),
+                tags: { [db.Sequelize.op.contains] : tags }
             },
-            include:[{
-                model: db.user,
-                attributes: ['id','username']
-            }]
-        })
-    }
-
-    findByTags(tag) {
-        const {fn, col} = db.sequelize;
-
-        return db.query.findAll({
-            where: fn('JSON_CONTAINS', col('tags'), `\"${tag}\"`),
             include:[{
                 model: db.user,
                 attributes: ['id','username']

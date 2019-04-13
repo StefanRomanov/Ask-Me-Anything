@@ -17,7 +17,7 @@ export class LandingComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.queries$ = this.queryService.getTopQueries()
+        this.queries$ = this.queryService.getLatestQueries()
             .pipe(
                 map(e => e.queries)
             );

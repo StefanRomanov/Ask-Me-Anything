@@ -1,19 +1,27 @@
 <div class="container" *ngIf="query">
     <div class="row mt-5 border-info">
-        <div class="col-md-2 align-content-center">
+        <div class="col-lg-2 align-content-center">
             <div class="row justify-content-center" *ngIf="!query.isOwner && authService.isLoggedIn()">
                 <button class="btn" [disabled]="query.isLiked" (click)="upVoteQuery()"><i class="fa fa-arrow-circle-up fa-2x text-success"></i></button>
                 <h4 class="mt-2">{{query.score}}</h4>
                 <button class="btn" [disabled]="query.isDisliked" (click)="downVoteQuery()"><i class="fa fa-arrow-circle-down fa-2x text-danger"></i></button>
             </div>
         </div>
-        <div class="col-lg-5">
+        <div class="col-lg-7">
             <h1>{{query.title}}</h1>
             <pre [innerHTML]="query.description"></pre>
             <div>
-                <span *ngFor="let tag of query.tags"> {{tag}}</span> <span class="pull-right">Author: {{query.User.username}}</span>
+                <a class="btn btn-light" [routerLink]="['/query','tagged',tag]" *ngFor="let tag of query.tags">{{tag}}</a>
             </div>
-
+            <div class="justify-content-between pull-right">
+                <span class="mx-1" *ngIf="query.createdAt !== query.updatedAt">edited on: {{query.updatedAt | date: 'dd/MM/yyyy'}}</span>
+                <span *ngIf="query.createdAt === query.updatedAt">created on: {{query.createdAt | date: 'dd/MM/yyyy'}}</span>
+                <span class="pull-right mx-1">Author: {{query.User.username}}</span>
+            </div>
+            <div *ngIf="query.isOwner">
+                <button class="btn btn-sm btn-outline-danger" (click)="delete()">Delete</button>
+                <button [routerLink]="['/query','edit',query.id]" class="btn btn-sm btn-outline-warning">Edit</button>
+            </div>
         </div>
     </div>
     <hr>

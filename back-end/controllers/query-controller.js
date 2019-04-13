@@ -11,8 +11,10 @@ module.exports = {
     getQueries: (req, res, next) => {
         const order = req.query.order;
         const search = req.query.search || '';
+        const tagString = req.query.tags || '';
+        const tags = tagString.split('-');
 
-        queryService.findByTitleContainsAndOrder(search, order)
+        queryService.findByTitleContainsAndOrderAndTags(search, order, tags)
             .then((queries) => {
                 res
                     .status(200)
@@ -32,8 +34,10 @@ module.exports = {
         const order = req.query.order;
         const userId = req.params.userId;
         const title = req.query.title || '';
+        const tagString = req.query.tags || '';
+        const tags = tagString.split('-');
 
-        queryService.findAllByUserIdAndTitleIncludesAndOrder(userId, title, order)
+        queryService.findAllByUserIdAndTitleIncludesAndOrderAndTags(userId, title, order, tags)
             .then((queries) => {
                 res
                     .status(200)
@@ -189,23 +193,6 @@ module.exports = {
             })
     },
 
-    searchByTag: (req, res, next) => {
-        const tag = req.query.search;
-
-        queryService.findByTags(tag)
-            .then(result => {
-                res
-                    .status(200)
-                    .json({message: `${result.length} queries found`, success: true, result})
-            })
-            .catch(error => {
-                if (!error.statusCode) {
-                    error.statusCode = 500;
-                }
-
-                next(error);
-            })
-    },
     searchByTitle: (req, res, next) => {
         const title = req.query.title;
 

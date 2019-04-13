@@ -16,6 +16,7 @@ export class UserQueriesComponent implements OnInit {
     queries$: Observable<Query[]>;
     searchString = '';
     orderString: string;
+    tag = '';
 
     constructor(private authService: AuthService, private queryService: QueryService) {
     }

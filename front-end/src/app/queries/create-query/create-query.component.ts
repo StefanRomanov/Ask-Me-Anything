@@ -42,7 +42,7 @@ export class CreateQueryComponent implements OnInit {
             userId
         })
             .subscribe(answer => {
-                this.router.navigate(['queries', 'all']);
+                this.router.navigate(['query', 'all']);
             });
     }
 

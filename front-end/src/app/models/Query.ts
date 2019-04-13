@@ -8,6 +8,8 @@ interface Query {
   isLiked: boolean;
   isDisliked: boolean;
   isOwner: boolean;
+  createdAt: Date;
+  updatedAt: Date;
   score: number;
   tags: string[];
   User: User;

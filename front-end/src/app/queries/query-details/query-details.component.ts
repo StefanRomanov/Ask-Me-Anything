@@ -2,7 +2,7 @@ import {Component, OnDestroy, OnInit} from '@angular/core';
 import Query from '../../models/Query';
 import {QueryService} from '../query.service';
 import {Subscription} from 'rxjs';
-import {ActivatedRoute} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {AuthService} from '../../auth/auth.service';
 
 @Component({
@@ -18,7 +18,10 @@ export class QueryDetailsComponent implements OnInit, OnDestroy {
     subscriptionUpVote: Subscription;
     id: string;
 
-    constructor(private queryService: QueryService, private activatedRoute: ActivatedRoute, private authService: AuthService) {
+    constructor(private queryService: QueryService,
+                private activatedRoute: ActivatedRoute,
+                private authService: AuthService,
+                private router: Router) {
     }
 
     ngOnInit() {
@@ -41,14 +44,22 @@ export class QueryDetailsComponent implements OnInit, OnDestroy {
         }
     }
 
+    delete() {
+        this.queryService.deleteQuery(this.query.id)
+            .subscribe(result => {
+                console.log(result);
+                this.router.navigate(['query', 'all']);
+            });
+    }
+
     upVoteQuery() {
         this.subscriptionUpVote = this.queryService.upVote({queryId: this.query.id})
             .subscribe(answer => {
-            this.subscription$ = this.queryService.getQuery(this.id)
-                .subscribe(result => {
-                    this.query = result.query;
-                });
-        });
+                this.subscription$ = this.queryService.getQuery(this.id)
+                    .subscribe(result => {
+                        this.query = result.query;
+                    });
+            });
     }
 
     downVoteQuery() {
