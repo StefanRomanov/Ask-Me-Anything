@@ -1,35 +1,40 @@
-<div class="container" *ngIf="query">
+<div class="container" *ngIf="query$ | async as query">
     <div class="row mt-5 border-info">
         <div class="col-lg-2 align-content-center">
             <div class="row justify-content-center" *ngIf="!query.isOwner && authService.isLoggedIn()">
-                <button class="btn" [disabled]="query.isLiked" (click)="upVoteQuery()"><i class="fa fa-arrow-circle-up fa-2x text-success"></i></button>
+                <button class="btn" [disabled]="query.isLiked" (click)="upVoteQuery(query.id)"><i
+                    class="fa fa-arrow-circle-up fa-2x text-success"></i></button>
                 <h4 class="mt-2">{{query.score}}</h4>
-                <button class="btn" [disabled]="query.isDisliked" (click)="downVoteQuery()"><i class="fa fa-arrow-circle-down fa-2x text-danger"></i></button>
+                <button class="btn" [disabled]="query.isDisliked" (click)="downVoteQuery(query.id)"><i
+                    class="fa fa-arrow-circle-down fa-2x text-danger"></i></button>
             </div>
         </div>
         <div class="col-lg-7">
             <h1>{{query.title}}</h1>
             <pre [innerHTML]="query.description"></pre>
             <div>
-                <a class="btn btn-light" [routerLink]="['/query','tagged',tag]" *ngFor="let tag of query.tags">{{tag}}</a>
+                <a class="btn btn-light" [routerLink]="['/query','tagged',tag]"
+                   *ngFor="let tag of query.tags">{{tag}}</a>
             </div>
             <div class="justify-content-between pull-right">
-                <span class="mx-1" *ngIf="query.createdAt !== query.updatedAt">edited on: {{query.updatedAt | date: 'dd/MM/yyyy'}}</span>
-                <span *ngIf="query.createdAt === query.updatedAt">created on: {{query.createdAt | date: 'dd/MM/yyyy'}}</span>
+                <span class="mx-1"
+                      *ngIf="query.createdAt !== query.updatedAt">edited on: {{query.updatedAt | date: 'dd/MM/yyyy'}}</span>
+                <span
+                    *ngIf="query.createdAt === query.updatedAt">created on: {{query.createdAt | date: 'dd/MM/yyyy'}}</span>
                 <span class="pull-right mx-1">Author: {{query.User.username}}</span>
             </div>
             <div *ngIf="query.isOwner">
-                <button class="btn btn-sm btn-outline-danger" (click)="delete()">Delete</button>
-                <button [routerLink]="['/query','edit',query.id]" class="btn btn-sm btn-outline-warning">Edit</button>
+                <button class="btn btn-sm btn-outline-danger" (click)="delete(query.id)">Delete</button>
+                <button [routerLink]="['/query','edit',query.id]" class="btn btn-sm btn-outline-info">Edit</button>
+                <button class="btn btn-sm btn-outline-warning" *ngIf="!query.solved" (click)="markAsSolved(query.id)">Close
+                </button>
             </div>
         </div>
     </div>
     <hr>
-    <app-answer-create-form [queryId]="query.id"></app-answer-create-form>
+    <app-answer-create-form *ngIf="!query.solved && authService.isLoggedIn()" [queryId]="query.id"></app-answer-create-form>
     <hr>
-    <div>
-        <app-answer-list [answers]="query.Answers"></app-answer-list>
-    </div>
+    <app-answer-list [answers]="query.Answers" (orderEmitter)="order($event)"></app-answer-list>
 </div>
 
 

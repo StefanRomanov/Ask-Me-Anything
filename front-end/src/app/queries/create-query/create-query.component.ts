@@ -40,10 +40,7 @@ export class CreateQueryComponent implements OnInit {
             description: this.description.value,
             tags: this.tagsArray,
             userId
-        })
-            .subscribe(answer => {
-                this.router.navigate(['query', 'all']);
-            });
+        });
     }
 
     get title() {

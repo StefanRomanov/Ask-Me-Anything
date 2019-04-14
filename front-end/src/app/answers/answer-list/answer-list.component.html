@@ -1,3 +1,8 @@
-<div class="row" *ngFor="let answer of answers">
-    <app-answer-card [answer]="answer"></app-answer-card>
+<div class="col-lg-8 container mb-5">
+    <div class="row justify-content-end">
+        <button class="btn btn-light" (click)="orderPopular()">Popular</button>
+        <button class="btn btn-light" (click)="orderLatest()">Latest</button>
+    </div>
+    <app-answer-card *ngFor="let answer of answers" [answer]="answer"></app-answer-card>
 </div>
+

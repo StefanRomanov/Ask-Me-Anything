@@ -97,7 +97,7 @@ module.exports = {
 
     likeAnswer: (req,res, next) => {
         const userId = req.userId;
-        const answerId = req.params.answerId;
+        const {answerId} = req.body;
 
         answerService.like(userId,answerId)
             .then(() => {
@@ -116,7 +116,7 @@ module.exports = {
 
     dislikeAnswer: (req, res, next) => {
         const userId = req.userId;
-        const answerId = req.params.answerId;
+        const {answerId} = req.body;
 
         answerService.dislike(userId,answerId)
             .then(() => {

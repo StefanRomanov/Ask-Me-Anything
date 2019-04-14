@@ -1,8 +1,8 @@
 import {Component, OnInit} from '@angular/core';
 import {QueryService} from '../query.service';
-import {Observable} from 'rxjs';
+import {Observable, Subject} from 'rxjs';
 import {map} from 'rxjs/operators';
-import Query from '../../models/Query';
+import Query from '../../core/models/Query';
 
 @Component({
     selector: 'app-all-queries',
@@ -11,7 +11,7 @@ import Query from '../../models/Query';
 })
 export class AllQueriesComponent implements OnInit {
 
-    queries$: Observable<Query[]>;
+    queries$: Subject<Query[]> = this.queryService.queryListSubject;
     title = 'All queries';
     searchString = '';
     orderString: string;
@@ -21,26 +21,17 @@ export class AllQueriesComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.queries$ = this.queryService.getAllQueries(this.searchString, 'popular', this.tag)
-            .pipe(
-                map(e => e.queries)
-            );
+        this.queryService.getAllQueries(this.searchString, 'popular', this.tag)
     }
 
     search(data: string) {
         this.searchString = data;
         this.title = 'All queries containing "' + data + '"';
-        this.queries$ = this.queryService.getAllQueries(this.searchString, this.orderString, this.tag)
-            .pipe(
-                map(e => e.queries)
-            );
+        this.queryService.getAllQueries(this.searchString, this.orderString, this.tag);
     }
 
     order(order: string) {
         this.orderString = order;
-        this.queries$ = this.queryService.getAllQueries(this.searchString, this.orderString, this.tag)
-            .pipe(
-                map(e => e.queries)
-            );
+        this.queryService.getAllQueries(this.searchString, this.orderString, this.tag);
     }
 }

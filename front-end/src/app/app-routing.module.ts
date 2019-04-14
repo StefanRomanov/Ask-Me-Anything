@@ -17,14 +17,14 @@ const routes: Routes = [
     {path: 'login', component: LoginFormComponent},
     {path: 'query/create', component: CreateQueryComponent},
     {path: 'query/my', component: UserQueriesComponent},
-    {path: 'query/details/:id', component: QueryDetailsComponent},
+    {path: 'query/details/:id', component: QueryDetailsComponent, runGuardsAndResolvers: 'always'},
     {path: 'query/all', component: AllQueriesComponent},
     {path: 'query/edit/:id', component: EditQueryComponent},
     {path: 'query/tagged/:tag', component: QueryTaggedComponent}
 ];
 
 @NgModule({
-    imports: [RouterModule.forRoot(routes)],
+    imports: [RouterModule.forRoot(routes,{onSameUrlNavigation: 'reload'})],
     exports: [RouterModule]
 })
 export class AppRoutingModule {

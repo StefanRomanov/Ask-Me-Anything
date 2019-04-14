@@ -8,9 +8,9 @@ const isAnonymous = require('../middleware/is-anonymous');
 //Query routes
 router.get('/queries', QueryController.getQueries);
 router.get('/query/:queryId', isAnonymous, QueryController.getQuery);
+router.get('/query/details/:queryId', isAnonymous, QueryController.getQueryDetails);
 router.get('/queries/latest', QueryController.getLatestQueries);
 router.get('/queries/user/:userId', QueryController.getByUser);
-router.get('/queries/search', QueryController.searchByTitle);
 
 router.post('/query/create', [
     body('title')
@@ -20,6 +20,7 @@ router.post('/query/create', [
         .trim()
         .isLength({min: 5})
 ], QueryController.createQuery);
+router.post('/query/solve', isAuth, QueryController.markSolved);
 router.post('/query/like', isAuth, QueryController.likeQuery);
 router.post('/query/dislike', isAuth, QueryController.dislikeQuery);
 

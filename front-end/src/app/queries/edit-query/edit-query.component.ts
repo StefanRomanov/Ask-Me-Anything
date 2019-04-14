@@ -1,10 +1,10 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {QueryService} from '../query.service';
 import {ActivatedRoute, Router} from '@angular/router';
 import * as ClassicEditor from '@ckeditor/ckeditor5-build-classic';
-import Query from '../../models/Query';
-import {Subscription} from 'rxjs';
+import Query from '../../core/models/Query';
+import {Subject, Subscription} from 'rxjs';
 
 @Component({
     selector: 'app-edit-query',
@@ -14,7 +14,8 @@ import {Subscription} from 'rxjs';
 export class EditQueryComponent implements OnInit, OnDestroy {
 
     id: string;
-    query: Query;
+    querySubject: Subject<Query> = this.queryService.querySubject;
+    query: Query = this.queryService.query;
     form: FormGroup;
     tagsArray: string[];
 
@@ -32,15 +33,12 @@ export class EditQueryComponent implements OnInit, OnDestroy {
     ngOnInit() {
         this.id = this.activatedRoute.snapshot.params.id;
 
-        this.subscription$ = this.queryService.getQuery(this.id)
-            .subscribe(response => {
-                this.query = response.query;
-                this.form = this.formBuilder.group({
-                    title: [this.query.title, [Validators.required, Validators.pattern('[A-Za-z0-9]{1,25}')]],
-                    description: [this.query.description, Validators.required],
-                    tags: [this.query.tags.join(' '), Validators.pattern('[0-9a-zA-Z]+( [0-9a-zA-Z]+)*')]
-                });
-            });
+        this.queryService.getQuery(this.id);
+        this.form = this.formBuilder.group({
+            title: [this.query.title, [Validators.required, Validators.pattern('[A-Za-z0-9]{1,25}')]],
+            description: [this.query.description, Validators.required],
+            tags: [this.query.tags.join(' '), Validators.pattern('[0-9a-zA-Z]+( [0-9a-zA-Z]+)*')]
+        });
     }
 
     ngOnDestroy(): void {
@@ -54,17 +52,13 @@ export class EditQueryComponent implements OnInit, OnDestroy {
     }
 
     submitForm() {
-
         this.tagsArray = Array.from(new Set(this.tags.value.split(' ')));
 
-        this.editSubscription$ = this.queryService.editQuery(this.query.id, {
+        this.queryService.editQuery(this.query.id, {
             title: this.title.value,
             description: this.description.value,
             tags: this.tagsArray
-        })
-            .subscribe(result => {
-                this.router.navigate(['query', 'details', this.query.id]);
-            });
+        });
     }
 
     get title() {

@@ -1,9 +1,9 @@
 <div class="container">
-    <div class="row">
+    <div class="row" *ngIf="querySubject | async as query">
         <div class="col-lg-2"></div>
         <div class="col-lg-8">
             <h1 class="text-center">Edit query</h1>
-            <form [formGroup]="form" class="mt-2" (submit)="submitForm()" *ngIf="query">
+            <form [formGroup]="form" class="mt-2" (submit)="submitForm()">
                 <div class="form-group input-group">
                     <div class="input-group-prepend">
                         <span class="input-group-text"> <i class="fa fa-question"></i> </span>

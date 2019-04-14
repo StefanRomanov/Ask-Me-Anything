@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
-import {Observable} from 'rxjs';
-import Query from '../../models/Query';
+import {Observable, Subject} from 'rxjs';
+import Query from '../../core/models/Query';
 import {ActivatedRoute} from '@angular/router';
 import {map} from 'rxjs/operators';
 import {QueryService} from '../query.service';
@@ -12,7 +12,7 @@ import {QueryService} from '../query.service';
 })
 export class QueryTaggedComponent implements OnInit {
 
-    queries$: Observable<Query[]>;
+    queries$: Subject<Query[]> = this.queryService.queryListSubject;
     title: string;
     searchString = '';
     orderString: string;
@@ -25,28 +25,19 @@ export class QueryTaggedComponent implements OnInit {
         this.tag = this.activatedRoute.snapshot.params.tag;
         this.title = `Queries tagged: ${this.tag}`;
 
-        this.queries$ = this.queryService.getAllQueries(this.searchString, this.orderString, this.tag)
-            .pipe(
-                map(e => e.queries)
-            );
+        this.queryService.getAllQueries(this.searchString, this.orderString, this.tag);
     }
 
     search(data: string) {
         this.searchString = data;
 
-        this.queries$ = this.queryService.getAllQueries(this.searchString, this.orderString, this.tag)
-            .pipe(
-                map(e => e.queries)
-            );
+        this.queryService.getAllQueries(this.searchString, this.orderString, this.tag);
     }
 
     order(order: string) {
         this.orderString = order;
 
-        this.queries$ = this.queryService.getAllQueries(this.searchString, this.orderString, this.tag)
-            .pipe(
-                map(e => e.queries)
-            );
+        this.queryService.getAllQueries(this.searchString, this.orderString, this.tag);
     }
 
 }

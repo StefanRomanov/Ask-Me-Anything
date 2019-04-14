@@ -8,13 +8,15 @@ class QueryService {
     findAllByUserIdAndTitleIncludesAndOrderAndTags(id, title, order, tags) {
 
         const orderArgument = getOrderArgument(order);
+        const tagsFilter = getTagsArgument(tags);
 
         return db.query.findAll({
             order: orderArgument,
             where: {
                 UserId: id,
                 title: db.Sequelize.where(db.Sequelize.fn('LOWER', db.Sequelize.col('title')), 'LIKE', '%' + title + '%'),
-                tags: { [db.Sequelize.op.contains] : tags }},
+                ...tagsFilter,
+            },
             include:[{
                 model: db.user,
                 attributes: ['id','username']
@@ -24,13 +26,14 @@ class QueryService {
 
     findByTitleContainsAndOrderAndTags(title, order, tags) {
 
+        const tagsFilter = getTagsArgument(tags);
         const orderArgument = getOrderArgument(order);
 
         return db.query.findAll({
             order: orderArgument,
             where: {
                 title: db.Sequelize.where(db.Sequelize.fn('LOWER', db.Sequelize.col('title')), 'LIKE', '%' + title + '%'),
-                tags: { [db.Sequelize.op.contains] : tags }
+                ...tagsFilter
             },
             include:[{
                 model: db.user,
@@ -39,7 +42,9 @@ class QueryService {
         })
     }
 
-    findOneById(id) {
+    findOneByIdOrderAnswers(id, order) {
+        console.error(order);
+
         return db.query.findOne({
             where: {id: id},
             include: [{
@@ -51,13 +56,24 @@ class QueryService {
             }, {
                 model: db.user,
                 attributes: ['id', 'username']
-            }]
+            }],
+            order: [[db.answer, order, 'DESC']]
+        })
+    }
+
+    findOneById(id) {
+        return db.query.findOne({
+            where: {id: id},
         })
     }
 
     findLatestFive() {
         return db.query.findAll({
             order: [['createdAt','DESC']],
+            include: {
+                model: db.user,
+                attributes: ['id', 'username']
+            },
             limit: 5
         })
     }
@@ -198,6 +214,22 @@ class QueryService {
     isDislikedByUser(userId, queryId) {
         return db.query_dislikes.findOne({where: {userId, queryId}});
     }
+
+    markSolved(queryId, userId) {
+
+        return this.findOneById(queryId)
+            .then(query => {
+                if(!query) {
+                    const error = new Error('Query not found');
+                    error.statusCode = 404;
+                    throw error;
+                } else {
+                    return query.update({
+                        solved: true
+                    })
+                }
+            })
+    }
 }
 
 module.exports = (userService) => {
@@ -211,4 +243,14 @@ function getOrderArgument(order){
     }
 
     return orderArgument;
+}
+
+function getTagsArgument(tags) {
+    let tagsFilter = {tags: { [db.Sequelize.Op.contains]: tags }};
+
+    if(tags.length === 1 && tags[0] === ''){
+        tagsFilter = null;
+    }
+
+    return tagsFilter;
 }

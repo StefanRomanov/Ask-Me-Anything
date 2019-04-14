@@ -1,8 +1,8 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
-import Query from '../../models/Query';
+import {Component, DoCheck, OnDestroy, OnInit} from '@angular/core';
+import Query from '../../core/models/Query';
 import {QueryService} from '../query.service';
-import {Subscription} from 'rxjs';
-import {ActivatedRoute, Router} from '@angular/router';
+import {Subject, Subscription} from 'rxjs';
+import {ActivatedRoute, NavigationEnd, Router} from '@angular/router';
 import {AuthService} from '../../auth/auth.service';
 
 @Component({
@@ -12,63 +12,52 @@ import {AuthService} from '../../auth/auth.service';
 })
 export class QueryDetailsComponent implements OnInit, OnDestroy {
 
-    query: Query;
-    subscription$: Subscription;
-    subscriptionDownVote: Subscription;
-    subscriptionUpVote: Subscription;
+    query$: Subject<Query> = this.queryService.querySubject;
+    navigationSubscription: Subscription;
+    answerOrder = 'score';
     id: string;
 
     constructor(private queryService: QueryService,
                 private activatedRoute: ActivatedRoute,
                 private authService: AuthService,
                 private router: Router) {
+        this.navigationSubscription = this.router.events.subscribe((e: any) => {
+            if (e instanceof NavigationEnd) {
+                this.id = this.activatedRoute.snapshot.params.id;
+                this.queryService.getQueryDetails(this.id, this.answerOrder);
+            }
+        });
     }
 
     ngOnInit() {
-        this.id = this.activatedRoute.snapshot.params.id;
-
-        this.subscription$ = this.queryService.getQuery(this.id)
-            .subscribe(result => {
-                this.query = result.query;
-            });
     }
 
     ngOnDestroy(): void {
-        this.subscription$.unsubscribe();
-        if (this.subscriptionDownVote) {
-            this.subscriptionDownVote.unsubscribe();
-        }
-
-        if (this.subscriptionUpVote) {
-            this.subscriptionUpVote.unsubscribe();
-        }
+        this.queryService.destroySubscriptions();
     }
 
-    delete() {
-        this.queryService.deleteQuery(this.query.id)
-            .subscribe(result => {
-                console.log(result);
-                this.router.navigate(['query', 'all']);
-            });
+    delete(id) {
+        this.queryService.deleteQuery(id);
     }
 
-    upVoteQuery() {
-        this.subscriptionUpVote = this.queryService.upVote({queryId: this.query.id})
-            .subscribe(answer => {
-                this.subscription$ = this.queryService.getQuery(this.id)
-                    .subscribe(result => {
-                        this.query = result.query;
-                    });
-            });
+    upVoteQuery(queryId) {
+        this.queryService.upVote({queryId});
+        this.router.navigate(['query', 'details', queryId]);
     }
 
-    downVoteQuery() {
-        this.subscriptionDownVote = this.queryService.downVote({queryId: this.query.id})
-            .subscribe(answer => {
-                this.subscription$ = this.queryService.getQuery(this.id)
-                    .subscribe(result => {
-                        this.query = result.query;
-                    });
-            });
+    downVoteQuery(queryId) {
+        this.queryService.downVote({queryId});
+        this.router.navigate(['query', 'details', queryId]);
     }
+
+    order($event: string) {
+        this.answerOrder = $event;
+
+        this.queryService.getQueryDetails(this.id, this.answerOrder);
+    }
+
+    markAsSolved(queryId) {
+        this.queryService.markSolved({queryId});
+    }
+
 }

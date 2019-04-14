@@ -1,5 +1,5 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import Query from '../../models/Query';
+import Query from '../../core/models/Query';
 @Component({
     selector: 'app-query-list',
     templateUrl: './query-list.component.html',

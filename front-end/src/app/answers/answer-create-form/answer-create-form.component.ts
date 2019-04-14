@@ -26,7 +26,7 @@ export class AnswerCreateFormComponent implements OnInit {
     }
 
     submitForm() {
-        this.answerService.createQuery({content: this.content.value, queryId: this.queryId});
+        this.answerService.createAnswer({content: this.content.value, queryId: this.queryId}, this.answerForm);
     }
 
     get content() {

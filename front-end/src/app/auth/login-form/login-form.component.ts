@@ -35,8 +35,7 @@ export class LoginFormComponent implements OnInit, OnDestroy {
         this.subscription$ = this.authService.login(this.username.value, this.password.value)
             .subscribe(result => {
                 window.localStorage.setItem('auth_token', result['token']);
-                window.localStorage.setItem('user', result['userId']);
-                window.localStorage.setItem('username', result['username']);
+                this.authService.setUserContext();
                 this.router.navigate(['']);
             });
     }

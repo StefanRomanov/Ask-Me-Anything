@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {QueryService} from '../queries/query.service';
-import {Observable} from 'rxjs';
-import Query from '../models/Query';
+import {Observable, Subject} from 'rxjs';
+import Query from '../core/models/Query';
 import {map} from 'rxjs/operators';
 
 @Component({
@@ -11,15 +11,12 @@ import {map} from 'rxjs/operators';
 })
 export class LandingComponent implements OnInit {
 
-    queries$: Observable<Query[]>;
+    queries$: Subject<Query[]> = this.queryService.queryListSubject;
 
     constructor(private queryService: QueryService) {
     }
 
     ngOnInit() {
-        this.queries$ = this.queryService.getLatestQueries()
-            .pipe(
-                map(e => e.queries)
-            );
+        this.queryService.getLatestQueries();
     }
 }

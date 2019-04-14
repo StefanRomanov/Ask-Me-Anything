@@ -1,5 +1,5 @@
-import {Component, Input, OnInit} from '@angular/core';
-import Answer from '../../models/Answer';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import Answer from '../../core/models/Answer';
 
 @Component({
     selector: 'app-answer-list',
@@ -10,10 +10,20 @@ export class AnswerListComponent implements OnInit {
     @Input()
     answers: Answer[];
 
+    @Output()
+    orderEmitter = new EventEmitter<string>();
+
     constructor() {
     }
 
     ngOnInit() {
     }
 
+    orderLatest() {
+        this.orderEmitter.emit('createdAt');
+    }
+
+    orderPopular() {
+        this.orderEmitter.emit('score');
+    }
 }

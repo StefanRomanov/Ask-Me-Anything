@@ -4,7 +4,7 @@ import {NgModule} from '@angular/core';
 import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
 import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
-import {AuthInterceptor} from './interceptors/auth.interceptor';
+import {AuthInterceptor} from './core/interceptors/auth.interceptor';
 import {QueriesModule} from './queries/queries.module';
 import {AnswersModule} from './answers/answers.module';
 import {AuthModule} from './auth/auth.module';

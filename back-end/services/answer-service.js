@@ -63,10 +63,11 @@ class AnswerService {
             });
     }
 
-    increaseScore(id) {
+    increaseScore(id, amount) {
         return db.answer.increment(
             'score',
             {
+                by: amount,
                 where: {
                     id: id
                 }
@@ -74,10 +75,11 @@ class AnswerService {
         )
     }
 
-    decreaseScore(id) {
+    decreaseScore(id, amount) {
         return db.answer.decrement(
             'score',
             {
+                by: amount,
                 where: {
                     id: id
                 }
@@ -94,26 +96,25 @@ class AnswerService {
         ])
             .then((result) => {
                 const [user, answer, like, dislike] = result;
+                console.error(result);
                 if (user && answer && !dislike) {
                     if (answer.UserId === userId) {
-                        throw 'Cannot vote for your own queries';
+                        throw 'Cannot vote for your own answers';
                     }
 
                     if (like) {
                         return Promise.all([
                             like.destroy(),
-                            this.decreaseScore(answerId),
-                            this.userService.decreaseScore(user.username),
-                            this.decreaseScore(answerId),
-                            this.userService.decreaseScore(user.username),
-                            db.query_dislikes.create({userId, answerId})
+                            this.decreaseScore(answerId, 2),
+                            this.userService.decreaseScore(userId, 2),
+                            db.answer_dislikes.create({userId, answerId})
                         ])
                     }
 
                     return Promise.all([
-                        this.decreaseScore(answerId),
-                        this.userService.decreaseScore(user.username),
-                        db.query_dislikes.create({userId, answerId})
+                        this.decreaseScore(answerId, 1),
+                        this.userService.decreaseScore(userId, 1),
+                        db.answer_dislikes.create({userId, answerId})
                     ])
                 } else {
                     throw 'Invalid operation';
@@ -125,25 +126,30 @@ class AnswerService {
         return Promise.all([
             this.userService.findUserById(userId),
             this.findOneById(answerId),
-            db.query_likes.findOne({where: {userId, answerId}}),
-            db.query_dislikes.findOne({where: {userId, answerId}})
+            db.answer_likes.findOne({where: {userId, answerId}}),
+            db.answer_dislikes.findOne({where: {userId, answerId}})
         ])
             .then((result) => {
                 const [user, query, like, dislike] = result;
                 if (user && query && !like) {
                     if (query.UserId === userId) {
-                        throw 'Cannot vote for your own queries';
+                        throw 'Cannot vote for your own answers';
                     }
 
                     if (dislike) {
-                        dislike.destroy();
-                        this.increaseScore(answerId);
-                        this.userService.increaseScore(user.username);
+                        return Promise.all([
+                            dislike.destroy(),
+                            this.increaseScore(answerId, 2),
+                            this.userService.increaseScore(userId, 2),
+                            db.answer_likes.create({userId, answerId}),
+                        ])
                     }
 
-                    this.increaseScore(answerId);
-                    this.userService.increaseScore(user.username);
-                    return db.query_likes.create({userId, answerId})
+                    return Promise.all([
+                        this.increaseScore(answerId, 1),
+                        this.userService.increaseScore(userId, 1),
+                        db.answer_likes.create({userId, answerId}),
+                    ])
                 } else {
                     throw 'Invalid operation';
                 }
@@ -156,6 +162,24 @@ class AnswerService {
 
     isDislikedByUser(userId, answerId) {
         return db.answer_dislikes.findOne({where: {userId, answerId}});
+    }
+
+    modifyAnswers(answers, userId) {
+
+        return answers.map(a => {
+            return Promise.all([
+                this.isDislikedByUser(userId, a.id),
+                this.isLikedByUser(userId, a.id)
+            ])
+                .then(result => {
+                    const [dislike, like] = result;
+                    a.dataValues.isLiked = !!like;
+                    a.dataValues.isDisliked = !!dislike;
+                    a.dataValues.isOwner = a.UserId === userId;
+
+                    return a;
+                })
+        })
     }
 }
 
