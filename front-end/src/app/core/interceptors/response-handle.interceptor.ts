@@ -19,13 +19,14 @@ export class ResponseHandleInterceptor implements HttpInterceptor {
                     if (success.url.endsWith('login')
                         || success.url.endsWith('register')
                         || success.url.endsWith('create')
-                        || success.url.includes('delete')) {
+                        || success.url.includes('delete')
+                        || success.url.includes('edit')) {
                         this.toastrService.success(success.body.message);
                     }
                 }
 
             }), catchError(error => {
-                if (error.error.statusCode === 410) {
+                if (error.status === 410) {
                     this.authService.logout();
                 }
                 console.log(error);

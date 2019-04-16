@@ -21,7 +21,12 @@ module.exports = {
             .then((result) => {
                 res
                     .status(200)
-                    .json({message: `${result.count} queries found`, success: true, queries: result.rows, count: result.count})
+                    .json({
+                        message: `${result.count} queries found`,
+                        success: true,
+                        queries: result.rows,
+                        count: result.count
+                    })
             })
             .catch(error => {
                 if (!error.statusCode) {
@@ -70,7 +75,12 @@ module.exports = {
             .then((result) => {
                 res
                     .status(200)
-                    .json({message: `${result.count} queries found`, success: true, queries: result.rows, count: result.count})
+                    .json({
+                        message: `${result.count} queries found`,
+                        success: true,
+                        queries: result.rows,
+                        count: result.count
+                    })
             })
             .catch(error => {
                 if (!error.statusCode) {
@@ -267,10 +277,10 @@ function queryDetailsAuthed(req, res, queryId, userId, order, page) {
                     queryService.isLikedByUser(user.id, query.id),
                     queryService.isDislikedByUser(user.id, query.id),
                     answerService.countAnswersByQueryId(query.id),
-                    ...answerService.modifyAnswers(query.Answers,userId)
+                    ...answerService.modifyAnswers(query.Answers, userId)
                 ])
                     .then(result => {
-                        const [like, dislike,count,...answers] = result;
+                        const [like, dislike, count, ...answers] = result;
 
                         query.Answers = answers;
                         query.dataValues.isLiked = !!like;

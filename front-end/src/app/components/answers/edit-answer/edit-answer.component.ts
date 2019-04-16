@@ -12,7 +12,7 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 })
 export class EditAnswerComponent implements OnInit {
 
-    public editor = ClassicEditor;
+    modules: object;
     answerEditForm: FormGroup;
 
     @Input()
@@ -30,6 +30,23 @@ export class EditAnswerComponent implements OnInit {
         this.answerEditForm = this.formBuilder.group({
             content: [this.answer.content, Validators.required]
         });
+
+        this.modules = {
+            toolbar: [
+                ['bold', 'italic', 'underline', 'strike'],        // toggled buttons
+                ['blockquote', 'code-block'],
+                [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+                [{ 'script': 'sub'}, { 'script': 'super' }],      // superscript/subscript
+                [{ 'indent': '-1'}, { 'indent': '+1' }],          // outdent/indent
+                [{ 'direction': 'rtl' }],                         // text direction
+                [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+                [{ 'align': [] }],
+
+                ['clean'],                                         // remove formatting button
+
+                ['link', 'image']                         // link and image, video
+            ]
+        };
     }
 
     submitForm() {

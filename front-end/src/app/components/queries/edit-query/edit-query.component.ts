@@ -14,6 +14,7 @@ import {Subject, Subscription} from 'rxjs';
 export class EditQueryComponent implements OnInit, OnDestroy {
 
     id: string;
+    modules: object;
     querySubject: Subject<Query> = this.queryService.querySubject;
     query: Query = this.queryService.query;
     form: FormGroup;
@@ -21,8 +22,6 @@ export class EditQueryComponent implements OnInit, OnDestroy {
 
     subscription$: Subscription;
     editSubscription$: Subscription;
-
-    public editor = ClassicEditor;
 
     constructor(private formBuilder: FormBuilder,
                 private queryService: QueryService,
@@ -39,6 +38,28 @@ export class EditQueryComponent implements OnInit, OnDestroy {
             description: [this.query.description, Validators.required],
             tags: [this.query.tags.join(' '), Validators.pattern('[0-9a-zA-Z]+( [0-9a-zA-Z]+)*')]
         });
+
+        this.modules = {
+            toolbar: [
+                ['bold', 'italic', 'underline', 'strike'],        // toggled buttons
+                ['blockquote', 'code-block'],
+
+                [{ 'header': 1 }, { 'header': 2 }],               // custom button values
+                [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+                [{ 'script': 'sub'}, { 'script': 'super' }],      // superscript/subscript
+                [{ 'indent': '-1'}, { 'indent': '+1' }],          // outdent/indent
+                [{ 'direction': 'rtl' }],                         // text direction
+
+                [{ 'size': ['small', false, 'large', 'huge'] }],  // custom dropdown
+                [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+                [{ 'font': [] }],
+                [{ 'align': [] }],
+
+                ['clean'],                                         // remove formatting button
+
+                ['link', 'image']                         // link and image, video
+            ]
+        };
     }
 
     ngOnDestroy(): void {

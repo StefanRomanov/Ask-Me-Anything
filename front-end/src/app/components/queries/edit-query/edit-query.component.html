@@ -25,12 +25,7 @@
                 <div class="alert alert-danger" *ngIf="tags?.dirty && tags?.errors?.pattern">
                     Enter tags separated by single space
                 </div>
-                <ckeditor
-                    tagName="textarea"
-                    formControlName="description"
-                    [editor]="editor"
-                    data="{{query.description}}">
-                </ckeditor>
+                <quill-editor formControlName="description" sanitize="true" [modules]="modules"></quill-editor>
                 <div class="alert alert-danger" *ngIf="description?.touched && description?.errors?.required">
                     Description is required
                 </div>

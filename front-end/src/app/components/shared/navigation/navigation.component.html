@@ -1,26 +1,45 @@
 <header>
-    <div class="navbar bg-primary shadow">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-12 justify-content-between">
-                    <a routerLink="/" routerLinkActive="active" class="navbar-brand nav-link text-white"><h3>AMA</h3>
-                    </a>
-                    <a routerLink="/query/all" routerLinkActive="active" class="nav-link font-weight-bold text-white">All
-                        Queries</a>
-                    <ng-template [ngIf]="!isLoggedIn">
-                        <a routerLink="/auth/login" routerLinkActive="active" class="nav-link font-weight-bold text-white">Login</a>
+    <nav class="navbar navbar-dark shadow bg-primary">
+        <ul class="navbar-nav mr-auto">
+            <li>
+                <a routerLink="/home" routerLinkActive="active"
+                   class="nav-link font-weight-bold text-white"><span>Home</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a routerLink="/query/all" routerLinkActive="active" class="nav-link font-weight-bold text-white"><span>All
+                    Queries</span></a>
+            </li>
+            <ng-template [ngIf]="!isLoggedIn">
+                <div class="pull-right">
+                    <li class="nav-item">
+                        <a routerLink="/auth/login" routerLinkActive="active"
+                           class="nav-link font-weight-bold text-white"><span>Login</span></a>
+                    </li>
+                    <li class="nav-item">
                         <a routerLink="/auth/register" routerLinkActive="active"
-                           class="nav-link font-weight-bold text-white">Register</a>
-                    </ng-template>
-                    <ng-template [ngIf]="isLoggedIn">
-                        <a routerLink="/query/my" routerLinkActive="active"
-                           class="nav-link font-weight-bold text-white">My Queries</a>
-                        <a routerLink="/query/create" routerLinkActive="active"
-                           class="nav-link font-weight-bold text-white">Ask a question</a>
-                        <a routerLink="/logout" routerLinkActive="active" class="nav-link font-weight-bold text-white" (click)="logout()">Logout</a>
-                    </ng-template>
+                           class="nav-link font-weight-bold text-white"><span>Register</span></a>
+                    </li>
                 </div>
-            </div>
-        </div>
-    </div>
+            </ng-template>
+            <ng-template [ngIf]="isLoggedIn">
+                <ng-template [ngIf]="!isAdmin">
+                    <li class="nav-item">
+                        <a routerLink="/query/my" routerLinkActive="active"
+                           class="nav-link font-weight-bold text-white"><span>My Queries</span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a routerLink="/query/create" routerLinkActive="active"
+                           class="nav-link font-weight-bold text-white"><span>Ask a question</span></a>
+                    </li>
+                </ng-template>
+                <div class="pull-right mb-auto">
+                    <li class="nav-item">
+                        <a routerLink="/logout" routerLinkActive="active" class="nav-link font-weight-bold text-white"
+                           (click)="logout()"><span>Logout</span></a>
+                    </li>
+                </div>
+            </ng-template>
+        </ul>
+    </nav>
 </header>

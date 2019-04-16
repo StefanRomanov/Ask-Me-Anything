@@ -1,33 +1,72 @@
-a.nav-link {
+body,html {
+    margin: 0;
+}
+nav.navbar{
+    height: 48px;
+}
+
+a>span{
+    margin-left: 6px;
+    margin-right: 6px;
+}
+
+ul {
+    padding-left: 50px;
+    list-style: none;
+    display: table;
+    width: 100%;
+    text-align: start;
+}
+li {
+    margin: 13px;
+    text-align: end;
+    display: inline;
+
+}
+a {
+    text-decoration: none;
     display: inline-block;
-    color: white;
-    opacity: 75%;
+    position: relative;
+    height: 100% !important;
 }
 
-a.nav-link:hover {
-    color: white;
+a:after {
+    bottom: 0;
+    content: "";
+    display: block;
+    height: 3px;
+    left: 50%;
+    position: absolute;
+    background: red;
+    transition: width 0.3s ease 0s, left 0.3s ease 0s;
+    width: 0;
 }
 
-a.nav-link.active {
-    color: white;
-    border: 2px beige solid;
-    background: burlywood;
+a:hover:after {
+    width: 100%;
+    left: 0;
 }
 
-.nav-link{
-    border-radius: 15px;
+.nav-item {
+    position: relative;
 }
 
-.nav-link:hover{
-    background: rgba(87.1,72.2,52.9,.99);
+.active:after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background-color: red;
 }
 
-.navbar-brand{
-    background: saddlebrown;
-    border: 2px beige solid;
-    border-radius: 55%;
+
+a.active {
+    border-radius: 2px;
+    box-shadow: 0 0 5px .1px;
+    background-color: lightskyblue;
 }
 
-.navbar span {
-    color: #bbbbbb;
-}
+
+

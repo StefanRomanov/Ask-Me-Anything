@@ -1,8 +1,6 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import * as ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import {AnswerService} from '../../../core/services/answer.service';
-import Answer from '../../../core/models/Answer';
 
 @Component({
     selector: 'app-answer-create-form',
@@ -11,7 +9,7 @@ import Answer from '../../../core/models/Answer';
 })
 export class AnswerCreateFormComponent implements OnInit {
 
-    public editor = ClassicEditor;
+    modules: object;
     answerForm: FormGroup;
 
     @Input()
@@ -24,6 +22,23 @@ export class AnswerCreateFormComponent implements OnInit {
         this.answerForm = this.formBuilder.group({
             content: ['', Validators.required]
         });
+
+        this.modules = {
+            toolbar: [
+                ['bold', 'italic', 'underline', 'strike'],        // toggled buttons
+                ['blockquote', 'code-block'],
+                [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+                [{ 'script': 'sub'}, { 'script': 'super' }],      // superscript/subscript
+                [{ 'indent': '-1'}, { 'indent': '+1' }],          // outdent/indent
+                [{ 'direction': 'rtl' }],                         // text direction
+                [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+                [{ 'align': [] }],
+
+                ['clean'],                                         // remove formatting button
+
+                ['link', 'image']                         // link and image, video
+            ]
+        };
     }
 
     submitForm() {

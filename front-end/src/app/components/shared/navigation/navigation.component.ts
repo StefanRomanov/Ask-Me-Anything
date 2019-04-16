@@ -10,6 +10,7 @@ import {Router} from '@angular/router';
 export class NavigationComponent implements OnInit, DoCheck {
 
     isLoggedIn: boolean;
+    isAdmin: boolean;
 
     constructor(private authService: AuthService, private router: Router) {
     }
@@ -19,6 +20,7 @@ export class NavigationComponent implements OnInit, DoCheck {
 
     ngDoCheck() {
         this.isLoggedIn = this.authService.isLoggedIn();
+        this.isAdmin = this.authService.isAdmin();
     }
 
     logout() {

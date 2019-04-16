@@ -3,6 +3,7 @@ import Answer from '../../../core/models/Answer';
 import {AnswerService} from '../../../core/services/answer.service';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {EditAnswerComponent} from '../edit-answer/edit-answer.component';
+import {AuthService} from '../../../core/services/auth.service';
 
 @Component({
     selector: 'app-answer-card',
@@ -16,7 +17,7 @@ export class AnswerCardComponent implements OnInit {
     @Output()
     emitter = new EventEmitter<Answer>();
 
-    constructor(private answerService: AnswerService, private modalService: NgbModal) {
+    constructor(private answerService: AnswerService, private modalService: NgbModal, private authService: AuthService) {
     }
 
     ngOnInit() {

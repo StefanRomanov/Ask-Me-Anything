@@ -37,6 +37,10 @@ export class AuthService {
         return this.userContext.username;
     }
 
+    isAdmin() {
+        return this.userContext.role === 'ADMIN';
+    }
+
     isLoggedIn() {
         return this.userContext.userId !== null;
     }
@@ -59,6 +63,7 @@ export class AuthService {
         } else {
             try {
                 const decoded = decode(token);
+                console.log(decoded);
                 this.userContext = {
                     isLoggedIn: true,
                     token,

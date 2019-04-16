@@ -22,7 +22,7 @@ class QueryService {
                 model: db.user,
                 attributes: ['id','username']
             }],
-            ...paginator(page, 1 )
+            ...paginator(page,5)
         });
     }
 
@@ -41,7 +41,7 @@ class QueryService {
                 model: db.user,
                 attributes: ['id','username']
             }],
-            ...paginator(page, 1 )
+            ...paginator(page,5)
         })
     }
 
@@ -56,8 +56,7 @@ class QueryService {
                     attributes: ['id', 'username'],
                 },
                 order: [[order, 'DESC']],
-                offset: page,
-                limit: 1
+                ...paginator(page,5)
             }, {
                 model: db.user,
                 attributes: ['id', 'username']
@@ -86,8 +85,8 @@ class QueryService {
     deleteQuery(id, userId, role) {
         return this.findOneById(id)
             .then(query => {
-                if (query.UserId !== userId || role !== 'ADMIN') {
-                    const error = new Error('Unauthorized. User is not author or admin');
+                if (role !== 'ADMIN') {
+                    const error = new Error('Unauthorized. User is not admin');
                     error.statusCode = 401;
                     throw error;
                 } else {

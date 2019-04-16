@@ -26,7 +26,9 @@
                             "src/styles.css",
                             "node_modules/bootstrap/dist/css/bootstrap.min.css",
                             "node_modules/font-awesome/css/font-awesome.css",
-                            "node_modules/ngx-toastr/toastr.css"
+                            "node_modules/ngx-toastr/toastr.css",
+                            "node_modules/quill/dist/quill.snow.css",
+                            "node_modules/quill/dist/quill.bubble.css"
                         ],
                         "scripts": [],
                         "es5BrowserSupport": true

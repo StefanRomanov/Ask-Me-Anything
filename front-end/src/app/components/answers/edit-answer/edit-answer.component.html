@@ -8,13 +8,7 @@
     <div class="col-lg-1"></div>
     <div class="col-lg-10">
         <form [formGroup]="answerEditForm" class="mt-2" (submit)="submitForm()">
-            <ckeditor
-                tagName="textarea"
-                formControlName="content"
-                [editor]="editor"
-                [config]="{ toolbar: ['bold', 'italic', 'blockquote' ] }"
-                [data]="answer.content">
-            </ckeditor>
+            <quill-editor formControlName="content" sanitize="true" [modules]="modules"></quill-editor>
             <div class="alert alert-danger" *ngIf="content?.touched && content?.errors?.required">
                 Content is required
             </div>

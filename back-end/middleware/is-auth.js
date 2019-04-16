@@ -13,7 +13,7 @@ module.exports = (req, res, next) => {
     decodedToken = jwt.verify(token, 'somesupersecret')
   } catch(error) {
     return res.status(410)
-      .json({ message: 'Token is invalid.', error });
+      .json({ message: 'Session expired.', error });
   }
 
   if (!decodedToken) {

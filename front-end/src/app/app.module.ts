@@ -12,6 +12,7 @@ import {AuthService} from './core/services/auth.service';
 import {ToastrModule, ToastrService} from 'ngx-toastr';
 import {ResponseHandleInterceptor} from './core/interceptors/response-handle.interceptor';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {QuillModule} from 'ngx-quill';
 
 @NgModule({
     declarations: [
@@ -24,6 +25,7 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
         AppRoutingModule,
         HttpClientModule,
         SharedModule,
+        QuillModule.forRoot(),
         ToastrModule.forRoot(),
         BrowserAnimationsModule
     ],

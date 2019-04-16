@@ -1,6 +1,12 @@
-<div class="container">
-    <a routerLink="/query/details/{{query.id}}"><h2>{{query.title}}</h2></a>
-    <p>{{query.description | slice:0:50}}...</p>
-    <span class="pull-right">{{query.User.username}}</span>
-    <p>Tags<span *ngFor="let tag of query.tags"> {{tag}}</span></p>
+<div class="container row border-bottom">
+    <div class="col-lg-1 my-3">
+        <h5 class="mt-2"><i class="fa fa-bar-chart"></i> :{{query.score}}</h5>
+        <h5 class="mt-2"><i class="fa fa-reply"></i> :{{query.totalAnswerCount}}</h5>
+    </div>
+    <div class="col-lg-11 border-left my-3">
+        <a routerLink="/query/details/{{query.id}}"><h3 class="text-dark title">{{query.title}}</h3></a>
+        <small class="pull-right">author: {{query.User.username}}</small>
+        <a class="btn btn-light mx-1" [routerLink]="['/query','tagged',tag]"
+           *ngFor="let tag of query.tags">{{tag}}</a>
+    </div>
 </div>
