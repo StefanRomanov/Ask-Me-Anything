@@ -1,0 +1,8 @@
+<div class="col-lg-8 container mb-5">
+    <div class="row justify-content-end">
+        <button class="btn btn-light" (click)="orderPopular()">Popular</button>
+        <button class="btn btn-light" (click)="orderLatest()">Latest</button>
+    </div>
+    <app-answer-card *ngFor="let answer of answers" [answer]="answer" (emitter)="editAnswer($event)"></app-answer-card>
+</div>
+

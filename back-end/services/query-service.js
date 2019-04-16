@@ -1,49 +1,51 @@
 const db = require('../database/config');
+const paginator = require('../util/pagination');
 
 class QueryService {
     constructor(userService) {
         this.userService = userService;
     }
 
-    findAllByUserIdAndTitleIncludesAndOrderAndTags(id, title, order, tags) {
+    findAllByUserIdAndTitleIncludesAndOrderAndTags(id, title, order, tags, page) {
 
         const orderArgument = getOrderArgument(order);
         const tagsFilter = getTagsArgument(tags);
 
-        return db.query.findAll({
+        return db.query.findAndCountAll({
             order: orderArgument,
             where: {
                 UserId: id,
-                title: db.Sequelize.where(db.Sequelize.fn('LOWER', db.Sequelize.col('title')), 'LIKE', '%' + title + '%'),
+                title: db.sequelize.where(db.sequelize.fn('LOWER', db.sequelize.col('title')), 'LIKE', '%' + title + '%'),
                 ...tagsFilter,
             },
             include:[{
                 model: db.user,
                 attributes: ['id','username']
-            }]
+            }],
+            ...paginator(page, 1 )
         });
     }
 
-    findByTitleContainsAndOrderAndTags(title, order, tags) {
+    findByTitleContainsAndOrderAndTags(title, order, tags, page) {
 
         const tagsFilter = getTagsArgument(tags);
         const orderArgument = getOrderArgument(order);
 
-        return db.query.findAll({
+        return db.query.findAndCountAll({
             order: orderArgument,
             where: {
-                title: db.Sequelize.where(db.Sequelize.fn('LOWER', db.Sequelize.col('title')), 'LIKE', '%' + title + '%'),
+                title: db.sequelize.where(db.sequelize.fn('LOWER', db.sequelize.col('title')), 'LIKE', '%' + title + '%'),
                 ...tagsFilter
             },
             include:[{
                 model: db.user,
                 attributes: ['id','username']
-            }]
+            }],
+            ...paginator(page, 1 )
         })
     }
 
-    findOneByIdOrderAnswers(id, order) {
-        console.error(order);
+    findOneByIdOrderAnswers(id, order, page) {
 
         return db.query.findOne({
             where: {id: id},
@@ -51,13 +53,16 @@ class QueryService {
                 model: db.answer,
                 include: {
                     model: db.user,
-                    attributes: ['id', 'username']
-                }
+                    attributes: ['id', 'username'],
+                },
+                order: [[order, 'DESC']],
+                offset: page,
+                limit: 1
             }, {
                 model: db.user,
                 attributes: ['id', 'username']
             }],
-            order: [[db.answer, order, 'DESC']]
+
         })
     }
 
@@ -82,7 +87,9 @@ class QueryService {
         return this.findOneById(id)
             .then(query => {
                 if (query.UserId !== userId || role !== 'ADMIN') {
-                    throw new Error('Unauthorized. User is not author or admin !');
+                    const error = new Error('Unauthorized. User is not author or admin');
+                    error.statusCode = 401;
+                    throw error;
                 } else {
                     return db.query.destroy({where: {id: id}})
                 }
@@ -94,7 +101,9 @@ class QueryService {
         return this.findOneById(id)
             .then(query => {
                 if (query.UserId !== userId) {
-                    throw new Error('Unauthorized. User is not author or admin !');
+                    const error = new Error('Unauthorized. User is not author or admin');
+                    error.statusCode = 401;
+                    throw error;
                 } else {
                     return db.query.update(payload, {where: {id: id}})
                 }
@@ -151,7 +160,9 @@ class QueryService {
                 const [user, query, like, dislike] = result;
                 if (user && query && !dislike) {
                     if (query.UserId === userId) {
-                        throw 'Cannot vote for your own queries';
+                        const error = new Error('Cannot vote for your own queries !');
+                        error.statusCode = 403;
+                        throw error;
                     }
 
                     if (like) {
@@ -169,7 +180,9 @@ class QueryService {
                         db.query_dislikes.create({userId, queryId})]);
 
                 } else {
-                    throw 'Invalid operation';
+                    const error = new Error('Invalid operation');
+                    error.statusCode = 500;
+                    throw error;
                 }
             });
     }
@@ -185,7 +198,9 @@ class QueryService {
                 const [user, query, like, dislike] = result;
                 if (user && query && !like) {
                     if (query.UserId === userId) {
-                        throw 'Cannot vote for your own queries';
+                        const error = new Error('Cannot vote for your own queries !');
+                        error.statusCode = 403;
+                        throw error;
                     }
 
                     if (dislike) {
@@ -202,7 +217,9 @@ class QueryService {
                         this.userService.increaseScore(userId, 1),
                         db.query_likes.create({userId, queryId})]);
                 } else {
-                    throw 'Invalid operation';
+                    const error = new Error('Invalid operation');
+                    error.statusCode = 500;
+                    throw error;
                 }
             });
     }

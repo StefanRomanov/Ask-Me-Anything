@@ -54,11 +54,11 @@ module.exports = {
     },
 
     deleteAnswer: (req, res, next) => {
-        const queryId = req.params.queryId;
+        const answerId = req.params.answerId;
         const userId = req.userId;
         const role = req.role;
 
-        answerService.deleteAnswer(queryId,userId, role)
+        answerService.deleteAnswer(answerId,userId, role)
             .then(() => {
                 res
                     .status(200)

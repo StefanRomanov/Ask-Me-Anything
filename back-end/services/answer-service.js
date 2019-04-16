@@ -24,6 +24,12 @@ class AnswerService {
         })
     }
 
+    countAnswersByQueryId(queryId){
+        return db.answer.count({
+            where: {QueryId: queryId}
+        })
+    }
+
     createAnswer(content, userId, queryId) {
         return Promise.all([
             db.user.findOne({where: {id: userId}}),
@@ -36,29 +42,35 @@ class AnswerService {
                     answer.setUser(user);
                     query.addAnswer(answer);
                 } else {
-                    throw 'Entity doesn\'t exist';
+                    const error = new Error('Entity not found');
+                    error.statusCode = 404;
+                    throw error;
                 }
             })
     }
 
-    deleteAnswer(queryId, userId, role) {
-        return this.findOneById(id)
+    deleteAnswer(answerId, userId, role) {
+        return this.findOneById(answerId)
             .then(answer => {
                 if (answer.UserId !== userId) {
-                    throw new Error('Unauthorized. User is not author or admin !');
+                    const error = new Error('User is not author or admin');
+                    error.statusCode = 401;
+                    throw error;
                 } else {
-                    return db.answer.destroy({where: {id: id}})
+                    return db.answer.destroy({where: {id: answerId}})
                 }
             });
     }
 
-    updateAnswer(id, payload, userId) {
-        return this.findOneById(id)
+    updateAnswer(answerId, payload, userId) {
+        return this.findOneById(answerId)
             .then(answer => {
                 if (answer.UserId !== userId) {
-                    throw new Error('Unauthorized. User is not author or admin !');
+                    const error = new Error('User is not author or admin');
+                    error.statusCode = 401;
+                    throw error;
                 } else {
-                    return db.answer.update(payload, {where: {id: id}})
+                    return db.answer.update(payload, {where: {id: answerId}})
                 }
             });
     }
@@ -96,10 +108,12 @@ class AnswerService {
         ])
             .then((result) => {
                 const [user, answer, like, dislike] = result;
-                console.error(result);
+
                 if (user && answer && !dislike) {
                     if (answer.UserId === userId) {
-                        throw 'Cannot vote for your own answers';
+                        const error = new Error('Cannot vote for your owm answers');
+                        error.statusCode = 403;
+                        throw error;
                     }
 
                     if (like) {
@@ -117,7 +131,9 @@ class AnswerService {
                         db.answer_dislikes.create({userId, answerId})
                     ])
                 } else {
-                    throw 'Invalid operation';
+                    const error = new Error('Invalid operation');
+                    error.statusCode = 500;
+                    throw error;
                 }
             });
     }
@@ -133,7 +149,9 @@ class AnswerService {
                 const [user, query, like, dislike] = result;
                 if (user && query && !like) {
                     if (query.UserId === userId) {
-                        throw 'Cannot vote for your own answers';
+                        const error = new Error('Cannot vote for your owm answers');
+                        error.statusCode = 403;
+                        throw error;
                     }
 
                     if (dislike) {
@@ -151,7 +169,9 @@ class AnswerService {
                         db.answer_likes.create({userId, answerId}),
                     ])
                 } else {
-                    throw 'Invalid operation';
+                    const error = new Error('Invalid operation');
+                    error.statusCode = 500;
+                    throw error;
                 }
             });
     }

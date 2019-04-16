@@ -1,0 +1,29 @@
+<div class="modal-header">
+    <h4 class="modal-title">Edit answer</h4>
+    <button type="button" class="btn fa fa-times" aria-label="Close"
+            (click)="activeModal.dismiss('Cross click')">
+    </button>
+</div>
+<div class="row">
+    <div class="col-lg-1"></div>
+    <div class="col-lg-10">
+        <form [formGroup]="answerEditForm" class="mt-2" (submit)="submitForm()">
+            <ckeditor
+                tagName="textarea"
+                formControlName="content"
+                [editor]="editor"
+                [config]="{ toolbar: ['bold', 'italic', 'blockquote' ] }"
+                [data]="answer.content">
+            </ckeditor>
+            <div class="alert alert-danger" *ngIf="content?.touched && content?.errors?.required">
+                Content is required
+            </div>
+            <div class="form-group mt-3 w-25 pull-left">
+                <button type="submit" [disabled]="answerEditForm.invalid" class="btn btn-primary btn-block">
+                    Edit
+                </button>
+            </div>
+        </form>
+    </div>
+    <div class="col-lg-1"></div>
+</div>

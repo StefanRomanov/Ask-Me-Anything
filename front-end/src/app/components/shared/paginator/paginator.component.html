@@ -1,0 +1,10 @@
+<div class="d-flex align-self-center justify-content-center mt-3">
+    <button class="page-link rounded font-weight-bold" [disabled]="page < 2 || totalPages === 0"
+    (click)="prevPage()">&lt;</button>
+    <button class="page-link w-5 rounded font-weight-bold text-center"
+             [disabled]="true">{{page}}</button>
+    <button class="page-link rounded w-5 font-weight-bold" id="total-pages"
+            disabled>{{totalPages}}</button>
+    <button class="page-link rounded font-weight-bold" [disabled]="page >= totalPages || totalPages === 0"
+        (click)="nextPage()">&gt;</button>
+</div>

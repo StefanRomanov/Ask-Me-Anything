@@ -5,11 +5,13 @@ import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
 import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 import {AuthInterceptor} from './core/interceptors/auth.interceptor';
-import {QueriesModule} from './queries/queries.module';
-import {AnswersModule} from './answers/answers.module';
-import {AuthModule} from './auth/auth.module';
-import {SharedModule} from './shared/shared.module';
-import { LandingComponent } from './landing/landing.component';
+import {SharedModule} from './components/shared/shared.module';
+import { LandingComponent } from './components/landing/landing.component';
+import {NgbActiveModal, NgbModule} from '@ng-bootstrap/ng-bootstrap';
+import {AuthService} from './core/services/auth.service';
+import {ToastrModule, ToastrService} from 'ngx-toastr';
+import {ResponseHandleInterceptor} from './core/interceptors/response-handle.interceptor';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 
 @NgModule({
     declarations: [
@@ -17,19 +19,27 @@ import { LandingComponent } from './landing/landing.component';
         LandingComponent,
     ],
     imports: [
+        NgbModule.forRoot(),
         BrowserModule,
         AppRoutingModule,
-        QueriesModule,
         HttpClientModule,
-        AnswersModule,
-        AuthModule,
-        SharedModule
+        SharedModule,
+        ToastrModule.forRoot(),
+        BrowserAnimationsModule
     ],
     providers: [
+        NgbActiveModal,
         {
             provide: HTTP_INTERCEPTORS,
             useClass: AuthInterceptor,
-            multi: true
+            multi: true,
+            deps: [AuthService]
+        },
+        {
+            provide: HTTP_INTERCEPTORS,
+            useClass: ResponseHandleInterceptor,
+            multi: true,
+            deps: [ToastrService, AuthService]
         }
     ],
     bootstrap: [AppComponent]

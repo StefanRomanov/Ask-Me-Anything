@@ -12,7 +12,7 @@ module.exports = (req, res, next) => {
   try {
     decodedToken = jwt.verify(token, 'somesupersecret')
   } catch(error) {
-    return res.status(401)
+    return res.status(410)
       .json({ message: 'Token is invalid.', error });
   }
 

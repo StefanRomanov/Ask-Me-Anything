@@ -9,7 +9,7 @@ module.exports = (req, res, next) => {
         try {
             decodedToken = jwt.verify(token, 'somesupersecret')
         } catch(error) {
-            console.error(error);
+            // Ignored
         }
 
         if (decodedToken) {

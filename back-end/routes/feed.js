@@ -48,10 +48,7 @@ router.post('/answer/like', isAuth, AnswerController.likeAnswer);
 router.post('/answer/dislike', isAuth, AnswerController.dislikeAnswer);
 
 router.put('/answer/:answerId', isAuth, [
-    body('title')
-        .trim()
-        .isLength({min: 5}),
-    body('description')
+    body('content')
         .trim()
         .isLength({min: 5})
 ], AnswerController.updateAnswer);

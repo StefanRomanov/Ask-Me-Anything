@@ -12,15 +12,16 @@ module.exports = {
 
     getQueries: (req, res, next) => {
         const order = req.query.order;
+        const page = req.query.page;
         const search = req.query.search || '';
         const tagString = req.query.tags || '';
         const tags = tagString.split('-');
 
-        queryService.findByTitleContainsAndOrderAndTags(search, order, tags)
-            .then((queries) => {
+        queryService.findByTitleContainsAndOrderAndTags(search, order, tags, page)
+            .then((result) => {
                 res
                     .status(200)
-                    .json({message: `${queries.length} queries found`, success: true, queries})
+                    .json({message: `${result.count} queries found`, success: true, queries: result.rows, count: result.count})
             })
             .catch(error => {
                 if (!error.statusCode) {
@@ -59,16 +60,17 @@ module.exports = {
     getByUser: (req, res, next) => {
 
         const order = req.query.order;
+        const page = req.query.page;
         const userId = req.params.userId;
         const title = req.query.title || '';
         const tagString = req.query.tags || '';
         const tags = tagString.split('-');
 
-        queryService.findAllByUserIdAndTitleIncludesAndOrderAndTags(userId, title, order, tags)
-            .then((queries) => {
+        queryService.findAllByUserIdAndTitleIncludesAndOrderAndTags(userId, title, order, tags, page)
+            .then((result) => {
                 res
                     .status(200)
-                    .json({message: `${queries.length} queries found`, success: true, queries})
+                    .json({message: `${result.count} queries found`, success: true, queries: result.rows, count: result.count})
             })
             .catch(error => {
                 if (!error.statusCode) {
@@ -121,13 +123,14 @@ module.exports = {
         const queryId = req.params.queryId;
         const userId = req.userId;
         const order = req.query.answers;
+        const page = req.query.page;
 
         let response;
 
         if (userId) {
-            response = queryDetailsAuthed(req, res, queryId, userId, order);
+            response = queryDetailsAuthed(req, res, queryId, userId, order, page);
         } else {
-            response = queryDetailsAnonymous(req, res, queryId, order);
+            response = queryDetailsAnonymous(req, res, queryId, order, page);
         }
 
         response
@@ -241,32 +244,33 @@ module.exports = {
     }
 };
 
-function queryDetailsAuthed(req, res, queryId, userId, order) {
+function queryDetailsAuthed(req, res, queryId, userId, order, page) {
 
     return Promise.all([
-        queryService.findOneByIdOrderAnswers(queryId, order),
+        queryService.findOneByIdOrderAnswers(queryId, order, page),
         userService.findUserById(userId)
     ])
         .then(result => {
             const [query, user] = result;
             if (!user) {
-                res
-                    .status(404)
-                    .json({message: 'User not found', success: false,})
+                const error = new Error('User not found');
+                error.statusCode = 404;
+                throw error;
             }
             if (!query) {
-                res
-                    .status(404)
-                    .json({message: 'Query not found', success: false,})
+                const error = new Error('Query not found');
+                error.statusCode = 404;
+                throw error;
             } else {
 
                 return Promise.all([
                     queryService.isLikedByUser(user.id, query.id),
                     queryService.isDislikedByUser(user.id, query.id),
+                    answerService.countAnswersByQueryId(query.id),
                     ...answerService.modifyAnswers(query.Answers,userId)
                 ])
                     .then(result => {
-                        const [like, dislike,...answers] = result;
+                        const [like, dislike,count,...answers] = result;
 
                         query.Answers = answers;
                         query.dataValues.isLiked = !!like;
@@ -276,25 +280,29 @@ function queryDetailsAuthed(req, res, queryId, userId, order) {
 
                         res
                             .status(200)
-                            .json({message: 'Query found', success: false, query})
+                            .json({message: 'Query found', success: false, query, count: count})
                     })
             }
         })
 
 }
 
-function queryDetailsAnonymous(req, res, queryId, order) {
+function queryDetailsAnonymous(req, res, queryId, order, page) {
 
-    return queryService.findOneByIdOrderAnswers(queryId, order)
+    return queryService.findOneByIdOrderAnswers(queryId, order, page)
         .then(query => {
             if (!query) {
-                res
-                    .status(404)
-                    .json({message: 'Query not found', success: false,})
+                const error = new Error('Query not found');
+                error.statusCode = 404;
+                throw error;
             } else {
-                res
-                    .status(200)
-                    .json({message: `Query found`, success: true, query})
+                return answerService.countAnswersByQueryId(query.id)
+                    .then(count => {
+                        res
+                            .status(200)
+                            .json({message: `Query found`, success: true, query})
+                    })
+
             }
         })
 }

@@ -15,7 +15,7 @@ module.exports = {
                 password
             ).then((user) => {
                 res.status(201)
-                    .json({message: 'User created!', userId: user._id});
+                    .json({message: 'Successful register!', userId: user._id});
             })
                 .catch((error) => {
                     if (!error.statusCode) {

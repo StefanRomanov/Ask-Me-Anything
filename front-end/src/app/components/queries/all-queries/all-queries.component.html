@@ -1,0 +1,7 @@
+<h1 class="text-center">{{title}}</h1>
+<app-search-form (searchEmitter)="search($event)"></app-search-form>
+<div class="container" *ngIf="{queries: queries$ | async, count: totalNumber | async} as result">
+    <app-query-list [queries]="result.queries" (orderEmitter)="order($event)"></app-query-list>
+    <app-paginator *ngIf="result.count" (pageEmitter)="pageChange($event)" [totalPages]="result.count"></app-paginator>
+</div>
+

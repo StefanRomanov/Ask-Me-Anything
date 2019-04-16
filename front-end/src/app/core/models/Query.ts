@@ -14,6 +14,7 @@ interface Query {
     createdAt: Date;
     updatedAt: Date;
     User: User;
+    totalAnswerCount: number;
     Answers: Answer[];
 }
 
