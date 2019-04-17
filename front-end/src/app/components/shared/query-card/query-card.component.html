@@ -1,12 +1,14 @@
 <div class="container row border-bottom">
     <div class="col-lg-1 my-3">
         <h5 class="mt-2"><i class="fa fa-bar-chart"></i> :{{query.score}}</h5>
-        <h5 class="mt-2"><i class="fa fa-reply"></i> :{{query.totalAnswerCount}}</h5>
     </div>
     <div class="col-lg-11 border-left my-3">
         <a routerLink="/query/details/{{query.id}}"><h3 class="text-dark title">{{query.title}}</h3></a>
-        <small class="pull-right">author: {{query.User.username}}</small>
         <a class="btn btn-light mx-1" [routerLink]="['/query','tagged',tag]"
            *ngFor="let tag of query.tags">{{tag}}</a>
+        <div class="row justify-content-end">
+            <small class="mx-3">posted: {{query.createdAt | date: 'dd MMM yyyy'}}</small>
+            <small class="pull-right">author: {{query.User.username}} ({{query.User.score}})</small>
+        </div>
     </div>
 </div>

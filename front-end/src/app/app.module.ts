@@ -17,7 +17,7 @@ import {QuillModule} from 'ngx-quill';
 @NgModule({
     declarations: [
         AppComponent,
-        LandingComponent,
+        LandingComponent
     ],
     imports: [
         NgbModule.forRoot(),
@@ -43,6 +43,8 @@ import {QuillModule} from 'ngx-quill';
             multi: true,
             deps: [ToastrService, AuthService]
         }
+    ],
+    exports: [
     ],
     bootstrap: [AppComponent]
 })

@@ -20,7 +20,7 @@ export class AnswerCreateFormComponent implements OnInit {
 
     ngOnInit() {
         this.answerForm = this.formBuilder.group({
-            content: ['', Validators.required]
+            content: ['',[ Validators.required, Validators.maxLength(1500)]]
         });
 
         this.modules = {

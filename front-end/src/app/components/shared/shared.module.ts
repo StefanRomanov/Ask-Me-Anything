@@ -8,6 +8,7 @@ import {ReactiveFormsModule} from '@angular/forms';
 import { PaginatorComponent } from './paginator/paginator.component';
 import {QueryListComponent} from './query-list/query-list.component';
 import {QueryCardComponent} from './query-card/query-card.component';
+import {NgbDropdownModule} from '@ng-bootstrap/ng-bootstrap';
 
 @NgModule({
     declarations: [
@@ -21,7 +22,8 @@ import {QueryCardComponent} from './query-card/query-card.component';
     imports: [
         CommonModule,
         ReactiveFormsModule,
-        RouterModule
+        RouterModule,
+        NgbDropdownModule
     ],
     exports: [
         FooterComponent,

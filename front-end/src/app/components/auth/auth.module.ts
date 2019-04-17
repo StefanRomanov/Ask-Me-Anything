@@ -14,7 +14,6 @@ import {AuthRoutingModule} from './auth-routing.module';
     imports: [
         CommonModule,
         ReactiveFormsModule,
-        RouterModule,
         AuthRoutingModule
     ],
     exports: [

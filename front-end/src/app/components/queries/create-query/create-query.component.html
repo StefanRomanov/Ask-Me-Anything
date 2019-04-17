@@ -19,7 +19,7 @@
                 </div>
                 <div class="form-group input-group">
                     <div class="input-group-prepend">
-                        <span class="input-group-text"> <i class="fa fa-info"></i> </span>
+                        <span class="input-group-text"> <i class="fa fa-tags"></i> </span>
                     </div>
                     <input formControlName="tags" class="form-control" placeholder="tags..."/>
                 </div>
@@ -29,7 +29,10 @@
                 <div class="alert alert-danger" *ngIf="tags?.touched && tags?.errors?.required">
                     Please enter at least one tag
                 </div>
-                <quill-editor formControlName="description" sanitize="true" [modules]="modules"></quill-editor>
+                <quill-editor formControlName="description"
+                              [sanitize]=true
+                              [modules]="modules"
+                              [preserveWhitespace]="true"></quill-editor>
                 <div class="alert alert-danger" *ngIf="description?.touched && description?.errors?.required">
                     Description is required
                 </div>

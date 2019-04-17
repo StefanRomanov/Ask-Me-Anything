@@ -29,8 +29,8 @@ export class QueryTaggedComponent implements OnInit, OnDestroy {
         this.queryService.getAllQueries(this.searchString, this.orderString, this.tag, this.page);
     }
 
-    search(data: string) {
-        this.searchString = data;
+    search(data) {
+        this.searchString = data.search;
 
         this.queryService.getAllQueries(this.searchString, this.orderString, this.tag, this.page);
     }

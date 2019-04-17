@@ -1,18 +1,21 @@
 <hr>
 <div class="container">
     <div class="row">
-        <div class="col-lg-2"></div>
+        <div class="col-lg-3"></div>
         <div class="col-lg-6">
             <form [formGroup]="answerForm" class="mt-2" (submit)="submitForm()">
                 <quill-editor formControlName="content" sanitize="true" [modules]="modules"></quill-editor>
                 <div class="alert alert-danger" *ngIf="content?.touched && content?.errors?.required">
                     Content is required
                 </div>
+                <div class="alert alert-danger" *ngIf="content?.dirty && content?.errors?.maxLength">
+                    Maximum 1500 characters
+                </div>
                 <div class="form-group mt-3 w-25 pull-left">
                     <button type="submit" [disabled]="answerForm.invalid" class="btn btn-primary btn-block"> Answer</button>
                 </div>
             </form>
         </div>
-        <div class="col-lg-4"></div>
+        <div class="col-lg-3"></div>
     </div>
 </div>

@@ -14,11 +14,11 @@
                     Username is required
                 </div>
                 <div class="alert alert-danger" *ngIf="title?.dirty && title?.errors?.pattern">
-                    Allowed only letters and numbers. Max 35 characters.
+                    Allowed only letters and numbers. Max 50 characters.
                 </div>
                 <div class="form-group input-group">
                     <div class="input-group-prepend">
-                        <span class="input-group-text"> <i class="fa fa-info"></i> </span>
+                        <span class="input-group-text"> <i class="fa fa-tags"></i> </span>
                     </div>
                     <input formControlName="tags" class="form-control" placeholder="{{query.tags}}"/>
                 </div>
@@ -28,6 +28,9 @@
                 <quill-editor formControlName="description" sanitize="true" [modules]="modules"></quill-editor>
                 <div class="alert alert-danger" *ngIf="description?.touched && description?.errors?.required">
                     Description is required
+                </div>
+                <div class="alert alert-danger" *ngIf="description?.dirty && description?.errors?.maxLength">
+                    Maximum 2000 characters
                 </div>
                 <div class="form-group mt-3">
                     <button type="submit" [disabled]="form.invalid" class="btn btn-primary btn-block"> Submit</button>

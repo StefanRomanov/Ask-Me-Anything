@@ -31,6 +31,13 @@ class UserService {
 
     }
 
+    changeRole(userId, role){
+        return db.user.update({role: role},
+            {
+                where: {id: userId}
+            })
+    }
+
     findUserByUsername(username) {
         return db.user.findOne({where: {username: username}});
     }

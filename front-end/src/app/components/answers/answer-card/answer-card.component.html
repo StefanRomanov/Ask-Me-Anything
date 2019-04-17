@@ -1,26 +1,28 @@
-<div class="row">
+<div class="row my-5">
     <div class="col-lg-2 align-content-center">
         <div class="row justify-content-center">
             <button class="btn" [disabled]="answer.isLiked || answer.isOwner || !authService.isLoggedIn()"
                     (click)="upVoteAnswer(answer.id)"><i class="fa fa-arrow-circle-up fa-2x text-success"></i></button>
-            <h4 class="mt-2">{{answer.score}}</h4>
+            <h5 class="mt-2">{{answer.score}}</h5>
             <button class="btn" [disabled]="answer.isLiked || answer.isOwner || !authService.isLoggedIn()"
                     (click)="downVoteAnswer(answer.id)"><i class="fa fa-arrow-circle-down fa-2x text-danger"></i>
             </button>
         </div>
     </div>
-    <div class="col-lg-6">
-        <div class="row">
-            <p [innerHTML]="answer.content"></p>
+    <div class="col-lg-7 border-left border-bottom">
+        <div class="row bg-light rounded ml-2">
+            <p class="m-3" [innerHTML]="answer.content"></p>
         </div>
-        <div class="row">
-            <button class="btn btn-sm btn-outline-danger" (click)="delete(answer.id)">Delete</button>
-            <button class="btn btn-sm btn-outline-info" (click)="openForm()">Edit</button>
+        <div class="row justify-content-start mt-2 ml-4">
+            <button class="btn btn-sm btn-outline-danger" *ngIf="authService.isAdmin()"
+                    (click)="delete(answer.id)">Delete
+            </button>
+            <button class="btn btn-sm btn-outline-info" *ngIf="answer.isOwner" (click)="openForm()">Edit</button>
         </div>
-        <div class="row">
-            <div class="justify-content-between pull-right">
-                <span>created on: {{answer.createdAt | date: 'dd/MM/yyyy'}}</span>
-                <span class="pull-right mx-1">author: {{answer.User.username}}</span>
+        <div class="row justify-content-end mr-3">
+            <div class="">
+                <small class="mr-3">posted on: {{answer.createdAt | date: 'dd MMM yyyy'}}</small>
+                <small class="">author: {{answer.User.username}} ({{answer.User.score}})</small>
             </div>
         </div>
 

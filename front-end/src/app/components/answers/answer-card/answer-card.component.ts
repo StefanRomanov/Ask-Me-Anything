@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
 import Answer from '../../../core/models/Answer';
 import {AnswerService} from '../../../core/services/answer.service';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
@@ -10,7 +10,7 @@ import {AuthService} from '../../../core/services/auth.service';
     templateUrl: './answer-card.component.html',
     styleUrls: ['./answer-card.component.css']
 })
-export class AnswerCardComponent implements OnInit {
+export class AnswerCardComponent implements OnInit, OnDestroy {
     @Input()
     answer: Answer;
 
@@ -40,5 +40,9 @@ export class AnswerCardComponent implements OnInit {
         modalRef.componentInstance.answer = this.answer;
 
         modalRef.result.then(result => console.log(result));
+    }
+
+    ngOnDestroy(): void {
+        this.answerService.destroySubscriptions();
     }
 }

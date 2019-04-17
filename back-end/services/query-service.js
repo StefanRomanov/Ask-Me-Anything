@@ -18,11 +18,11 @@ class QueryService {
                 title: db.sequelize.where(db.sequelize.fn('LOWER', db.sequelize.col('title')), 'LIKE', '%' + title + '%'),
                 ...tagsFilter,
             },
-            include:[{
+            include: [{
                 model: db.user,
-                attributes: ['id','username']
+                attributes: ['id', 'username','score']
             }],
-            ...paginator(page,5)
+            ...paginator(page, 5)
         });
     }
 
@@ -37,11 +37,11 @@ class QueryService {
                 title: db.sequelize.where(db.sequelize.fn('LOWER', db.sequelize.col('title')), 'LIKE', '%' + title + '%'),
                 ...tagsFilter
             },
-            include:[{
+            include: [{
                 model: db.user,
-                attributes: ['id','username']
+                attributes: ['id', 'username', 'score']
             }],
-            ...paginator(page,5)
+            ...paginator(page, 5)
         })
     }
 
@@ -53,13 +53,13 @@ class QueryService {
                 model: db.answer,
                 include: {
                     model: db.user,
-                    attributes: ['id', 'username'],
+                    attributes: ['id', 'username','score'],
                 },
                 order: [[order, 'DESC']],
-                ...paginator(page,5)
+                ...paginator(page, 5)
             }, {
                 model: db.user,
-                attributes: ['id', 'username']
+                attributes: ['id', 'username', 'score']
             }],
 
         })
@@ -73,10 +73,10 @@ class QueryService {
 
     findLatestFive() {
         return db.query.findAll({
-            order: [['createdAt','DESC']],
+            order: [['createdAt', 'DESC']],
             include: {
                 model: db.user,
-                attributes: ['id', 'username']
+                attributes: ['id', 'username', 'score']
             },
             limit: 5
         })
@@ -100,7 +100,7 @@ class QueryService {
         return this.findOneById(id)
             .then(query => {
                 if (query.UserId !== userId) {
-                    const error = new Error('Unauthorized. User is not author or admin');
+                    const error = new Error('Unauthorized. User is not the author');
                     error.statusCode = 401;
                     throw error;
                 } else {
@@ -109,7 +109,7 @@ class QueryService {
             });
     }
 
-    increaseScore(id,amount) {
+    increaseScore(id, amount) {
         return db.query.increment(
             'score',
             {
@@ -167,15 +167,15 @@ class QueryService {
                     if (like) {
                         return Promise.all([
                             like.destroy(),
-                            this.decreaseScore(queryId,2),
-                            this.userService.decreaseScore(userId, 2),
+                            this.decreaseScore(queryId, 2),
+                            this.userService.decreaseScore(query.UserId, 2),
                             db.query_dislikes.create({userId, queryId})
                         ])
                     }
 
                     return Promise.all([
                         this.decreaseScore(queryId, 1),
-                        this.userService.decreaseScore(userId, 1),
+                        this.userService.decreaseScore(query.UserId, 1),
                         db.query_dislikes.create({userId, queryId})]);
 
                 } else {
@@ -206,14 +206,14 @@ class QueryService {
                         return Promise.all([
                             dislike.destroy(),
                             this.increaseScore(queryId, 2),
-                            this.userService.increaseScore(userId, 2),
+                            this.userService.increaseScore(query.UserId, 2),
                             db.query_likes.create({userId, queryId})
                         ])
                     }
 
                     return Promise.all([
                         this.increaseScore(queryId, 1),
-                        this.userService.increaseScore(userId, 1),
+                        this.userService.increaseScore(query.UserId, 1),
                         db.query_likes.create({userId, queryId})]);
                 } else {
                     const error = new Error('Invalid operation');
@@ -235,7 +235,7 @@ class QueryService {
 
         return this.findOneById(queryId)
             .then(query => {
-                if(!query) {
+                if (!query) {
                     const error = new Error('Query not found');
                     error.statusCode = 404;
                     throw error;
@@ -252,9 +252,9 @@ module.exports = (userService) => {
     return new QueryService(userService);
 };
 
-function getOrderArgument(order){
+function getOrderArgument(order) {
     let orderArgument = [['score', 'DESC']];
-    if(order === 'latest'){
+    if (order === 'latest') {
         orderArgument = [['createdAt', 'DESC']];
     }
 
@@ -262,9 +262,9 @@ function getOrderArgument(order){
 }
 
 function getTagsArgument(tags) {
-    let tagsFilter = {tags: { [db.Sequelize.Op.contains]: tags }};
+    let tagsFilter = {tags: {[db.Sequelize.Op.contains]: tags}};
 
-    if(tags.length === 1 && tags[0] === ''){
+    if (tags.length === 1 && tags[0] === '') {
         tagsFilter = null;
     }
 

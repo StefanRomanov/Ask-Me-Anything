@@ -3,6 +3,8 @@ import {HttpClient} from '@angular/common/http';
 import {Router} from '@angular/router';
 import {UserContext} from '../models/UserContext';
 import decode from 'jwt-decode';
+import constants from '../../util/constants';
+import {Role} from '../models/Role';
 
 @Injectable({
     providedIn: 'root'
@@ -22,11 +24,11 @@ export class AuthService {
     }
 
     register(username: string, email: string, password: string) {
-        return this.http.post('http://localhost:3000/auth/register', {username, email, password});
+        return this.http.post(`${constants.AUTH_URL}register`, {username, email, password});
     }
 
     login(username: string, password: string) {
-        return this.http.post('http://localhost:3000/auth/login', {username, password});
+        return this.http.post(`${constants.AUTH_URL}login`, {username, password});
     }
 
     getToken() {
@@ -63,15 +65,15 @@ export class AuthService {
         } else {
             try {
                 const decoded = decode(token);
-                console.log(decoded);
                 this.userContext = {
                     isLoggedIn: true,
                     token,
                     ...decoded
                 };
 
+                console.log(this.userContext);
+
             } catch (e) {
-                console.log(e);
                 this.userContext = {...this.initialUserContext};
             }
         }

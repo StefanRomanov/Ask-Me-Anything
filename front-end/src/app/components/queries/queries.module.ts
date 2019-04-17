@@ -13,6 +13,7 @@ import { EditQueryComponent } from './edit-query/edit-query.component';
 import { QueryTaggedComponent } from './query-tagged/query-tagged.component';
 import {QueryRoutingModule} from './query-routing.module';
 import {QuillModule} from 'ngx-quill';
+import {CeilPipe} from '../../core/pipes/ceil.pipe';
 
 @NgModule({
     declarations: [
@@ -21,14 +22,14 @@ import {QuillModule} from 'ngx-quill';
         QueryDetailsComponent,
         UserQueriesComponent,
         EditQueryComponent,
-        QueryTaggedComponent
+        QueryTaggedComponent,
+        CeilPipe
     ],
     imports: [
         CommonModule,
         SharedModule,
         ReactiveFormsModule,
         CKEditorModule,
-        RouterModule,
         QueryRoutingModule,
         AnswersModule,
         QuillModule
@@ -39,7 +40,8 @@ import {QuillModule} from 'ngx-quill';
         QueryDetailsComponent,
         UserQueriesComponent,
         EditQueryComponent,
-        QueryTaggedComponent
+        QueryTaggedComponent,
+        CeilPipe
     ]
 })
 export class QueriesModule {

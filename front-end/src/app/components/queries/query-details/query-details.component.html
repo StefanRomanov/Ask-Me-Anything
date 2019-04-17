@@ -25,12 +25,12 @@
             </div>
             <div class="row justify-content-end m-3">
                 <small class="mx-3"
-                >added on: {{query.createdAt | date: 'dd.MM.yyyy'}}</small>
-                <small class="mx-1">author: {{query.User.username}}</small>
+                >added on: {{query.createdAt | date: 'dd MMM yyyy'}}</small>
+                <small class="mx-1">author: {{query.User.username}} ({{query.User.score}})</small>
             </div>
             <hr/>
             <div class="row m-3 " *ngIf="authService.isLoggedIn()">
-                <button class="btn btn-sm btn-outline-danger m-3" *ngIf="query.isOwner || authService.isAdmin()"
+                <button class="btn btn-sm btn-outline-danger m-3" *ngIf="authService.isAdmin()"
                         (click)="delete(query.id)">Delete
                 </button>
                 <button [routerLink]="['/query','edit',query.id]" *ngIf="query.isOwner"
@@ -43,12 +43,11 @@
             </div>
         </div>
     </div>
-
+    <app-answer-list [answers]="query.Answers" [totalAnswers]="query.totalAnswerCount" (orderEmitter)="order($event)"></app-answer-list>
+    <app-paginator [totalPages]="query.totalAnswerCount / 5 | ceil"
+                   (pageEmitter)="pageChange($event)"></app-paginator>
     <app-answer-create-form *ngIf="!query.solved && authService.isLoggedIn()"
                             [queryId]="query.id"></app-answer-create-form>
-    <app-answer-list [answers]="query.Answers" (orderEmitter)="order($event)"></app-answer-list>
-    <app-paginator [totalPages]="query.totalAnswerCount / 5 + 1 | number:'1.0-0'"
-                   (pageEmitter)="pageChange($event)"></app-paginator>
 </div>
 
 

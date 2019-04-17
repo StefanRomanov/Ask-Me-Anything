@@ -1,6 +1,5 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import * as ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import {AnswerService} from '../../../core/services/answer.service';
 import Answer from '../../../core/models/Answer';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
@@ -10,7 +9,7 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
   templateUrl: './edit-answer.component.html',
   styleUrls: ['./edit-answer.component.css']
 })
-export class EditAnswerComponent implements OnInit {
+export class EditAnswerComponent implements OnInit, OnDestroy {
 
     modules: object;
     answerEditForm: FormGroup;
@@ -60,6 +59,10 @@ export class EditAnswerComponent implements OnInit {
 
     closeModal() {
         this.activeModal.close('Modal Closed');
+    }
+
+    ngOnDestroy(): void {
+        this.answerService.destroySubscriptions();
     }
 
 }

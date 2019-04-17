@@ -1,12 +1,27 @@
-<div class="container">
+<div class="container mt-4 justify-content-center">
     <form [formGroup]="form" (submit)="submitSearch()">
-        <div class="form-group input-group">
-            <div class="input-group-prepend">
-                <span class="input-group-text"> <i class="fa fa-search"></i> </span>
+        <div class="row justify-content-center">
+            <div class="col-lg-6">
+                <div class="row">
+                    <div class="form-group input-group w-75">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"> <i class="fa fa-search"></i> </span>
+                        </div>
+                        <input formControlName="search" class="form-control" placeholder="Title"/>
+                    </div>
+                </div>
+                <div class="row justify-content-start" *ngIf="!router.url.includes('tagged')">
+                    <div class="form-group input-group w-25">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"> <i class="fa fa-tag"></i> </span>
+                        </div>
+                        <input formControlName="tag" class="form-control" placeholder="Tag"/>
+                    </div>
+                </div>
             </div>
-            <input formControlName="search" class="form-control" placeholder="Search"/>
+            <button class="btn btn-primary h-25" type="submit">Filter</button>
+
         </div>
-        <button class="btn btn-primary" type="submit">Search</button>
     </form>
-    <hr>
 </div>
+<hr>

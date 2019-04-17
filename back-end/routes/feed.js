@@ -4,36 +4,37 @@ const {QueryController, AnswerController} = require('../controllers');
 const isAuth = require('../middleware/is-auth');
 const isAdmin = require('../middleware/is-admin');
 const isAnonymous = require('../middleware/is-anonymous');
+const isUser = require('../middleware/is-user');
 
 //Query routes
 router.get('/queries', QueryController.getQueries);
 router.get('/query/:queryId', isAnonymous, QueryController.getQuery);
 router.get('/query/details/:queryId', isAnonymous, QueryController.getQueryDetails);
 router.get('/queries/latest', QueryController.getLatestQueries);
-router.get('/queries/user/:userId', QueryController.getByUser);
+router.get('/queries/user/:userId',isAuth, isUser ,QueryController.getByUser);
 
 router.post('/query/create', [
     body('title')
         .trim()
-        .isLength({min: 5}),
+        .isLength({min: 5, max: 50}),
     body('description')
         .trim()
-        .isLength({min: 5})
-], QueryController.createQuery);
-router.post('/query/solve', isAuth, QueryController.markSolved);
+        .isLength({min: 5,max: 2000})
+],isAuth, isUser , QueryController.createQuery);
+router.post('/query/solve', isAuth, isAdmin, QueryController.markSolved);
 router.post('/query/like', isAuth, QueryController.likeQuery);
 router.post('/query/dislike', isAuth, QueryController.dislikeQuery);
 
 router.put('/query/update/:queryId', isAuth, [
     body('title')
         .trim()
-        .isLength({min: 5}),
+        .isLength({min: 5, max: 50}),
     body('description')
         .trim()
-        .isLength({min: 5})
+        .isLength({min: 5,max: 2000})
 ], QueryController.updateQuery);
 
-router.delete('/query/:queryId', isAuth, QueryController.deleteQuery);
+router.delete('/query/:queryId', isAuth, isAdmin, QueryController.deleteQuery);
 
 
 //Answer routes
@@ -42,7 +43,7 @@ router.get('/answers/:queryId', AnswerController.getAnswers);
 router.post('/answer', isAuth, [
     body('content')
         .trim()
-        .isLength({min: 5})
+        .isLength({min: 5, max: 1500})
 ], AnswerController.createAnswer);
 router.post('/answer/like', isAuth, AnswerController.likeAnswer);
 router.post('/answer/dislike', isAuth, AnswerController.dislikeAnswer);
@@ -50,10 +51,10 @@ router.post('/answer/dislike', isAuth, AnswerController.dislikeAnswer);
 router.put('/answer/:answerId', isAuth, [
     body('content')
         .trim()
-        .isLength({min: 5})
+        .isLength({min: 5, max: 1500})
 ], AnswerController.updateAnswer);
 
-router.delete('/answer/:answerId', isAuth, AnswerController.deleteAnswer);
+router.delete('/answer/:answerId', isAuth, isAdmin, AnswerController.deleteAnswer);
 
 
 module.exports = router;

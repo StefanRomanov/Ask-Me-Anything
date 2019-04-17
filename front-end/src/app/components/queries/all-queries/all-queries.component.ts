@@ -1,7 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {QueryService} from '../../../core/services/query.service';
 import {Observable, Subject} from 'rxjs';
-import {map} from 'rxjs/operators';
 import Query from '../../../core/models/Query';
 import {OnDestroy} from '@angular/core/src/metadata/lifecycle_hooks';
 
@@ -27,9 +26,9 @@ export class AllQueriesComponent implements OnInit, OnDestroy {
         this.queryService.getAllQueries(this.searchString, this.orderString, this.tag, this.page);
     }
 
-    search(data: string) {
-        this.searchString = data;
-        this.title = 'All queries containing "' + data + '"';
+    search(data) {
+        this.searchString = data.search;
+        this.tag = data.tag;
         this.queryService.getAllQueries(this.searchString, this.orderString, this.tag, this.page);
     }
 
@@ -40,7 +39,6 @@ export class AllQueriesComponent implements OnInit, OnDestroy {
 
     pageChange(page: number) {
         this.page = page;
-        console.log(page);
         this.queryService.getAllQueries(this.searchString, this.orderString, this.tag, this.page);
     }
 

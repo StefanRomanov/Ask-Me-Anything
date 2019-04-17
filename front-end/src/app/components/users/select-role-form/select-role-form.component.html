@@ -1,0 +1,16 @@
+<form [formGroup]="form" (submit)="onSubmit()">
+    <div class="row justify-content-center">
+        <div class="col-lg-6">
+            <div class="row">
+                <div class="form-group input-group w-50">
+                    <select formControlName="role" class="custom-select">
+                        <option [selected]="currentRole === role" *ngFor="let role of roles"
+                                [value]="role" >{{role}}</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <button class="btn btn-primary h-25" type="submit">Change</button>
+    </div>
+</form>

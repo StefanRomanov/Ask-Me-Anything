@@ -33,7 +33,14 @@
                            class="nav-link font-weight-bold text-white"><span>Ask a question</span></a>
                     </li>
                 </ng-template>
+                <ng-template [ngIf]="isAdmin">
+                    <li class="nav-item">
+                        <a routerLink="/user/manage" routerLinkActive="active"
+                           class="nav-link font-weight-bold text-white"><span>Manage users</span></a>
+                    </li>
+                </ng-template>
                 <div class="pull-right mb-auto">
+                    <span class="text-white font-weight-bold mr-3">Hello, {{authService.getUsername()}}</span>
                     <li class="nav-item">
                         <a routerLink="/logout" routerLinkActive="active" class="nav-link font-weight-bold text-white"
                            (click)="logout()"><span>Logout</span></a>

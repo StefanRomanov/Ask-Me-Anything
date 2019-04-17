@@ -10,6 +10,9 @@ export class AnswerListComponent implements OnInit {
     @Input()
     answers: Answer[];
 
+    @Input()
+    totalAnswers: number;
+
     answerForEdit: Answer;
 
     @Output()

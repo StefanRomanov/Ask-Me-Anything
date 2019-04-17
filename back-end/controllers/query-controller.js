@@ -290,7 +290,7 @@ function queryDetailsAuthed(req, res, queryId, userId, order, page) {
 
                         res
                             .status(200)
-                            .json({message: 'Query found', success: false, query, count: count})
+                            .json({message: 'Query found', success: false, query, count})
                     })
             }
         })
@@ -310,7 +310,7 @@ function queryDetailsAnonymous(req, res, queryId, order, page) {
                     .then(count => {
                         res
                             .status(200)
-                            .json({message: `Query found`, success: true, query})
+                            .json({message: `Query found`, success: true, query, count})
                     })
 
             }

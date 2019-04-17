@@ -62,4 +62,8 @@ export class AnswerService {
                 this.router.navigate(['query', 'details', this.queryService.query.id]);
             });
     }
+
+    destroySubscriptions() {
+        this.subscriptions.forEach(s => s.unsubscribe());
+    }
 }

@@ -1,5 +1,6 @@
 import {Component, EventEmitter, OnInit, Output} from '@angular/core';
 import {FormBuilder, FormGroup} from '@angular/forms';
+import {Router} from '@angular/router';
 
 @Component({
     selector: 'app-search-form',
@@ -11,23 +12,28 @@ export class SearchFormComponent implements OnInit {
     form: FormGroup;
 
     @Output()
-    searchEmitter = new EventEmitter<string>();
+    searchEmitter = new EventEmitter<object>();
 
-    constructor(private formBuilder: FormBuilder) {
+    constructor(private formBuilder: FormBuilder, private router: Router) {
     }
 
     ngOnInit() {
         this.form = this.formBuilder.group({
-            search: ['']
+            search: [''],
+            tag: ['']
         });
     }
 
     submitSearch() {
-        this.searchEmitter.emit(this.search.value);
+        this.searchEmitter.emit({search: this.search.value, tag: this.tag.value});
     }
 
     get search() {
         return this.form.controls.search;
+    }
+
+    get tag() {
+        return this.form.controls.tag;
     }
 
 }

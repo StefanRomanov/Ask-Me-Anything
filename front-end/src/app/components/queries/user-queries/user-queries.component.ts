@@ -12,7 +12,7 @@ import {map} from 'rxjs/operators';
 })
 export class UserQueriesComponent implements OnInit, OnDestroy {
 
-    title = `Queries of user ${this.authService.getUsername()}`;
+    title = `Queries of user "${this.authService.getUsername()}"`;
     queries$: Subject<Query[]> = this.queryService.queryListSubject;
     totalNumber: Subject<number> = this.queryService.queryCount;
     searchString = '';
@@ -28,7 +28,8 @@ export class UserQueriesComponent implements OnInit, OnDestroy {
     }
 
     search(data) {
-        this.searchString = data;
+        this.searchString = data.search;
+        this.tag = data.tag;
         this.queryService.getByUserIdAndTitle(this.authService.getUserId(), this.searchString, this.orderString, this.tag, this.page);
     }
 

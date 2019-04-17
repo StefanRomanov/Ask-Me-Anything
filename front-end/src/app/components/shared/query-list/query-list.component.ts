@@ -1,5 +1,6 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import Query from '../../../core/models/Query';
+import {Router} from '@angular/router';
 @Component({
     selector: 'app-query-list',
     templateUrl: './query-list.component.html',
@@ -13,7 +14,7 @@ export class QueryListComponent implements OnInit {
     @Output()
     orderEmitter = new EventEmitter<string>();
 
-    constructor() {
+    constructor(private router: Router) {
     }
 
     ngOnInit() {

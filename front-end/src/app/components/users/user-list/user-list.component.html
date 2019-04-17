@@ -1,0 +1,23 @@
+<div class="container">
+    <div class="col-lg-12">
+        <app-search-form></app-search-form>
+        <table class="w-100 table-striped" >
+            <tr class="d-table-row">
+                <th>Username</th>
+                <th>Current role</th>
+                <th>Select role</th>
+            </tr>
+            <tr>
+                <td>username</td>
+                <td>role</td>
+                <td><app-select-role-form [currentRole]='"ADMIN"' (roleEmitter)="changeRole($event, user.id)" [roles]="userService.roles"></app-select-role-form></td>
+            </tr>
+            <!--<tr *ngFor="let user of users">
+                <td>{{user.username}}</td>
+                <td>{{user.role}}</td>
+                <td><app-select-role-form></app-select-role-form></td>
+            </tr>-->
+        </table>
+    </div>
+    <app-paginator></app-paginator>
+</div>

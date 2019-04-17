@@ -66,5 +66,22 @@ module.exports = {
 
                 next(error);
             })
+    },
+
+    changeRole(req, res, next){
+        const {role, userId} = req.body;
+
+        userService.changeRole(userId,role)
+            .then(result => {
+                res.status(200)
+                    .json({message: 'Role changed', success: true});
+            })
+            .catch(error => {
+                if (!error.statusCode) {
+                    error.statusCode = 500;
+                }
+
+                next(error);
+            })
     }
 };

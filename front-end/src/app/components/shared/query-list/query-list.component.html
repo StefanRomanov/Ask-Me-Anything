@@ -1,7 +1,10 @@
 <div class="container">
-    <button class="btn btn-light" (click)="orderPopular()" >Popular</button>
-    <button class="btn btn-light" (click)="orderLatest()" >Latest</button>
+    <ng-template [ngIf]="!router.url.endsWith('home')">
+        <div class="row justify-content-end mr-3">
+            <a class="btn btn-outline-info" (click)="orderPopular()">Popular</a>
+            <a class="btn btn-outline-info" (click)="orderLatest()">Latest</a>
+        </div>
+    </ng-template>
     <hr/>
     <app-query-card *ngFor="let query of queries" [query]="query"></app-query-card>
-    <hr/>
 </div>

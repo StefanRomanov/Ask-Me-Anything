@@ -52,8 +52,8 @@ class AnswerService {
     deleteAnswer(answerId, userId, role) {
         return this.findOneById(answerId)
             .then(answer => {
-                if (answer.UserId !== userId) {
-                    const error = new Error('User is not author or admin');
+                if (role !== 'ADMIN') {
+                    const error = new Error('User is not admin');
                     error.statusCode = 401;
                     throw error;
                 } else {
@@ -66,7 +66,7 @@ class AnswerService {
         return this.findOneById(answerId)
             .then(answer => {
                 if (answer.UserId !== userId) {
-                    const error = new Error('User is not author or admin');
+                    const error = new Error('User is not the author');
                     error.statusCode = 401;
                     throw error;
                 } else {
@@ -120,14 +120,14 @@ class AnswerService {
                         return Promise.all([
                             like.destroy(),
                             this.decreaseScore(answerId, 2),
-                            this.userService.decreaseScore(userId, 2),
+                            this.userService.decreaseScore(answer.UserId, 2),
                             db.answer_dislikes.create({userId, answerId})
                         ])
                     }
 
                     return Promise.all([
                         this.decreaseScore(answerId, 1),
-                        this.userService.decreaseScore(userId, 1),
+                        this.userService.decreaseScore(answer.UserId, 1),
                         db.answer_dislikes.create({userId, answerId})
                     ])
                 } else {
@@ -146,9 +146,9 @@ class AnswerService {
             db.answer_dislikes.findOne({where: {userId, answerId}})
         ])
             .then((result) => {
-                const [user, query, like, dislike] = result;
-                if (user && query && !like) {
-                    if (query.UserId === userId) {
+                const [user, answer, like, dislike] = result;
+                if (user && answer && !like) {
+                    if (answer.UserId === userId) {
                         const error = new Error('Cannot vote for your owm answers');
                         error.statusCode = 403;
                         throw error;
@@ -158,14 +158,14 @@ class AnswerService {
                         return Promise.all([
                             dislike.destroy(),
                             this.increaseScore(answerId, 2),
-                            this.userService.increaseScore(userId, 2),
+                            this.userService.increaseScore(answer.UserId, 2),
                             db.answer_likes.create({userId, answerId}),
                         ])
                     }
 
                     return Promise.all([
                         this.increaseScore(answerId, 1),
-                        this.userService.increaseScore(userId, 1),
+                        this.userService.increaseScore(answer.UserId, 1),
                         db.answer_likes.create({userId, answerId}),
                     ])
                 } else {
