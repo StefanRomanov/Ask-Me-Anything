@@ -1,5 +1,6 @@
-const db = require('../database/config');
 const encryption = require('../util/encryption');
+const db = require('../database/config');
+const paginator = require('../util/pagination');
 
 class UserService {
 
@@ -18,7 +19,7 @@ class UserService {
             .then(
             result => {
                 if(result === 0){
-                    role = 'ADMIN';
+                    role = 'ROOT';
                 }
                 return db.user.create({
                     username,
@@ -31,11 +32,45 @@ class UserService {
 
     }
 
+    findUsersForRoleManage(userId, username, page){
+        return db.user.findAndCountAll({
+            where: {
+                username: {
+                  [db.Sequelize.Op.substring]  : username
+                },
+                id: {
+                    [db.Sequelize.Op.not] : userId
+                },
+                role: {
+                    [db.Sequelize.Op.not] : 'ROOT'
+                }
+            },
+            attributes: ['id','username', 'email' ,'role'],
+            ...paginator(page, 5)
+        })
+    }
+
     changeRole(userId, role){
-        return db.user.update({role: role},
-            {
-                where: {id: userId}
-            })
+        return db.user.findOne({
+            where: {id: userId}
+        }).then(user => {
+            if(!user){
+                const error = new Error('User not found !');
+                error.statusCode = 404;
+                throw error;
+            }
+            if(user.role === 'ROOT'){
+                const error = new Error('Cannot change role of root admin !');
+                error.statusCode = 403;
+                throw error;
+            }
+
+            return db.user.update({role: role},
+                {
+                    where: {id: userId}
+                })
+        })
+
     }
 
     findUserByUsername(username) {

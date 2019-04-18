@@ -83,5 +83,30 @@ module.exports = {
 
                 next(error);
             })
+    },
+
+    findUsersForManage(req, res, next) {
+        const userId = req.userId;
+        const username = req.query.username;
+        const page = req.query.page;
+
+        userService.findUsersForRoleManage(userId, username, page)
+            .then(result => {
+                res
+                    .status(200)
+                    .json({
+                        message: `${result.count} users found`,
+                        success: true,
+                        users: result.rows,
+                        count: result.count
+                    })
+            })
+            .catch(error => {
+                if (!error.statusCode) {
+                    error.statusCode = 500;
+                }
+
+                next(error);
+            })
     }
 };

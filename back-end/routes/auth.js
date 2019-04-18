@@ -2,6 +2,8 @@ const router = require('express').Router();
 const {body} = require('express-validator/check');
 const authController = require('../controllers/auth-controller');
 const UserService = require('../services/user-service');
+const isAuth = require('../middleware/is-auth');
+const isAdmin = require('../middleware/is-admin');
 
 const userService = UserService();
 
@@ -29,6 +31,7 @@ router.post('/register',
     ]
     , authController.signUp);
 router.post('/login', authController.signIn);
+router.get('/users', isAuth, isAdmin, authController.findUsersForManage);
 router.put('/users/manage', isAuth, isAdmin, authController.changeRole);
 
 module.exports = router;
