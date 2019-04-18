@@ -4,7 +4,7 @@ A simple app for asking and answering questions, inspired by Stackoverflow, Quor
 
 ## Installation
 
-Run `npm install` in both 'front-end' and 'back-end' folders.Front-end runs by default on `http://localhost:4200/` and the back-end on `http://localhost:3000/`.
+Run `npm install` in both 'front-end' and 'back-end' folders.Front-end runs by default on `http://localhost:4200/`.
 
 
 ## Functionality overview
