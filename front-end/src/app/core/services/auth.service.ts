@@ -4,7 +4,6 @@ import {Router} from '@angular/router';
 import {UserContext} from '../models/UserContext';
 import decode from 'jwt-decode';
 import constants from '../../util/constants';
-import {Role} from '../models/Role';
 
 @Injectable({
     providedIn: 'root'
@@ -40,7 +39,7 @@ export class AuthService {
     }
 
     isAdmin() {
-        return this.userContext.role === 'ADMIN';
+        return this.userContext.role === 'ADMIN' ||  this.userContext.role === 'ROOT';
     }
 
     isLoggedIn() {

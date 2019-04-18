@@ -22,8 +22,7 @@ import {CeilPipe} from '../../core/pipes/ceil.pipe';
         QueryDetailsComponent,
         UserQueriesComponent,
         EditQueryComponent,
-        QueryTaggedComponent,
-        CeilPipe
+        QueryTaggedComponent
     ],
     imports: [
         CommonModule,
@@ -40,8 +39,7 @@ import {CeilPipe} from '../../core/pipes/ceil.pipe';
         QueryDetailsComponent,
         UserQueriesComponent,
         EditQueryComponent,
-        QueryTaggedComponent,
-        CeilPipe
+        QueryTaggedComponent
     ]
 })
 export class QueriesModule {

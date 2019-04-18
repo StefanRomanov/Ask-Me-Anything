@@ -9,6 +9,7 @@ import { PaginatorComponent } from './paginator/paginator.component';
 import {QueryListComponent} from './query-list/query-list.component';
 import {QueryCardComponent} from './query-card/query-card.component';
 import {NgbDropdownModule} from '@ng-bootstrap/ng-bootstrap';
+import {CeilPipe} from '../../core/pipes/ceil.pipe';
 
 @NgModule({
     declarations: [
@@ -17,7 +18,8 @@ import {NgbDropdownModule} from '@ng-bootstrap/ng-bootstrap';
         SearchFormComponent,
         PaginatorComponent,
         QueryListComponent,
-        QueryCardComponent
+        QueryCardComponent,
+        CeilPipe
     ],
     imports: [
         CommonModule,
@@ -31,7 +33,8 @@ import {NgbDropdownModule} from '@ng-bootstrap/ng-bootstrap';
         SearchFormComponent,
         PaginatorComponent,
         QueryListComponent,
-        QueryCardComponent
+        QueryCardComponent,
+        CeilPipe
     ]
 })
 export class SharedModule {

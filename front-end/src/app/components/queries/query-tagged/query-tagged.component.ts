@@ -1,5 +1,5 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
-import {Observable, Subject} from 'rxjs';
+import {Component, OnChanges, OnDestroy, OnInit, SimpleChanges} from '@angular/core';
+import {Observable, Subject, Subscription} from 'rxjs';
 import Query from '../../../core/models/Query';
 import {ActivatedRoute} from '@angular/router';
 import {QueryService} from '../../../core/services/query.service';
@@ -13,6 +13,8 @@ export class QueryTaggedComponent implements OnInit, OnDestroy {
 
     queries$: Subject<Query[]> = this.queryService.queryListSubject;
     totalNumber: Subject<number> = this.queryService.queryCount;
+
+    routeSubscription: Subscription;
     title: string;
     searchString = '';
     page = 1;
@@ -23,10 +25,11 @@ export class QueryTaggedComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
-        this.tag = this.activatedRoute.snapshot.params.tag;
-        this.title = `Queries tagged: ${this.tag}`;
-
-        this.queryService.getAllQueries(this.searchString, this.orderString, this.tag, this.page);
+        this.activatedRoute.params.subscribe(data => {
+            this.tag = data.tag;
+            this.title = `Queries tagged: ${this.tag}`;
+            this.queryService.getAllQueries(this.searchString, this.orderString, this.tag, this.page);
+        });
     }
 
     search(data) {
@@ -47,6 +50,10 @@ export class QueryTaggedComponent implements OnInit, OnDestroy {
     }
 
     ngOnDestroy(): void {
+        if (this.routeSubscription) {
+            this.routeSubscription.unsubscribe();
+        }
+
         this.queryService.destroySubscriptions();
     }
 

@@ -11,7 +11,7 @@
                     Queries</span></a>
             </li>
             <ng-template [ngIf]="!isLoggedIn">
-                <div class="pull-right">
+                <div class="pull-right mr-5">
                     <li class="nav-item">
                         <a routerLink="/auth/login" routerLinkActive="active"
                            class="nav-link font-weight-bold text-white"><span>Login</span></a>
@@ -41,7 +41,7 @@
                 </ng-template>
                 <div class="pull-right mb-auto">
                     <span class="text-white font-weight-bold mr-3">Hello, {{authService.getUsername()}}</span>
-                    <li class="nav-item">
+                    <li class="nav-item mr-5">
                         <a routerLink="/logout" routerLinkActive="active" class="nav-link font-weight-bold text-white"
                            (click)="logout()"><span>Logout</span></a>
                     </li>

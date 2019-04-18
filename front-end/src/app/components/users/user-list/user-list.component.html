@@ -1,23 +1,22 @@
-<div class="container">
-    <div class="col-lg-12">
-        <app-search-form></app-search-form>
-        <table class="w-100 table-striped" >
-            <tr class="d-table-row">
-                <th>Username</th>
-                <th>Current role</th>
-                <th>Select role</th>
-            </tr>
-            <tr>
-                <td>username</td>
-                <td>role</td>
-                <td><app-select-role-form [currentRole]='"ADMIN"' (roleEmitter)="changeRole($event, user.id)" [roles]="userService.roles"></app-select-role-form></td>
-            </tr>
-            <!--<tr *ngFor="let user of users">
-                <td>{{user.username}}</td>
-                <td>{{user.role}}</td>
-                <td><app-select-role-form></app-select-role-form></td>
-            </tr>-->
-        </table>
+<div class="container mt-5">
+    <div class="col-lg-12" *ngIf="{users: users$ | async, count: totalCount | async} as result" >
+        <app-search-form (searchEmitter)="searchByUsername($event)"></app-search-form>
+        <div class="panel panel-default">
+            <table class="table w-100 table-hover table-striped border-bottom border-left border-right">
+                <tr class="">
+                    <th>Username</th>
+                    <th>Current role</th>
+                    <th class="text-center">Select role</th>
+                </tr>
+                <tr *ngFor="let user of result.users">
+                    <td class="ml-3">{{user.username}}</td>
+                    <td>{{user.role}}</td>
+                    <td><app-select-role-form [currentRole]='user.role' (roleEmitter)="changeRole($event, user.id)" [roles]="userService.roles"></app-select-role-form></td>
+                </tr>
+            </table>
+        </div>
+        <app-paginator *ngIf="result.count" (pageEmitter)="pageChange($event)"
+        [totalPages]="result.count / 5 | ceil"></app-paginator>
     </div>
-    <app-paginator></app-paginator>
+
 </div>

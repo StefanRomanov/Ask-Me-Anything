@@ -4,13 +4,13 @@
             <button class="btn" [disabled]="answer.isLiked || answer.isOwner || !authService.isLoggedIn()"
                     (click)="upVoteAnswer(answer.id)"><i class="fa fa-arrow-circle-up fa-2x text-success"></i></button>
             <h5 class="mt-2">{{answer.score}}</h5>
-            <button class="btn" [disabled]="answer.isLiked || answer.isOwner || !authService.isLoggedIn()"
+            <button class="btn" [disabled]="answer.isDisliked || answer.isOwner || !authService.isLoggedIn()"
                     (click)="downVoteAnswer(answer.id)"><i class="fa fa-arrow-circle-down fa-2x text-danger"></i>
             </button>
         </div>
     </div>
     <div class="col-lg-7 border-left border-bottom">
-        <div class="row bg-light rounded ml-2">
+        <div class="row bg-grey rounded ml-2">
             <p class="m-3" [innerHTML]="answer.content"></p>
         </div>
         <div class="row justify-content-start mt-2 ml-4">

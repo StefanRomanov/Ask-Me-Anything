@@ -1,4 +1,4 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
+import {Component, OnInit, ViewChild, ViewEncapsulation} from '@angular/core';
 import * as ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {QueryService} from '../../../core/services/query.service';
@@ -53,9 +53,11 @@ export class CreateQueryComponent implements OnInit {
     }
 
     submitForm() {
-        this.tagsArray = Array.from(new Set(this.tags.value.split(' ')));
+
+        console.log(this.form);
+
+        this.tagsArray = Array.from(new Set(this.tags.value.toLowerCase().split(' ')));
         const userId = this.authService.getUserId();
-        console.log(userId);
 
         this.queryService.createQuery({
             title: this.title.value,
