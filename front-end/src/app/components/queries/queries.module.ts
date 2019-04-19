@@ -23,6 +23,7 @@ import {QuillModule} from 'ngx-quill';
         SharedModule,
         ReactiveFormsModule,
         CKEditorModule,
+        QuillModule,
         QueryRoutingModule,
         AnswersModule,
         QuillModule

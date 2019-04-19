@@ -24,8 +24,7 @@ import {CeilPipe} from '../../core/pipes/ceil.pipe';
     imports: [
         CommonModule,
         ReactiveFormsModule,
-        RouterModule,
-        NgbDropdownModule
+        RouterModule
     ],
     exports: [
         FooterComponent,

@@ -4,8 +4,9 @@ import {CommonModule} from '@angular/common';
 import {UsersRoutingModule} from './users-routing.module';
 import {UserListComponent} from './user-list/user-list.component';
 import {SharedModule} from '../shared/shared.module';
-import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import { ReactiveFormsModule} from '@angular/forms';
 import {SelectRoleFormComponent} from './select-role-form/select-role-form.component';
+import {NgbDropdownModule} from '@ng-bootstrap/ng-bootstrap';
 
 @NgModule({
     declarations: [UserListComponent, SelectRoleFormComponent],
@@ -13,7 +14,8 @@ import {SelectRoleFormComponent} from './select-role-form/select-role-form.compo
         CommonModule,
         UsersRoutingModule,
         SharedModule,
-        ReactiveFormsModule
+        ReactiveFormsModule,
+        NgbDropdownModule
     ],
     exports: [
         UserListComponent,

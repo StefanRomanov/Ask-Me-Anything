@@ -9,7 +9,6 @@ import { LandingComponent } from './components/landing/landing.component';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {ToastrModule} from 'ngx-toastr';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {QuillModule} from 'ngx-quill';
 import {CoreModule} from './core/core.module';
 
 @NgModule({
@@ -24,7 +23,6 @@ import {CoreModule} from './core/core.module';
         AppRoutingModule,
         HttpClientModule,
         SharedModule,
-        QuillModule.forRoot(),
         ToastrModule.forRoot(),
         BrowserAnimationsModule
     ],
