@@ -12,7 +12,6 @@ import {QueryService} from './query.service';
 export class AnswerService {
 
     answer: Answer;
-    answerList: Answer[];
     answerSubject: Subject<Answer>;
     answerListSubject: Subject<Answer[]>;
     subscriptions: Subscription[];

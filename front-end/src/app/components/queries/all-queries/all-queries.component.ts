@@ -4,7 +4,9 @@ import {Observable, Subscription} from 'rxjs';
 import Query from '../../../core/models/Query';
 import {OnDestroy} from '@angular/core/src/metadata/lifecycle_hooks';
 import {ActivatedRoute, Router} from '@angular/router';
-import {AuthService} from '../../../core/services/auth.service';
+import {Store} from '@ngrx/store';
+import {getAuthUserId} from '../../../+store';
+import {take} from 'rxjs/operators';
 
 @Component({
     selector: 'app-all-queries',
@@ -27,7 +29,7 @@ export class AllQueriesComponent implements OnInit, OnDestroy {
     constructor(private activatedRoute: ActivatedRoute,
                 private queryService: QueryService,
                 private router: Router,
-                private authService: AuthService) {
+                private store: Store<any>) {
     }
 
     ngOnInit() {
@@ -42,8 +44,15 @@ export class AllQueriesComponent implements OnInit, OnDestroy {
                 }
 
                 if (this.router.url.includes('my')) {
-                    this.title = `Queries posted by "${this.authService.getUsername()}"`;
-                    this.user = this.authService.getUserId();
+                    this.title = `Queries posted by you`;
+                    this.store.select(getAuthUserId)
+                        .pipe(
+                            take(1)
+                        )
+                        .subscribe(userId => {
+                            this.user = userId;
+                        });
+
                 } else {
                     this.user = null;
                 }

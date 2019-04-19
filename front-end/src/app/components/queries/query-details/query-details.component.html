@@ -2,11 +2,11 @@
     <div class="row mt-5 border-info">
         <div class="col-lg-2">
             <div class="row justify-content-center mt-5">
-                <button class="btn" [disabled]="query.isLiked || query.isOwner || !authService.isLoggedIn()"
+                <button class="btn" [disabled]="query.isLiked || query.isOwner || !isLoggedIn"
                         (click)="upVoteQuery(query.id)"><i
                     class="fa fa-arrow-circle-up fa-2x text-success"></i></button>
                 <h4 class="mt-2">{{query.score}}</h4>
-                <button class="btn" [disabled]="query.isDisliked || query.isOwner || !authService.isLoggedIn()"
+                <button class="btn" [disabled]="query.isDisliked || query.isOwner || !isLoggedIn"
                         (click)="downVoteQuery(query.id)"><i
                     class="fa fa-arrow-circle-down fa-2x text-danger"></i></button>
             </div>
@@ -29,18 +29,18 @@
                 <small class="mx-1">author: {{query.User.username}} ({{query.User.score}})</small>
             </div>
             <hr/>
-            <div class="row m-3 " *ngIf="authService.isLoggedIn()">
-                <button class="btn btn-sm btn-outline-danger m-3" *ngIf="authService.isAdmin()"
+            <div class="row m-3 " *ngIf="isLoggedIn">
+                <button class="btn btn-sm btn-outline-danger m-3" *ngIf="isAdmin"
                         (click)="delete(query.id)">Delete
                 </button>
                 <button [routerLink]="['/query','edit',query.id]" *ngIf="query.isOwner"
                         class="btn btn-sm btn-outline-info m-3">Edit
                 </button>
-                <button class="btn btn-sm btn-outline-warning m-3" *ngIf="!query.solved && authService.isAdmin()"
+                <button class="btn btn-sm btn-outline-warning m-3" *ngIf="!query.solved && isAdmin"
                         (click)="closeQuery(query.id)">
                     Close
                 </button>
-                <button class="btn btn-sm btn-outline-warning m-3" *ngIf="query.solved && authService.isAdmin()"
+                <button class="btn btn-sm btn-outline-warning m-3" *ngIf="query.solved && isAdmin"
                         (click)="openQuery(query.id)">
                     Open
                 </button>
@@ -50,7 +50,7 @@
     <app-answer-list [answers]="query.Answers" [totalAnswers]="query.totalAnswerCount" (orderEmitter)="order($event)"></app-answer-list>
     <app-paginator [totalPages]="query.totalAnswerCount / 5 | ceil"
                    (pageEmitter)="pageChange($event)"></app-paginator>
-    <app-answer-create-form *ngIf="!query.solved && authService.isLoggedIn()"
+    <app-answer-create-form *ngIf="!query.solved && isLoggedIn"
                             [queryId]="query.id"></app-answer-create-form>
 </div>
 

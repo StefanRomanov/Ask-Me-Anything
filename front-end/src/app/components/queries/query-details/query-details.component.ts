@@ -1,26 +1,30 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import Query from '../../../core/models/Query';
 import {QueryService} from '../../../core/services/query.service';
-import {Observable, Subject, Subscription} from 'rxjs';
+import {Observable, Subscription} from 'rxjs';
 import {ActivatedRoute, NavigationEnd, Router} from '@angular/router';
-import {AuthService} from '../../../core/services/auth.service';
+import {Store} from '@ngrx/store';
+import {getAuthIsAdmin, getAuthIsLoggedIn} from '../../../+store';
+import {take} from 'rxjs/operators';
 
 @Component({
     selector: 'app-query-details',
     templateUrl: './query-details.component.html',
     styleUrls: ['./query-details.component.css']
 })
-export class QueryDetailsComponent implements OnInit, OnDestroy {
+export class QueryDetailsComponent implements OnInit, OnDestroy{
 
     query$: Observable<Query>;
     navigationSubscription: Subscription;
+    isLoggedIn: boolean;
+    isAdmin: boolean;
     answerOrder = 'score';
     answerPage = 1;
     id: string;
 
     constructor(private queryService: QueryService,
                 private activatedRoute: ActivatedRoute,
-                private authService: AuthService,
+                private store: Store<any>,
                 private router: Router) {
         this.navigationSubscription = this.router.events.subscribe((e: any) => {
             if (e instanceof NavigationEnd) {
@@ -32,6 +36,21 @@ export class QueryDetailsComponent implements OnInit, OnDestroy {
 
     ngOnInit() {
         this.query$ = this.queryService.getQueryObservable();
+        this.store.select(getAuthIsAdmin)
+            .pipe(
+                take(1)
+            )
+            .subscribe(isAdmin => {
+                this.isAdmin = isAdmin;
+            });
+
+        this.store.select(getAuthIsLoggedIn)
+            .pipe(
+                take(1)
+            )
+            .subscribe(isLogged => {
+                this.isLoggedIn = isLogged;
+            });
     }
 
     ngOnDestroy(): void {

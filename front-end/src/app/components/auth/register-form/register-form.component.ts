@@ -1,7 +1,7 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {AuthService} from '../../../core/services/auth.service';
-import {Subscription} from 'rxjs';
+import {Store} from '@ngrx/store';
+import {Register} from '../../../+store/auth/actions';
 
 @Component({
     selector: 'app-register-form',
@@ -11,9 +11,8 @@ import {Subscription} from 'rxjs';
 export class RegisterFormComponent implements OnInit, OnDestroy {
 
     form: FormGroup;
-    subscription$: Subscription;
 
-    constructor(private formBuilder: FormBuilder, private authService: AuthService) {
+    constructor(private formBuilder: FormBuilder, private store: Store<any>) {
     }
 
     ngOnInit() {
@@ -27,13 +26,10 @@ export class RegisterFormComponent implements OnInit, OnDestroy {
     }
 
     ngOnDestroy(): void {
-        if (this.subscription$) {
-            this.subscription$.unsubscribe();
-        }
     }
 
     submitForm() {
-        this.subscription$ = this.authService.register(this.username.value, this.email.value, this.password.value);
+        this.store.dispatch(new Register(this.form.value));
 
     }
 

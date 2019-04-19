@@ -1,8 +1,10 @@
 import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {QueryService} from '../../../core/services/query.service';
-import {AuthService} from '../../../core/services/auth.service';
 import constants from '../../../util/constants';
+import {Store} from '@ngrx/store';
+import {getAuthUserId} from '../../../+store';
+import {take} from 'rxjs/operators';
 
 @Component({
     selector: 'app-create-query',
@@ -13,11 +15,12 @@ export class CreateQueryComponent implements OnInit {
     modules: object;
     form: FormGroup;
     tagsArray: string[];
+    userId: string;
 
     constructor(
         private formBuilder: FormBuilder,
         private queryService: QueryService,
-        private authService: AuthService) {
+        private store: Store<any>) {
     }
 
     ngOnInit() {
@@ -32,17 +35,19 @@ export class CreateQueryComponent implements OnInit {
 
     submitForm() {
 
-        console.log(this.form);
-
         this.tagsArray = Array.from(new Set(this.tags.value.toLowerCase().split(' ')));
-        const userId = this.authService.getUserId();
-
-        this.queryService.createQuery({
-            title: this.title.value,
-            description: this.description.value,
-            tags: this.tagsArray,
-            userId
-        });
+        this.store.select(getAuthUserId)
+            .pipe(
+                take(1)
+            )
+            .subscribe(userId => {
+                this.queryService.createQuery({
+                    title: this.title.value,
+                    description: this.description.value,
+                    tags: this.tagsArray,
+                    userId
+                });
+            });
     }
 
     get title() {

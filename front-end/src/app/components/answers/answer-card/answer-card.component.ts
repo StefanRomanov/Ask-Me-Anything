@@ -3,7 +3,9 @@ import Answer from '../../../core/models/Answer';
 import {AnswerService} from '../../../core/services/answer.service';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {EditAnswerComponent} from '../edit-answer/edit-answer.component';
-import {AuthService} from '../../../core/services/auth.service';
+import {Store} from '@ngrx/store';
+import {getAuthIsAdmin, getAuthIsLoggedIn} from '../../../+store';
+import {take} from 'rxjs/operators';
 
 @Component({
     selector: 'app-answer-card',
@@ -14,13 +16,31 @@ export class AnswerCardComponent implements OnInit, OnDestroy {
     @Input()
     answer: Answer;
 
+    isLoggedIn: boolean;
+    isAdmin: boolean;
+
     @Output()
     emitter = new EventEmitter<Answer>();
 
-    constructor(private answerService: AnswerService, private modalService: NgbModal, private authService: AuthService) {
+    constructor(private answerService: AnswerService, private modalService: NgbModal, private store: Store<any>) {
     }
 
     ngOnInit() {
+        this.store.select(getAuthIsLoggedIn)
+            .pipe(
+                take(1)
+            )
+            .subscribe(isLoggedIn => {
+                this.isLoggedIn = isLoggedIn;
+            });
+
+        this.store.select(getAuthIsAdmin)
+            .pipe(
+                take(1)
+            )
+            .subscribe(isAdmin => {
+                this.isAdmin = isAdmin;
+            });
     }
 
     downVoteAnswer(answerId: string) {

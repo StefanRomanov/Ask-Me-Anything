@@ -10,7 +10,7 @@
                 <a routerLink="/query/all" routerLinkActive="active" class="nav-link font-weight-bold text-white"><span>All
                     Queries</span></a>
             </li>
-            <ng-template [ngIf]="!isLoggedIn">
+            <ng-template #notLogged>
                 <div class="pull-right mr-5">
                     <li class="nav-item">
                         <a routerLink="/auth/login" routerLinkActive="active"
@@ -22,8 +22,8 @@
                     </li>
                 </div>
             </ng-template>
-            <ng-template [ngIf]="isLoggedIn">
-                <ng-template [ngIf]="!isAdmin">
+            <ng-template #loggedIn>
+                <ng-template #notAdmin>
                     <li class="nav-item">
                         <a routerLink="/query/my" routerLinkActive="active"
                            class="nav-link font-weight-bold text-white"><span>My Queries</span></a>
@@ -33,20 +33,22 @@
                            class="nav-link font-weight-bold text-white"><span>Ask a question</span></a>
                     </li>
                 </ng-template>
-                <ng-template [ngIf]="isAdmin">
+                <ng-template #isAdmin>
                     <li class="nav-item">
                         <a routerLink="/user/manage" routerLinkActive="active"
                            class="nav-link font-weight-bold text-white"><span>Manage users</span></a>
                     </li>
                 </ng-template>
+                <ng-container *ngIf="(isAdmin$ | async) then isAdmin else notAdmin"></ng-container>
                 <div class="pull-right mb-auto">
-                    <span class="text-white font-weight-bold mr-3">Hello, {{authService.getUsername()}}</span>
+                    <span class="text-white font-weight-bold mr-3" *ngIf="username$ | async as username">Hello, {{username}}</span>
                     <li class="nav-item mr-5">
                         <a routerLink="/logout" routerLinkActive="active" class="nav-link font-weight-bold text-white"
                            (click)="logout()"><span>Logout</span></a>
                     </li>
                 </div>
             </ng-template>
+            <ng-container *ngIf="(isLoggedIn$ | async) then loggedIn else notLogged"></ng-container>
         </ul>
     </nav>
 </header>

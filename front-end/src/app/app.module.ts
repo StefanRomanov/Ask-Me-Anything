@@ -10,6 +10,11 @@ import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {ToastrModule} from 'ngx-toastr';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {CoreModule} from './core/core.module';
+import {reducers} from './+store';
+import {StoreModule} from '@ngrx/store';
+import {EffectsModule} from '@ngrx/effects';
+import {AuthEffects} from './+store/auth/effects';
+import {StoreDevtoolsModule} from '@ngrx/store-devtools';
 
 @NgModule({
     declarations: [
@@ -18,6 +23,11 @@ import {CoreModule} from './core/core.module';
     ],
     imports: [
         CoreModule,
+        StoreModule.forRoot(reducers),
+        EffectsModule.forRoot([
+            AuthEffects
+        ]),
+        StoreDevtoolsModule.instrument({}),
         NgbModule,
         BrowserModule,
         AppRoutingModule,

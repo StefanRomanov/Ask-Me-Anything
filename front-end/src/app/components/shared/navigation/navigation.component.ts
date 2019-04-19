@@ -1,6 +1,9 @@
 import {Component, DoCheck, OnInit} from '@angular/core';
-import {AuthService} from '../../../core/services/auth.service';
 import {Router} from '@angular/router';
+import {Store} from '@ngrx/store';
+import {Observable} from 'rxjs';
+import {getAuthIsAdmin, getAuthIsLoggedIn, getAuthUsername} from '../../../+store';
+import {Logout} from '../../../+store/auth/actions';
 
 @Component({
     selector: 'app-navigation',
@@ -9,23 +12,24 @@ import {Router} from '@angular/router';
 })
 export class NavigationComponent implements OnInit, DoCheck {
 
-    isLoggedIn: boolean;
-    isAdmin: boolean;
+    isLoggedIn$: Observable<boolean>;
+    isAdmin$: Observable<boolean>;
+    username$: Observable<string>;
 
-    constructor(private authService: AuthService, private router: Router) {
+    constructor(private store: Store<any>, private router: Router) {
     }
 
     ngOnInit() {
     }
 
     ngDoCheck() {
-        this.isLoggedIn = this.authService.isLoggedIn();
-        this.isAdmin = this.authService.isAdmin();
+        this.isLoggedIn$ = this.store.select(getAuthIsLoggedIn);
+        this.isAdmin$ = this.store.select(getAuthIsAdmin);
+        this.username$ = this.store.select(getAuthUsername);
     }
 
     logout() {
-        this.authService.logout();
-        this.router.navigate(['home']);
+        this.store.dispatch(new Logout());
     }
 
 }
