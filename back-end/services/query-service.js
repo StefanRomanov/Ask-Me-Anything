@@ -246,6 +246,22 @@ class QueryService {
                 }
             })
     }
+
+    openQuery(queryId, userId) {
+
+        return this.findOneById(queryId)
+            .then(query => {
+                if (!query) {
+                    const error = new Error('Query not found');
+                    error.statusCode = 404;
+                    throw error;
+                } else {
+                    return query.update({
+                        solved: false
+                    })
+                }
+            })
+    }
 }
 
 module.exports = (userService) => {

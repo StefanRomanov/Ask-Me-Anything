@@ -1,7 +1,6 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {AuthService} from '../../../core/services/auth.service';
-import {Router} from '@angular/router';
 import {Subscription} from 'rxjs';
 
 @Component({
@@ -14,7 +13,7 @@ export class RegisterFormComponent implements OnInit, OnDestroy {
     form: FormGroup;
     subscription$: Subscription;
 
-    constructor(private formBuilder: FormBuilder, private authService: AuthService, private router: Router) {
+    constructor(private formBuilder: FormBuilder, private authService: AuthService) {
     }
 
     ngOnInit() {
@@ -34,10 +33,8 @@ export class RegisterFormComponent implements OnInit, OnDestroy {
     }
 
     submitForm() {
-        this.subscription$ = this.authService.register(this.username.value, this.email.value, this.password.value)
-            .subscribe(result => {
-                this.router.navigate(['auth', 'login']);
-            });
+        this.subscription$ = this.authService.register(this.username.value, this.email.value, this.password.value);
+
     }
 
     get username() {

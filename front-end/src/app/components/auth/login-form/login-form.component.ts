@@ -32,12 +32,7 @@ export class LoginFormComponent implements OnInit, OnDestroy {
     }
 
     submitForm() {
-        this.subscription$ = this.authService.login(this.username.value, this.password.value)
-            .subscribe(result => {
-                window.localStorage.setItem('auth_token', result['token']);
-                this.authService.setUserContext();
-                this.router.navigate(['']);
-            });
+        this.subscription$ = this.authService.login(this.username.value, this.password.value);
     }
 
     get username() {

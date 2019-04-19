@@ -32,13 +32,13 @@ module.exports = {
         userService.findUserByUsername(username)
             .then((user) => {
                 if (!user) {
-                    const error = new Error('A user with this username could not be found');
+                    const error = new Error('An user with this username could not be found');
                     error.statusCode = 401;
                     throw error;
                 }
 
                 if (!user.authenticate(password)) {
-                    const error = new Error('A user with this username could not be found');
+                    const error = new Error('Password is wrong');
                     error.statusCode = 401;
                     throw error;
                 }

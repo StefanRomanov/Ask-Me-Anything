@@ -37,8 +37,12 @@
                         class="btn btn-sm btn-outline-info m-3">Edit
                 </button>
                 <button class="btn btn-sm btn-outline-warning m-3" *ngIf="!query.solved && authService.isAdmin()"
-                        (click)="markAsSolved(query.id)">
+                        (click)="closeQuery(query.id)">
                     Close
+                </button>
+                <button class="btn btn-sm btn-outline-warning m-3" *ngIf="query.solved && authService.isAdmin()"
+                        (click)="openQuery(query.id)">
+                    Open
                 </button>
             </div>
         </div>

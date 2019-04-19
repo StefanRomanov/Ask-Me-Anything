@@ -23,11 +23,19 @@ export class AuthService {
     }
 
     register(username: string, email: string, password: string) {
-        return this.http.post(`${constants.AUTH_URL}register`, {username, email, password});
+        return this.http.post(`${constants.AUTH_URL}register`, {username, email, password})
+            .subscribe(result => {
+                this.router.navigate(['auth', 'login']);
+            });
     }
 
     login(username: string, password: string) {
-        return this.http.post(`${constants.AUTH_URL}login`, {username, password});
+        return this.http.post(`${constants.AUTH_URL}login`, {username, password})
+            .subscribe(result => {
+                window.localStorage.setItem('auth_token', result['token']);
+                this.setUserContext();
+                this.router.navigate(['']);
+            });
     }
 
     getToken() {

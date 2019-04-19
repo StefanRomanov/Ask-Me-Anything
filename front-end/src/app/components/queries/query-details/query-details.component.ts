@@ -59,8 +59,12 @@ export class QueryDetailsComponent implements OnInit, OnDestroy {
         this.queryService.getQueryDetails(this.id, this.answerOrder, this.answerPage);
     }
 
-    markAsSolved(queryId) {
-        this.queryService.markSolved({queryId});
+    closeQuery(queryId) {
+        this.queryService.closeQuery({queryId});
+    }
+
+    openQuery(queryId) {
+        this.queryService.openQuery({queryId});
     }
 
     pageChange($event: number) {

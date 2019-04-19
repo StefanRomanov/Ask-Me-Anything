@@ -21,7 +21,8 @@ router.post('/query/create', [
         .trim()
         .isLength({min: 5,max: 2000})
 ],isAuth, isUser , QueryController.createQuery);
-router.post('/query/solve', isAuth, isAdmin, QueryController.markSolved);
+router.post('/query/close', isAuth, isAdmin, QueryController.markSolved);
+router.post('/query/open', isAuth, isAdmin, QueryController.openQuery);
 router.post('/query/like', isAuth, QueryController.likeQuery);
 router.post('/query/dislike', isAuth, QueryController.dislikeQuery);
 

@@ -24,7 +24,7 @@ module.exports = {
                     .json({
                         message: `${result.count} queries found`,
                         success: true,
-                        queries: result.rows,
+                        content: result.rows,
                         count: result.count
                     })
             })
@@ -50,7 +50,7 @@ module.exports = {
                 } else {
                     res
                         .status(200)
-                        .json({message: `Query found`, success: true, query})
+                        .json({message: `Query found`, success: true, content: query})
                 }
             })
             .catch(error => {
@@ -78,7 +78,7 @@ module.exports = {
                     .json({
                         message: `${result.count} queries found`,
                         success: true,
-                        queries: result.rows,
+                        content: result.rows,
                         count: result.count
                     })
             })
@@ -96,7 +96,7 @@ module.exports = {
             .then(queries => {
                 res
                     .status(200)
-                    .json({message: `${queries.length} queries found`, success: true, queries})
+                    .json({message: `${queries.length} queries found`, success: true, content: queries})
             })
             .catch(error => {
                 if (!error.statusCode) {
@@ -242,7 +242,26 @@ module.exports = {
             .then(() => {
                 res
                     .status(200)
-                    .json({message: 'Query marked as solved', success: true})
+                    .json({message: 'Query closed', success: true})
+            })
+            .catch(error => {
+                if (!error.statusCode) {
+                    error.statusCode = 500;
+                }
+
+                next(error);
+            })
+    },
+
+    openQuery: (req, res, next) => {
+        const userId = req.userId;
+        const {queryId} = req.body;
+
+        queryService.openQuery(queryId, userId)
+            .then(() => {
+                res
+                    .status(200)
+                    .json({message: 'Query opened', success: true})
             })
             .catch(error => {
                 if (!error.statusCode) {
@@ -290,7 +309,7 @@ function queryDetailsAuthed(req, res, queryId, userId, order, page) {
 
                         res
                             .status(200)
-                            .json({message: 'Query found', success: false, query, count})
+                            .json({message: 'Query found', success: false, content: query, count})
                     })
             }
         })
@@ -310,7 +329,7 @@ function queryDetailsAnonymous(req, res, queryId, order, page) {
                     .then(count => {
                         res
                             .status(200)
-                            .json({message: `Query found`, success: true, query, count})
+                            .json({message: `Query found`, success: true, content: query, count})
                     })
 
             }
