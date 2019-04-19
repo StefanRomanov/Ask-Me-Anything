@@ -18,7 +18,9 @@ module.exports = {
                     .json({message: 'Successful register!', userId: user._id});
             })
                 .catch((error) => {
-                    if (!error.statusCode) {
+                    if(error.name === 'SequelizeUniqueConstraintError'){
+                        error.statusCode = 422;
+                    } else {
                         error.statusCode = 500;
                     }
 
@@ -60,10 +62,11 @@ module.exports = {
                     });
             })
             .catch(error => {
-                if (!error.statusCode) {
+                if(error.name === 'SequelizeUniqueConstraintError'){
+                    error.statusCode = 422;
+                } else {
                     error.statusCode = 500;
                 }
-
                 next(error);
             })
     },

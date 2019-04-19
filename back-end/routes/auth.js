@@ -10,16 +10,10 @@ const userService = UserService();
 router.post('/register',
     [
         body('username')
+            .isLength({min: 3,max: 16})
             .not()
             .isEmpty()
-            .withMessage('Please enter a valid name.')
-            .custom((value) => {
-                return userService.findUserByUsername(value).then(userDoc => {
-                    if (userDoc) {
-                        return Promise.reject('Username address already exists!');
-                    }
-                })
-            }),
+            .withMessage('Please enter a valid name.'),
         body('password')
             .trim()
             .isLength({min: 3,max: 16})

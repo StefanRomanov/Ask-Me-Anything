@@ -14,12 +14,16 @@ module.exports = (sequelize, DataTypes) => {
         },
         username: {
             type: DataTypes.STRING,
-            unique: true,
+            unique: {
+                msg: 'Username already taken'
+            },
             allowNull: false
         },
         email:{
             type: DataTypes.STRING,
-            unique: true,
+            unique: {
+                msg: 'Email already taken'
+            },
             allowNull: false
         },
         hashedPassword: {
