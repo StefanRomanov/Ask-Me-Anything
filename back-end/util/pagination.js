@@ -1,7 +1,7 @@
 module.exports = (page, pageSize ) => {
     
     const offset = page * pageSize;
-    const limit = offset + pageSize;
+    const limit = pageSize;
 
     return {
         offset,
