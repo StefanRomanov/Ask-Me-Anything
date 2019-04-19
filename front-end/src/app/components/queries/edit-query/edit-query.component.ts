@@ -1,10 +1,10 @@
-import {Component, Input, OnDestroy, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {QueryService} from '../../../core/services/query.service';
-import {ActivatedRoute, Router} from '@angular/router';
-import * as ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+import {ActivatedRoute} from '@angular/router';
 import Query from '../../../core/models/Query';
-import {Subject, Subscription} from 'rxjs';
+import {Observable, Subscription} from 'rxjs';
+import constants from '../../../util/constants';
 
 @Component({
     selector: 'app-edit-query',
@@ -15,7 +15,7 @@ export class EditQueryComponent implements OnInit, OnDestroy {
 
     id: string;
     modules: object;
-    querySubject: Subject<Query> = this.queryService.querySubject;
+    querySubject: Observable<Query>;
     query: Query = this.queryService.query;
     form: FormGroup;
     tagsArray: string[];
@@ -25,41 +25,22 @@ export class EditQueryComponent implements OnInit, OnDestroy {
 
     constructor(private formBuilder: FormBuilder,
                 private queryService: QueryService,
-                private activatedRoute: ActivatedRoute,
-                private router: Router) {
+                private activatedRoute: ActivatedRoute) {
     }
 
     ngOnInit() {
         this.id = this.activatedRoute.snapshot.params.id;
-
         this.queryService.getQuery(this.id);
+
+        this.querySubject = this.queryService.getQueryObservable();
+
         this.form = this.formBuilder.group({
-            title: [this.query.title, [Validators.required, Validators.pattern('[A-Za-z0-9 ]{1,50}')]],
-            description: [this.query.description, [Validators.required, Validators.maxLength(2000)]],
+            title: [this.query.title, [Validators.required, Validators.pattern('[A-Za-z0-9 ]{10,50}')]],
+            description: [this.query.description, [Validators.required]],
             tags: [this.query.tags.join(' '), Validators.pattern('[0-9a-zA-Z]+( [0-9a-zA-Z]+)*')]
         });
 
-        this.modules = {
-            toolbar: [
-                ['bold', 'italic', 'underline', 'strike'],        // toggled buttons
-                ['blockquote', 'code-block'],
-
-                [{ 'header': 1 }, { 'header': 2 }],               // custom button values
-                [{ 'list': 'ordered'}, { 'list': 'bullet' }],
-                [{ 'script': 'sub'}, { 'script': 'super' }],      // superscript/subscript
-                [{ 'indent': '-1'}, { 'indent': '+1' }],          // outdent/indent
-                [{ 'direction': 'rtl' }],                         // text direction
-
-                [{ 'size': ['small', false, 'large', 'huge'] }],  // custom dropdown
-                [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
-                [{ 'font': [] }],
-                [{ 'align': [] }],
-
-                ['clean'],                                         // remove formatting button
-
-                ['link', 'image']                         // link and image, video
-            ]
-        };
+        this.modules = constants.QUERY_EDITOR_MODULES;
     }
 
     ngOnDestroy(): void {

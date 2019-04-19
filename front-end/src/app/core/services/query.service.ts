@@ -26,9 +26,15 @@ export class QueryService {
         this.subscriptions = [];
     }
 
-    getAllQueries(search, order, tag, page) {
+    getAllQueries(search, order, tag, page, userId) {
+        let route = 'queries';
+
+        if (userId) {
+            route = `queries/user/${userId}`;
+        }
+
         const subscription = this.http.get<ServerResponse>
-        (`${constants.FEED_URL}queries?search=${search}&order=${order}&tags=${tag}&page=${page - 1}`)
+        (`${constants.FEED_URL}${route}?search=${search}&order=${order}&tags=${tag}&page=${page - 1}`)
             .subscribe(result => {
                 this.queryList = result.content;
                 this.queryCount.next(result.count);
@@ -139,5 +145,17 @@ export class QueryService {
                 this.subscriptions.push(subscription);
                 this.router.navigate(['query', 'details', this.query.id]);
             });
+    }
+
+    getQueryObservable() {
+        return this.querySubject.asObservable();
+    }
+
+    getQueryListObservable() {
+        return this.queryListSubject.asObservable();
+    }
+
+    getCountObservable() {
+        return this.queryCount.asObservable();
     }
 }

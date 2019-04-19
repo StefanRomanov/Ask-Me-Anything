@@ -36,10 +36,8 @@ export class AnswerCardComponent implements OnInit, OnDestroy {
     }
 
     openForm() {
-        const modalRef = this.modalService.open(EditAnswerComponent);
+        const modalRef = this.modalService.open(EditAnswerComponent, { size: 'lg' });
         modalRef.componentInstance.answer = this.answer;
-
-        modalRef.result.then(result => console.log(result));
     }
 
     ngOnDestroy(): void {

@@ -52,7 +52,7 @@ class AnswerService {
     deleteAnswer(answerId, userId, role) {
         return this.findOneById(answerId)
             .then(answer => {
-                if (role !== 'ADMIN') {
+                if (role !== 'ADMIN' && role !== 'ROOT') {
                     const error = new Error('User is not admin');
                     error.statusCode = 401;
                     throw error;

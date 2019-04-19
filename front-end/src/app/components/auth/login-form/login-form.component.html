@@ -20,7 +20,7 @@
                     <div class="input-group-prepend">
                         <span class="input-group-text"> <i class="fa fa-lock"></i> </span>
                     </div>
-                    <input formControlName="password" class="form-control" placeholder="Create password" type="password"/>
+                    <input formControlName="password" class="form-control" placeholder="Enter password" type="password"/>
                 </div>
                 <div class="alert alert-danger" *ngIf="password?.touched && password?.errors?.required">
                     Password is required
@@ -31,7 +31,6 @@
                 <div class="form-group">
                     <button type="submit" [disabled]="form.invalid" class="btn btn-primary btn-block"> Login</button>
                 </div>
-                <p class="text-center">Have an account? <a href="">Log In</a></p>
             </form>
         </div>
         <div class="col-lg-4"></div>

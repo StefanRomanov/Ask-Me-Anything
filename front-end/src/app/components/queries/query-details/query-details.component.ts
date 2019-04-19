@@ -1,7 +1,7 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import Query from '../../../core/models/Query';
 import {QueryService} from '../../../core/services/query.service';
-import {Subject, Subscription} from 'rxjs';
+import {Observable, Subject, Subscription} from 'rxjs';
 import {ActivatedRoute, NavigationEnd, Router} from '@angular/router';
 import {AuthService} from '../../../core/services/auth.service';
 
@@ -12,7 +12,7 @@ import {AuthService} from '../../../core/services/auth.service';
 })
 export class QueryDetailsComponent implements OnInit, OnDestroy {
 
-    query$: Subject<Query>;
+    query$: Observable<Query>;
     navigationSubscription: Subscription;
     answerOrder = 'score';
     answerPage = 1;
@@ -31,7 +31,7 @@ export class QueryDetailsComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
-        this.query$ = this.queryService.querySubject;
+        this.query$ = this.queryService.getQueryObservable();
     }
 
     ngOnDestroy(): void {

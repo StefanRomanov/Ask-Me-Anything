@@ -67,7 +67,7 @@ module.exports = {
         const order = req.query.order;
         const page = req.query.page;
         const userId = req.params.userId;
-        const title = req.query.title || '';
+        const title = req.query.search || '';
         const tagString = req.query.tags || '';
         const tags = tagString.split('-');
 

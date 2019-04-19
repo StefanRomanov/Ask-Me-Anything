@@ -3,6 +3,7 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {AnswerService} from '../../../core/services/answer.service';
 import Answer from '../../../core/models/Answer';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import constants from '../../../util/constants';
 
 @Component({
   selector: 'app-edit-answer',
@@ -27,25 +28,10 @@ export class EditAnswerComponent implements OnInit, OnDestroy {
 
     ngOnInit() {
         this.answerEditForm = this.formBuilder.group({
-            content: [this.answer.content, Validators.required]
+            content: [this.answer.content, [Validators.required]]
         });
 
-        this.modules = {
-            toolbar: [
-                ['bold', 'italic', 'underline', 'strike'],        // toggled buttons
-                ['blockquote', 'code-block'],
-                [{ 'list': 'ordered'}, { 'list': 'bullet' }],
-                [{ 'script': 'sub'}, { 'script': 'super' }],      // superscript/subscript
-                [{ 'indent': '-1'}, { 'indent': '+1' }],          // outdent/indent
-                [{ 'direction': 'rtl' }],                         // text direction
-                [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
-                [{ 'align': [] }],
-
-                ['clean'],                                         // remove formatting button
-
-                ['link', 'image']                         // link and image, video
-            ]
-        };
+        this.modules = constants.ANSWER_EDITOR_MODULES;
     }
 
     submitForm() {
@@ -58,7 +44,7 @@ export class EditAnswerComponent implements OnInit, OnDestroy {
     }
 
     closeModal() {
-        this.activeModal.close('Modal Closed');
+        this.activeModal.dismiss();
     }
 
     ngOnDestroy(): void {

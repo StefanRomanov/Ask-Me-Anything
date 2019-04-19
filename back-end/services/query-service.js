@@ -85,7 +85,7 @@ class QueryService {
     deleteQuery(id, userId, role) {
         return this.findOneById(id)
             .then(query => {
-                if (role !== 'ADMIN') {
+                if (role !== 'ADMIN' && role !== 'ROOT') {
                     const error = new Error('Unauthorized. User is not admin');
                     error.statusCode = 401;
                     throw error;

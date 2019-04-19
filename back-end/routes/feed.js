@@ -32,7 +32,7 @@ router.put('/query/update/:queryId', isAuth, [
         .isLength({min: 5, max: 50}),
     body('description')
         .trim()
-        .isLength({min: 5,max: 2000})
+        .isLength({min: 5,max: 2500})
 ], QueryController.updateQuery);
 
 router.delete('/query/:queryId', isAuth, isAdmin, QueryController.deleteQuery);
@@ -44,7 +44,7 @@ router.get('/answers/:queryId', AnswerController.getAnswers);
 router.post('/answer', isAuth, [
     body('content')
         .trim()
-        .isLength({min: 5, max: 1500})
+        .isLength({min: 5, max: 2000})
 ], AnswerController.createAnswer);
 router.post('/answer/like', isAuth, AnswerController.likeAnswer);
 router.post('/answer/dislike', isAuth, AnswerController.dislikeAnswer);
@@ -52,7 +52,7 @@ router.post('/answer/dislike', isAuth, AnswerController.dislikeAnswer);
 router.put('/answer/:answerId', isAuth, [
     body('content')
         .trim()
-        .isLength({min: 5, max: 1500})
+        .isLength({min: 5, max: 2000})
 ], AnswerController.updateAnswer);
 
 router.delete('/answer/:answerId', isAuth, isAdmin, AnswerController.deleteAnswer);

@@ -1,6 +1,7 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {AnswerService} from '../../../core/services/answer.service';
+import constants from '../../../util/constants';
 
 @Component({
     selector: 'app-answer-create-form',
@@ -20,25 +21,10 @@ export class AnswerCreateFormComponent implements OnInit {
 
     ngOnInit() {
         this.answerForm = this.formBuilder.group({
-            content: ['',[ Validators.required, Validators.maxLength(1500)]]
+            content: ['', [ Validators.required]]
         });
 
-        this.modules = {
-            toolbar: [
-                ['bold', 'italic', 'underline', 'strike'],        // toggled buttons
-                ['blockquote', 'code-block'],
-                [{ 'list': 'ordered'}, { 'list': 'bullet' }],
-                [{ 'script': 'sub'}, { 'script': 'super' }],      // superscript/subscript
-                [{ 'indent': '-1'}, { 'indent': '+1' }],          // outdent/indent
-                [{ 'direction': 'rtl' }],                         // text direction
-                [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
-                [{ 'align': [] }],
-
-                ['clean'],                                         // remove formatting button
-
-                ['link', 'image']                         // link and image, video
-            ]
-        };
+        this.modules = constants.ANSWER_EDITOR_MODULES;
     }
 
     submitForm() {
