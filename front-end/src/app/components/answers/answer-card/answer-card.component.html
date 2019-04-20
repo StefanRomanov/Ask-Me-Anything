@@ -10,8 +10,8 @@
         </div>
     </div>
     <div class="col-lg-7 border-left border-bottom">
-        <div class="row bg-grey rounded ml-2">
-            <p class="m-3" [innerHTML]="answer.content"></p>
+        <div class="row bg-grey rounded ml-2 text-wrap">
+            <pre class="m-3" [innerHTML]="answer.content"></pre>
         </div>
         <div class="row justify-content-start mt-2 ml-4">
             <button class="btn btn-sm btn-outline-danger mr-3" *ngIf="isAdmin"

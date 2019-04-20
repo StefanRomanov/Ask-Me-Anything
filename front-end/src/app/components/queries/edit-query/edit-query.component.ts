@@ -35,7 +35,7 @@ export class EditQueryComponent implements OnInit, OnDestroy {
         this.querySubject = this.queryService.getQueryObservable();
 
         this.form = this.formBuilder.group({
-            title: [this.query.title, [Validators.required, Validators.pattern('[A-Za-z0-9 ]{10,50}')]],
+            title: [this.query.title, [Validators.required, Validators.pattern('[A-Za-z0-9 ,?-!.]{10,100}')]],
             description: [this.query.description, [Validators.required]],
             tags: [this.query.tags.join(' '), Validators.pattern('[0-9a-zA-Z]+( [0-9a-zA-Z]+)*')]
         });

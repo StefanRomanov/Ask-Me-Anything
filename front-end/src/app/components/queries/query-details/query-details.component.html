@@ -16,8 +16,8 @@
                 <h3>{{query.title}}</h3>
             </div>
             <hr/>
-            <div class="row m-3 bg-grey rounded">
-                <p class="m-3" [innerHTML]="query.description"></p>
+            <div class="row m-3 bg-grey rounded text-break">
+                <pre class="m-3 text-wrap" [innerHTML]="query.description"></pre>
             </div>
             <div class="row m-3">
                 <a class="btn btn-light mx-1" [routerLink]="['/query','tagged',tag]"

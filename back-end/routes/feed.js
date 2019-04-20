@@ -16,10 +16,10 @@ router.get('/queries/user/:userId',isAuth, isUser ,QueryController.getByUser);
 router.post('/query/create', [
     body('title')
         .trim()
-        .isLength({min: 5, max: 50}),
+        .isLength({min: 5, max: 100}),
     body('description')
         .trim()
-        .isLength({min: 5,max: 2000})
+        .isLength({min: 5,max: 2500})
 ],isAuth, isUser , QueryController.createQuery);
 router.post('/query/close', isAuth, isAdmin, QueryController.markSolved);
 router.post('/query/open', isAuth, isAdmin, QueryController.openQuery);
