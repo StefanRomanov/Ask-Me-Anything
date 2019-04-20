@@ -5,6 +5,7 @@ import {HTTP_INTERCEPTORS} from '@angular/common/http';
 import {AuthInterceptor} from './interceptors/auth.interceptor';
 import {ResponseHandleInterceptor} from './interceptors/response-handle.interceptor';
 import {ToastrService} from 'ngx-toastr';
+import {Store} from '@ngrx/store';
 
 @NgModule({
     declarations: [],
@@ -22,7 +23,7 @@ import {ToastrService} from 'ngx-toastr';
             provide: HTTP_INTERCEPTORS,
             useClass: ResponseHandleInterceptor,
             multi: true,
-            deps: [ToastrService]
+            deps: [ToastrService, Store]
         }
     ]
 })

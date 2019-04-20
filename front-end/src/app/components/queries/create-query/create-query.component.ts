@@ -25,7 +25,7 @@ export class CreateQueryComponent implements OnInit {
 
     ngOnInit() {
         this.form = this.formBuilder.group({
-            title: ['', [Validators.required, Validators.pattern('[A-Za-z0-9 ,?-!.]{10,100}')]],
+            title: ['', [Validators.required, Validators.pattern('[A-Za-z0-9 ,?-]{10,100}')]],
             description: ['', [Validators.required]],
             tags: ['', [Validators.pattern('[0-9a-zA-Z]+( [0-9a-zA-Z]+)*'), Validators.required]]
         });
