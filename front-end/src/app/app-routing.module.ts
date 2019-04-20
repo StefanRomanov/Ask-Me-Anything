@@ -2,6 +2,7 @@ import {NgModule} from '@angular/core';
 import {Routes, RouterModule} from '@angular/router';
 import {LandingComponent} from './components/landing/landing.component';
 import {AdminGuard} from './core/guards/admin.guard';
+import {NotFoundComponent} from './components/shared/not-found/not-found.component';
 
 const routes: Routes = [
     {path: '', pathMatch: 'full', redirectTo: 'home'},
@@ -14,7 +15,8 @@ const routes: Routes = [
     },
     {
         path: 'user', loadChildren: './components/users/users.module#UsersModule', canLoad: [AdminGuard]
-    }
+    },
+    { path: '**', component: NotFoundComponent }
 ];
 
 @NgModule({

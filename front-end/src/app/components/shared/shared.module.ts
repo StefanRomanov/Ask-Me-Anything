@@ -10,6 +10,7 @@ import {QueryListComponent} from './query-list/query-list.component';
 import {QueryCardComponent} from './query-card/query-card.component';
 import {NgbDropdownModule} from '@ng-bootstrap/ng-bootstrap';
 import {CeilPipe} from '../../core/pipes/ceil.pipe';
+import { NotFoundComponent } from './not-found/not-found.component';
 
 @NgModule({
     declarations: [
@@ -19,7 +20,8 @@ import {CeilPipe} from '../../core/pipes/ceil.pipe';
         PaginatorComponent,
         QueryListComponent,
         QueryCardComponent,
-        CeilPipe
+        CeilPipe,
+        NotFoundComponent
     ],
     imports: [
         CommonModule,
